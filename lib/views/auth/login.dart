@@ -1,79 +1,82 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/routes/router.dart';
-import 'package:mms_app/views/auth/choose_type.dart';
+import 'package:mms_app/views/fan/fan_layout.dart';
+import 'package:mms_app/views/widgets/buttons.dart';
+import 'package:mms_app/views/widgets/custom_textfield.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({Key? key}) : super(key: key);
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
 
   @override
-  _LoginViewState createState() => _LoginViewState();
+  _LoginState createState() => _LoginState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginState extends State<Login> {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController otp = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: ListView(
-            padding: EdgeInsets.all(24.h),
-            shrinkWrap: true,
-            children: [
-              Image.asset('assets/images/logo.png', height: 60.h),
-              SizedBox(height: 150.h),
-              item('Sign  up with  Email', 'mail'),
-              SizedBox(height: 18.h),
-              item('Continue with Google', 'gg'),
-              SizedBox(height: 18.h),
-              item('Continue with Facebook', 'fb'),
-              SizedBox(height: 51.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      push(context, ChooseType());
-                    },
-                    child: regularText(
-                      'Login',
-                      fontSize: 16.sp,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+      backgroundColor: AppColors.white,
+      appBar: AppBar(
+        elevation: 0,        leading: SizedBox(),
 
-  Widget item(String a, String b) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 22.h, vertical: 16.h),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(40.h), color: AppColors.grey2),
-      child: Stack(
-        alignment: Alignment.center,
+        backgroundColor: AppColors.white,
+        centerTitle: true,
+        title: Image.asset('assets/images/logo.png', height: 32.h),
+      ),
+      body: ListView(
+        padding: EdgeInsets.symmetric(horizontal: 24.h),
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Image.asset(
-              'assets/images/$b.png',
-              width: 24.h,
+          SizedBox(height: 70.h),
+          regularText(
+            'Login',
+            fontSize: 24.sp,
+            textAlign: TextAlign.center,
+            fontWeight: FontWeight.w700,
+            color: AppColors.black,
+          ),
+          SizedBox(height: 32.h),
+          CustomTextField(
+            hintText: 'Email Address',
+            controller: email,
+            textInputType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            prefixIcon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/mail.png',
+                  height: 20.h,
+                  color: Color(0xffAEB5BC),
+                ),
+              ],
             ),
           ),
-          SizedBox(height: 10.h),
-          regularText(
-            a,
-            fontSize: 14.sp,
-            color: Colors.black,
-            fontWeight: FontWeight.w700,
+          CustomTextField(
+            hintText: 'Password',
+            controller: password,
+            textInputType: TextInputType.text,
+            textInputAction: TextInputAction.next,
+            prefixIcon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/images/lock.png', height: 20.h),
+              ],
+            ),
           ),
+          SizedBox(height: 36.h),
+          buttonWithBorder('Login',
+              buttonColor: AppColors.red,
+              fontSize: 16.sp,
+              height: 52.h,
+              textColor: AppColors.white,
+              fontWeight: FontWeight.w700,
+              onTap: () => push(context, FanLayout())),
         ],
       ),
     );

@@ -23,10 +23,9 @@ class CustomTextField extends StatelessWidget {
   final int? maxLength;
   final bool? readOnly;
   final bool? enabled;
-  final bool specialCase;
+  final bool isCode;
   final bool obscureText;
   final bool autoFocus;
-  final bool important;
   final bool busy;
   final bool enableCopy;
   final FocusNode? focusNode;
@@ -57,9 +56,8 @@ class CustomTextField extends StatelessWidget {
     this.enabled,
     this.suffix,
     this.inputFormatters,
-    this.specialCase = false,
+    this.isCode = false,
     this.busy = false,
-    this.important = false,
     this.enableCopy = true,
   });
 
@@ -81,15 +79,6 @@ class CustomTextField extends StatelessWidget {
                   color: AppColors.black,
                 ),
               ),
-              if (important)
-                Padding(
-                  padding: EdgeInsets.only(bottom: 6.h, top: 16.h),
-                  child: regularText(
-                    '*',
-                    fontSize: 12.sp,
-                    color: AppColors.red,
-                  ),
-                ),
               Spacer(),
               if (busy)
                 SizedBox(
@@ -131,7 +120,7 @@ class CustomTextField extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
             filled: true,
-            fillColor: AppColors.grey2,
+            fillColor:isCode ? AppColors.white: AppColors.grey2,
             errorStyle: GoogleFonts.dmSans(
               color: AppColors.red,
               fontSize: 10.5.sp,
@@ -143,42 +132,42 @@ class CustomTextField extends StatelessWidget {
             border: OutlineInputBorder(
               borderSide: BorderSide(
                 color: AppColors.grey2,
-                width: 1.h,
+                width: 2.h,
               ),
               borderRadius: BorderRadius.circular(6.h),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: AppColors.grey2,
-                width: 1.h,
+                width: 2.h,
               ),
               borderRadius: BorderRadius.circular(6.h),
             ),
             errorBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: AppColors.grey2,
-                width: 1.h,
+                width: 2.h,
               ),
               borderRadius: BorderRadius.circular(6.h),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: AppColors.red,
-                width: 1.h,
+                width: 2.h,
               ),
               borderRadius: BorderRadius.circular(6.h),
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: AppColors.grey2,
-                width: 1.h,
+                width: 2.h,
               ),
               borderRadius: BorderRadius.circular(6.h),
             ),
             disabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: AppColors.grey2,
-                width: 1.h,
+                width: 2.h,
               ),
               borderRadius: BorderRadius.circular(6.h),
             ),

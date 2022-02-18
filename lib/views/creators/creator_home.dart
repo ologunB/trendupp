@@ -17,6 +17,7 @@ class _CreatorHomeState extends State<CreatorHome> {
       shrinkWrap: true,
       padding: EdgeInsets.symmetric(horizontal: 24.h),
       children: [
+        SizedBox(height: 16.h),
         cardItem('wallet2', '₦22,500', 'Current Earning', AppColors.lightRed,
             AppColors.red),
         cardItem(

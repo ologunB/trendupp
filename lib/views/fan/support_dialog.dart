@@ -192,37 +192,39 @@ class _SupportDialogState extends State<SupportDialog> {
                   textInputAction: TextInputAction.next,
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  Navigator.pop(cContext);
-                  showDialog<AlertDialog>(
-                    context: context,
-                    barrierDismissible: true,
-                    builder: (BuildContext context) => SupportAuth(),
-                  );
-                },
-                child: Container(
-                  margin:
-                      EdgeInsets.symmetric(horizontal: 24.h, vertical: 24.h),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 40.h, vertical: 7.h),
-                  decoration: BoxDecoration(
-                      color: AppColors.red,
-                      borderRadius: BorderRadius.circular(6.h)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.favorite,
-                          color: AppColors.lightRed, size: 20.h),
-                      SizedBox(width: 8.h),
-                      regularText(
-                        'Support Twyse',
-                        fontSize: 12.sp,
-                        color: AppColors.white,
-                        fontWeight: FontWeight.w500,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 24.h),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(cContext);
+                    showDialog<AlertDialog>(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (BuildContext context) => SupportAuth(),
+                    );
+                  },
+                  child: Container(
+
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 40.h, vertical: 7.h),
+                    decoration: BoxDecoration(
+                        color: AppColors.red,
+                        borderRadius: BorderRadius.circular(6.h)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.favorite,
+                            color: AppColors.lightRed, size: 20.h),
+                        SizedBox(width: 8.h),
+                        regularText(
+                          'Support Twyse',
+                          fontSize: 12.sp,
+                          color: AppColors.white,
+                          fontWeight: FontWeight.w500,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -21,6 +21,7 @@ class _UpdateLinkState extends State<UpdateLink> {
       backgroundColor: AppColors.white,
       appBar: AppBar(
         elevation: 0,
+        leading: SizedBox(),
         backgroundColor: AppColors.white,
         centerTitle: true,
         title: Image.asset('assets/images/logo.png', height: 32.h),

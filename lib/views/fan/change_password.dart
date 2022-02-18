@@ -26,7 +26,8 @@ class _ChangePasswordState extends State<ChangePassword> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: AppColors.white,
-        centerTitle: true,
+        centerTitle: true,        leading: SizedBox(),
+
         title: Image.asset('assets/images/logo.png', height: 32.h),
       ),
       body: ListView(

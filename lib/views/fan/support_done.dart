@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/routes/router.dart';
-import 'package:mms_app/views/auth/login.dart';
+import 'package:mms_app/views/auth/choose_signup.dart';
  import 'package:mms_app/views/widgets/text_widgets.dart';
 
 class SupportDone extends StatelessWidget {
@@ -83,7 +83,7 @@ class SupportDone extends StatelessWidget {
                                   ),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      push(context, LoginView());
+                                      push(context, ChooseSignup());
                                     }),
                               TextSpan(
                                 text: ' to track your support to creators',

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/routes/router.dart';
-import 'package:mms_app/views/auth/login.dart';
+import 'package:mms_app/views/auth/choose_signup.dart';
 import 'package:mms_app/views/creators/add_post.dart';
 import 'package:mms_app/views/creators/posts_history.dart';
 import 'package:mms_app/views/creators/settings.dart';
 import 'package:mms_app/views/creators/supporters_history.dart';
 import 'package:mms_app/views/creators/wallet_history.dart';
 import 'package:mms_app/views/fan/creator_details.dart';
+import 'package:mms_app/views/fan/fan_home.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 
 import 'creator_home.dart';
@@ -22,6 +23,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
 
   List<Widget> views() => [
         CreatorHome(),
+        FanHome(),
         CreatorDetails(hasHeader: false),
         PostsHistory(),
         SupportersHistory(),
@@ -89,12 +91,13 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                 addPost(),
                 SizedBox(height: 32.h),
                 item('Dashboard', 0),
-                item('My Page', 1),
-                item('My Post', 2),
-                item('Supporters', 3),
-                item('Wallet', 4),
-                item('Settings', 5),
-                item('Logout', 6),
+                item('Creators I support', 1),
+                item('My Page', 2),
+                item('My Post', 3),
+                item('Supporters', 4),
+                item('Wallet', 5),
+                item('Settings', 6),
+                item('Logout', 7),
               ],
             ),
           ),
@@ -104,9 +107,10 @@ class _CreatorLayoutState extends State<CreatorLayout> {
   }
 
   Widget item(String a, int i) {
+    String img = a == 'Creators I support' ? 'Home' : a;
     return InkWell(
       onTap: () {
-        if (i == 6) {
+        if (i == 7) {
           showDialog<AlertDialog>(
             context: context,
             builder: (BuildContext bContext) => Container(
@@ -154,7 +158,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                           child: TextButton(
                             onPressed: () {
                               Navigator.pop(bContext);
-                              pushAndRemoveUntil(context, LoginView());
+                              pushAndRemoveUntil(context, ChooseSignup());
                             },
                             child: regularText(
                               'Confirm',
@@ -187,7 +191,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
             Container(
               width: 30.h,
               child: Image.asset(
-                'assets/images/$a.png',
+                'assets/images/$img.png',
                 height: 25.h,
                 color: currentIndex == i ? AppColors.red : AppColors.textGrey,
               ),

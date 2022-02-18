@@ -83,9 +83,10 @@ class _SupportHistoryState extends State<SupportHistory> {
                               ),
                             ),
                             regularText(
-                              'N5,000',
+                              '₦ 5,000',
                               fontSize: 12.sp,
                               color: AppColors.black,
+                              isOther: true,
                               fontWeight: FontWeight.w700,
                             ),
                           ],

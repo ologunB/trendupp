@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/routes/router.dart';
-import 'package:mms_app/views/auth/login.dart';
+import 'package:mms_app/views/auth/choose_signup.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'explore_creators.dart';
 import 'fan_home.dart';
@@ -147,7 +147,7 @@ class _FanLayoutState extends State<FanLayout> {
                           child: TextButton(
                             onPressed: () {
                               Navigator.pop(bContext);
-                              pushAndRemoveUntil(context, LoginView());
+                              pushAndRemoveUntil(context, ChooseSignup());
                             },
                             child: regularText(
                               'Confirm',

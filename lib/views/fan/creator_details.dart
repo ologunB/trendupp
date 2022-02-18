@@ -5,9 +5,10 @@ import 'package:mms_app/views/widgets/creator_post.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 
 class CreatorDetails extends StatefulWidget {
-  const CreatorDetails({Key? key, this.hasHeader =true }) : super(key: key);
+  const CreatorDetails({Key? key, this.hasHeader = true}) : super(key: key);
 
- final bool hasHeader ;
+  final bool hasHeader;
+
   @override
   _CreatorDetailsState createState() => _CreatorDetailsState();
 }
@@ -16,51 +17,56 @@ class _CreatorDetailsState extends State<CreatorDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:!widget.hasHeader ? null: AppBar(
-        elevation: 0,
-        leadingWidth: 0,
-        backgroundColor: Colors.transparent,
-        titleSpacing: 0,
-        leading: SizedBox(),
-        title: Container(
-          padding: EdgeInsets.symmetric(horizontal: 24.h),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Image.asset('assets/images/logo2.png', height: 32.h),
-              Spacer(),
-            ],
-          ),
-        ),
-      ),
+      appBar: !widget.hasHeader
+          ? null
+          : AppBar(
+              elevation: 0,
+              leadingWidth: 0,
+              backgroundColor: Colors.transparent,
+              titleSpacing: 0,
+              leading: SizedBox(),
+              title: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset('assets/images/logo2.png', height: 32.h),
+                    Spacer(),
+                  ],
+                ),
+              ),
+            ),
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(horizontal: 80.h, vertical: 16.h),
         color: AppColors.lightRed,
-        child: InkWell(
-          onTap: () {
-            showDialog<AlertDialog>(
-              context: context,
-              barrierDismissible: true,
-              builder: (BuildContext context) => SupportDialog(),
-            );
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 40.h, vertical: 7.h),
-            decoration: BoxDecoration(
-                color: AppColors.red, borderRadius: BorderRadius.circular(6.h)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.favorite, color: AppColors.lightRed, size: 20.h),
-                SizedBox(width: 8.h),
-                regularText(
-                  'Support Twyse',
-                  fontSize: 12.sp,
-                  color: AppColors.white,
-                  fontWeight: FontWeight.w500,
-                  textAlign: TextAlign.center,
-                ),
-              ],
+        child: SafeArea(
+          child: InkWell(
+            onTap: () {
+              showDialog<AlertDialog>(
+                context: context,
+                barrierDismissible: true,
+                builder: (BuildContext context) => SupportDialog(),
+              );
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 40.h, vertical: 7.h),
+              decoration: BoxDecoration(
+                  color: AppColors.red,
+                  borderRadius: BorderRadius.circular(6.h)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.favorite, color: AppColors.lightRed, size: 20.h),
+                  SizedBox(width: 8.h),
+                  regularText(
+                    'Support Twyse',
+                    fontSize: 12.sp,
+                    color: AppColors.white,
+                    fontWeight: FontWeight.w500,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -116,31 +116,32 @@ class _SupportAuthState extends State<SupportAuth> {
                   ],
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  Navigator.pop(cContext);
-                  push(context, SupportDone());
-                },
-                child: Container(
-                    margin:
-                        EdgeInsets.symmetric(horizontal: 24.h, vertical: 16.h),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 40.h, vertical: 12.h),
-                    decoration: BoxDecoration(
-                        color: AppColors.red,
-                        borderRadius: BorderRadius.circular(6.h)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        regularText(
-                          'Pay with Flutterwave',
-                          fontSize: 14.sp,
-                          color: AppColors.white,
-                          fontWeight: FontWeight.w700,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    )),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 16.h),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(cContext);
+                    push(context, SupportDone());
+                  },
+                  child: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 40.h, vertical: 12.h),
+                      decoration: BoxDecoration(
+                          color: AppColors.red,
+                          borderRadius: BorderRadius.circular(6.h)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          regularText(
+                            'Pay with Flutterwave',
+                            fontSize: 14.sp,
+                            color: AppColors.white,
+                            fontWeight: FontWeight.w700,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      )),
+                ),
               ),
               Image.asset(
                 'assets/images/payment.png',
