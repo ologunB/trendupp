@@ -1,7 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/routes/router.dart';
-import 'package:mms_app/views/auth/choose_signup.dart';
 import 'package:mms_app/views/creators/add_post.dart';
 import 'package:mms_app/views/creators/posts_history.dart';
 import 'package:mms_app/views/creators/settings.dart';
@@ -9,6 +10,7 @@ import 'package:mms_app/views/creators/supporters_history.dart';
 import 'package:mms_app/views/creators/wallet_history.dart';
 import 'package:mms_app/views/fan/creator_details.dart';
 import 'package:mms_app/views/fan/fan_home.dart';
+import 'package:mms_app/views/widgets/logout_dialog.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 
 import 'creator_home.dart';
@@ -18,13 +20,13 @@ class CreatorLayout extends StatefulWidget {
   _CreatorLayoutState createState() => _CreatorLayoutState();
 }
 
-class _CreatorLayoutState extends State<CreatorLayout> {
-  int currentIndex = 0;
+ValueNotifier<int> cIndexNotifier = ValueNotifier(0);
 
+class _CreatorLayoutState extends State<CreatorLayout> {
   List<Widget> views() => [
         CreatorHome(),
         FanHome(),
-        CreatorDetails(hasHeader: false),
+        CreatorDetails(isFan: false),
         PostsHistory(),
         SupportersHistory(),
         WalletHistory(),
@@ -35,33 +37,38 @@ class _CreatorLayoutState extends State<CreatorLayout> {
 
   @override
   Widget build(bContext) {
-    return Scaffold(
-      key: mainLayoutScaffoldKey,
-      appBar: AppBar(
-        elevation: 0,
-        leadingWidth: 0,
-        backgroundColor: Colors.transparent,
-        titleSpacing: 0,
-        leading: SizedBox(),
-        title: Container(
-          padding: EdgeInsets.symmetric(horizontal: 24.h),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Image.asset('assets/images/logo.png', height: 32.h),
-              Spacer(),
-              InkWell(
-                  onTap: () {
-                    mainLayoutScaffoldKey.currentState!.openDrawer();
-                  },
-                  child: Image.asset('assets/images/menu.png', height: 20.h)),
-            ],
-          ),
-        ),
-      ),
-      body: views()[currentIndex],
-      drawer: drawerWidget(bContext),
-    );
+    return ValueListenableBuilder<int>(
+        valueListenable: cIndexNotifier,
+        builder: (_, a, __) {
+          return Scaffold(
+            key: mainLayoutScaffoldKey,
+            appBar: AppBar(
+              elevation: 0,
+              leadingWidth: 0,
+              backgroundColor: Colors.transparent,
+              titleSpacing: 0,
+              leading: SizedBox(),
+              title: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset('assets/images/logo.png', height: 32.h),
+                    Spacer(),
+                    InkWell(
+                        onTap: () {
+                          mainLayoutScaffoldKey.currentState!.openDrawer();
+                        },
+                        child: Image.asset('assets/images/menu.png',
+                            height: 20.h)),
+                  ],
+                ),
+              ),
+            ),
+            body: views()[a],
+            drawer: drawerWidget(bContext),
+          );
+        });
   }
 
   Widget drawerWidget(BuildContext bContext) {
@@ -91,7 +98,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                 addPost(),
                 SizedBox(height: 32.h),
                 item('Dashboard', 0),
-                item('Creators I support', 1),
+                //   item('Creators I support', 1),
                 item('My Page', 2),
                 item('My Post', 3),
                 item('Supporters', 4),
@@ -112,75 +119,11 @@ class _CreatorLayoutState extends State<CreatorLayout> {
       onTap: () {
         if (i == 7) {
           showDialog<AlertDialog>(
-            context: context,
-            builder: (BuildContext bContext) => Container(
-              color: AppColors.darkBlue.withOpacity(.1),
-              child: AlertDialog(
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    regularText(
-                      'Logout',
-                      fontSize: 15.sp,
-                      textAlign: TextAlign.center,
-                      color: AppColors.black,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    SizedBox(height: 10.h),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.h),
-                      child: regularText(
-                        'Are you sure you want to logout from your account?',
-                        fontSize: 13.sp,
-                        textAlign: TextAlign.center,
-                        color: AppColors.black,
-                      ),
-                    ),
-                    SizedBox(height: 12.h),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.pop(bContext);
-                            },
-                            child: regularText(
-                              'Cancel',
-                              fontSize: 13.sp,
-                              textAlign: TextAlign.center,
-                              color: AppColors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10.h),
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.pop(bContext);
-                              pushAndRemoveUntil(context, ChooseSignup());
-                            },
-                            child: regularText(
-                              'Confirm',
-                              fontSize: 13.sp,
-                              textAlign: TextAlign.center,
-                              color: AppColors.red,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.h)),
-              ),
-            ),
-          );
+              context: context,
+              builder: (BuildContext bContext) => LogoutDialog());
           return;
         }
-        currentIndex = i;
+        cIndexNotifier.value = i;
         setState(() {});
         Navigator.pop(context);
       },
@@ -193,14 +136,17 @@ class _CreatorLayoutState extends State<CreatorLayout> {
               child: Image.asset(
                 'assets/images/$img.png',
                 height: 25.h,
-                color: currentIndex == i ? AppColors.red : AppColors.textGrey,
+                color: cIndexNotifier.value == i
+                    ? AppColors.red
+                    : AppColors.textGrey,
               ),
             ),
             SizedBox(width: 12.h),
             regularText(
               a,
               fontSize: 14.sp,
-              color: currentIndex == i ? AppColors.red : AppColors.textGrey,
+              color:
+                  cIndexNotifier.value == i ? AppColors.red : AppColors.textGrey,
               fontWeight: FontWeight.w500,
             ),
           ],
@@ -269,6 +215,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                           Image.asset(
                             'assets/images/people.png',
                             height: 20.h,
+                            color: Color(0xffD38CA5),
                           ),
                           SizedBox(width: 16.h),
                           Expanded(
@@ -306,7 +253,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                           Image.asset(
                             'assets/images/Supporters.png',
                             height: 20.h,
-                            color: AppColors.grey1,
+                            color: Color(0xffD38CA5),
                           ),
                           SizedBox(width: 16.h),
                           Expanded(

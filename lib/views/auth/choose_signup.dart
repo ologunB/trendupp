@@ -54,8 +54,8 @@ class _ChooseSignupState extends State<ChooseSignup>
       body: Container(
         alignment: Alignment.center,
         padding: EdgeInsets.all(24.h),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: ListView(
+          shrinkWrap: true,
           children: [
             Hero(
                 tag: 'splash',
@@ -103,7 +103,9 @@ class _ChooseSignupState extends State<ChooseSignup>
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 22.h, vertical: 12.h),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(40.h), color: AppColors.grey2),
+        borderRadius: BorderRadius.circular(40.h),
+        color: AppColors.grey2,
+      ),
       child: Stack(
         alignment: Alignment.center,
         children: [

@@ -4,6 +4,8 @@ import 'package:mms_app/views/widgets/creator_item.dart';
 import 'package:mms_app/views/widgets/creator_post.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 
+import 'fan_layout.dart';
+
 class FanHome extends StatefulWidget {
   const FanHome({Key? key}) : super(key: key);
 
@@ -135,7 +137,9 @@ class _FanHomeState extends State<FanHome> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             InkWell(
-              onTap: () {},
+              onTap: () {
+                fIndexNotifier.value = 1;
+              },
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

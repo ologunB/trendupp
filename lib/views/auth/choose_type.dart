@@ -23,8 +23,8 @@ class _ChooseTypeState extends State<ChooseType> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        elevation: 0,        leading: SizedBox(),
-
+        elevation: 0,
+        leading: SizedBox(),
         backgroundColor: AppColors.white,
         centerTitle: true,
         title: Image.asset('assets/images/logo.png', height: 32.h),
@@ -33,7 +33,7 @@ class _ChooseTypeState extends State<ChooseType> {
         children: [
           SizedBox(height: 20.h),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 50.h),
+            padding: EdgeInsets.symmetric(horizontal: 30.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -47,7 +47,7 @@ class _ChooseTypeState extends State<ChooseType> {
           ),
           SizedBox(height: 6.h),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 45.h),
+            padding: EdgeInsets.symmetric(horizontal: 25.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -66,53 +66,57 @@ class _ChooseTypeState extends State<ChooseType> {
             color: AppColors.black,
           ),
           SizedBox(height: 24.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: ['creator', 'fan']
-                .map((e) => Container(
-                      margin: EdgeInsets.all(8.h),
-                      child: InkWell(
-                        onTap: () {
-                          type = e;
-                          setState(() {});
-                        },
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: ['creator', 'fan']
+                  .map((e) => Expanded(
                         child: Container(
-                          height: (w / 2) - 16.h,
-                          width: (w / 2) - 16.h,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.h),
-                              border: Border.all(
-                                  color: type == e
-                                      ? AppColors.red
-                                      : AppColors.grey,
-                                  width: 1.h),
-                              color: AppColors.grey),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/images/$e.png',
-                                height: 70.h,
-                                width: 70.h,
+                          margin: EdgeInsets.all(8.h),
+                          child: InkWell(
+                            onTap: () {
+                              type = e;
+                              setState(() {});
+                            },
+                            child: Container(
+                              height: (w / 2) - 24.h,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.h),
+                                  border: Border.all(
+                                      color: type == e
+                                          ? AppColors.red
+                                          : AppColors.grey,
+                                      width: 1.h),
+                                  color: AppColors.grey),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/$e.png',
+                                    height: 70.h,
+                                    width: 70.h,
+                                  ),
+                                  SizedBox(height: 15.h),
+                                  regularText(
+                                    (e == 'fan' ? '' : 'Yes, ') + 'I’m a $e',
+                                    fontSize: 12.sp,
+                                    textAlign: TextAlign.center,
+                                    color: type == e
+                                        ? AppColors.red
+                                        : AppColors.black,
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 15.h),
-                              regularText(
-                                (e == 'fan' ? '' : 'Yes, ') + 'I’m a $e',
-                                fontSize: 12.sp,
-                                textAlign: TextAlign.center,
-                                color: type == e
-                                    ? AppColors.red
-                                    : AppColors.black,
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ))
-                .toList(),
+                      ))
+                  .toList(),
+            ),
           ),
-          SizedBox(height: 34.h),
+          SizedBox(height: 16.h),
           if (type != null)
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.h),

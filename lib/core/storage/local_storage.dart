@@ -1,7 +1,10 @@
- import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mms_app/core/models/user_model.dart';
 
 const String kUserBox = 'userBox';
-   const String isFirstKey = 'noBiometricKoeypipo';
+const String isFirstKey = 'noBiometricKoeypipo';
+const String tokenKey = 'tokenKeyrgewr';
+const String userKey = 'userKeytrte';
 
 class AppCache {
   static Future<void> init() async {
@@ -11,13 +14,25 @@ class AppCache {
 
   static Box<dynamic> get _userBox => Hive.box<dynamic>(kUserBox);
 
-  static void haveFirstView() {
-    _userBox.put(isFirstKey, false);
+  static void setToken(String a) {
+    _userBox.put(tokenKey, a);
   }
 
-  static bool getIsFirst() {
-    final bool data = _userBox.get(isFirstKey, defaultValue: true);
-    return data;
+  static String? getToken() {
+    return _userBox.get(tokenKey);
+  }
+
+  static void setUser(UserData a) {
+    _userBox.put(userKey, a.toJson());
+  }
+
+  static UserData? getUser() {
+    dynamic data = _userBox.get(userKey);
+    if (data == null) {
+      return null;
+    } else {
+      return UserData.fromJson(data);
+    }
   }
 
   static Future<void> clear() async {

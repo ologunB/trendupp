@@ -8,8 +8,8 @@ class Utils {
     await SystemChannels.textInput.invokeMethod<dynamic>('TextInput.hide');
   }
 
-  static String? isValidPassword(String value) {
-    value = value.trim();
+  static String? isValidPassword(String? value) {
+    value = value!.trim();
     if (value.trim().isEmpty) {
       return "Password is required";
     } else if (value.trim().length < 6) {
@@ -18,13 +18,19 @@ class Utils {
       return "Password must contain a number";
     } else if (!value.trim().toUpperCase().contains(RegExp(r'[A-Z]'))) {
       return "Password must contain a letter";
+    } else if (!value.trim().contains(RegExp(r'[A-Z]'))) {
+      return "Password must contain an upper case letter";
+    } else if (!value.trim().contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      return "Password must contain a special character";
     }
     return null;
   }
 
-  static String? isValidName(String value) {
-    if (value.isEmpty) {
-      return 'Field cannot be Empty';
+  static String? isValidName(String? value, String type, int length) {
+    if (value!.isEmpty) {
+      return '$type cannot be Empty';
+    } else if (value.length < length) {
+      return '$type is too short';
     }
     return null;
   }
@@ -40,8 +46,8 @@ class Utils {
     return result;
   }
 
-  static String? validateEmail(String value) {
-    value = value.trim();
+  static String? validateEmail(String? value) {
+    value = value!.trim();
     final RegExp regex = RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
     if (value.isEmpty) {

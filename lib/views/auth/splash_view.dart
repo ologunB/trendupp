@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/core/routes/router.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
+import 'package:mms_app/views/creators/creators_layout.dart';
+import 'package:mms_app/views/fan/fan_layout.dart';
 import 'package:mms_app/views/widgets/utils.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'choose_type.dart';
 import 'choose_signup.dart';
+import 'login.dart';
 
 class SplashView extends StatefulWidget {
   @override
@@ -14,20 +17,21 @@ class SplashView extends StatefulWidget {
 class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
+    //  AppCache.clear();
     Future.delayed(Duration(seconds: 2), () {
-      if (AppCache.getIsFirst()) {
+      if (AppCache.getUser() == null) {
         Navigator.pushReplacement(
             context,
             PageRouteBuilder(
                 transitionDuration: Duration(seconds: 1),
                 pageBuilder: (_, __, ___) => ChooseSignup()));
-       // pushReplacement(context, ChooseSignup());
       } else {
-        String? uid; //= AppCache.instance.currentUser?.uid;
-        if (uid == null) {
-          pushReplacement(context, ChooseType());
-        } else {
-          pushReplacement(context, ChooseType());
+        if (AppCache.getUser()!.userType == 'fan') {
+          pushReplacement(context, FanLayout());
+        } else if (AppCache.getUser()!.userType == 'creator') {
+          pushReplacement(context, CreatorLayout());
+        } else if (!AppCache.getUser()!.verified!) {
+          pushReplacement(context, Login(isVerify: true));
         }
       }
     });

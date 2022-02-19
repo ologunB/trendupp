@@ -82,7 +82,7 @@ class _SupportedCreatorsState extends State<SupportedCreators> {
                         ),
                         SizedBox(width: 4.h),
                         regularText(
-                          'View all creators',
+                          'View more',
                           fontSize: 12.sp,
                           color: AppColors.red,
                           fontWeight: FontWeight.w500,

@@ -1,15 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mms_app/views/auth/choose_type.dart';
 
 const String Onboard = '/onboarding-view';
-const String LoginLayout = '/login-layout-view';
+const String ChooseTypeString = '/choose-type-view';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
-    case LoginLayout:
+    case ChooseTypeString:
       return _getPageRoute(
         routeName: settings.name!,
-        view: Text(''),
+        view: ChooseType(),
         args: settings.arguments!,
       );
 

@@ -1,7 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
-import 'package:mms_app/core/routes/router.dart';
-import 'package:mms_app/views/auth/choose_signup.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
+import 'package:mms_app/views/widgets/logout_dialog.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'explore_creators.dart';
 import 'fan_home.dart';
@@ -14,9 +16,9 @@ class FanLayout extends StatefulWidget {
   _FanLayoutState createState() => _FanLayoutState();
 }
 
-class _FanLayoutState extends State<FanLayout> {
-  int currentIndex = 0;
+ValueNotifier<int> fIndexNotifier = ValueNotifier(0);
 
+class _FanLayoutState extends State<FanLayout> {
   List<Widget> views() => [
         FanHome(),
         ExploreCreators(),
@@ -29,33 +31,39 @@ class _FanLayoutState extends State<FanLayout> {
 
   @override
   Widget build(bContext) {
-    return Scaffold(
-      key: mainLayoutScaffoldKey,
-      appBar: AppBar(
-        elevation: 0,
-        leadingWidth: 0,
-        backgroundColor: Colors.transparent,
-        titleSpacing: 0,
-        leading: SizedBox(),
-        title: Container(
-          padding: EdgeInsets.symmetric(horizontal: 24.h),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Image.asset('assets/images/logo.png', height: 32.h),
-              Spacer(),
-              InkWell(
-                  onTap: () {
-                    mainLayoutScaffoldKey.currentState!.openDrawer();
-                  },
-                  child: Image.asset('assets/images/menu.png', height: 20.h)),
-            ],
-          ),
-        ),
-      ),
-      body: views()[currentIndex],
-      drawer: drawerWidget(bContext),
-    );
+    print(AppCache.getToken());
+    return ValueListenableBuilder<int>(
+        valueListenable: fIndexNotifier,
+        builder: (_, a, __) {
+          return Scaffold(
+            key: mainLayoutScaffoldKey,
+            appBar: AppBar(
+              elevation: 0,
+              leadingWidth: 0,
+              backgroundColor: Colors.transparent,
+              titleSpacing: 0,
+              leading: SizedBox(),
+              title: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset('assets/images/logo.png', height: 32.h),
+                    Spacer(),
+                    InkWell(
+                        onTap: () {
+                          mainLayoutScaffoldKey.currentState!.openDrawer();
+                        },
+                        child: Image.asset('assets/images/menu.png',
+                            height: 20.h)),
+                  ],
+                ),
+              ),
+            ),
+            body: views()[a],
+            drawer: drawerWidget(bContext),
+          );
+        });
   }
 
   Widget drawerWidget(BuildContext bContext) {
@@ -101,75 +109,11 @@ class _FanLayoutState extends State<FanLayout> {
       onTap: () {
         if (i == 5) {
           showDialog<AlertDialog>(
-            context: context,
-            builder: (BuildContext bContext) => Container(
-              color: AppColors.darkBlue.withOpacity(.1),
-              child: AlertDialog(
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    regularText(
-                      'Logout',
-                      fontSize: 15.sp,
-                      textAlign: TextAlign.center,
-                      color: AppColors.black,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    SizedBox(height: 10.h),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.h),
-                      child: regularText(
-                        'Are you sure you want to logout from your account?',
-                        fontSize: 13.sp,
-                        textAlign: TextAlign.center,
-                        color: AppColors.black,
-                      ),
-                    ),
-                    SizedBox(height: 12.h),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.pop(bContext);
-                            },
-                            child: regularText(
-                              'Cancel',
-                              fontSize: 13.sp,
-                              textAlign: TextAlign.center,
-                              color: AppColors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10.h),
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.pop(bContext);
-                              pushAndRemoveUntil(context, ChooseSignup());
-                            },
-                            child: regularText(
-                              'Confirm',
-                              fontSize: 13.sp,
-                              textAlign: TextAlign.center,
-                              color: AppColors.red,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.h)),
-              ),
-            ),
-          );
+              context: context,
+              builder: (BuildContext bContext) => LogoutDialog());
           return;
         }
-        currentIndex = i;
+        fIndexNotifier.value = i;
         setState(() {});
         Navigator.pop(context);
       },
@@ -182,14 +126,18 @@ class _FanLayoutState extends State<FanLayout> {
               child: Image.asset(
                 'assets/images/$a.png',
                 height: 25.h,
-                color: currentIndex == i ? AppColors.red : AppColors.textGrey,
+                color: fIndexNotifier.value == i
+                    ? AppColors.red
+                    : AppColors.textGrey,
               ),
             ),
             SizedBox(width: 12.h),
             regularText(
               a,
               fontSize: 14.sp,
-              color: currentIndex == i ? AppColors.red : AppColors.textGrey,
+              color: fIndexNotifier.value == i
+                  ? AppColors.red
+                  : AppColors.textGrey,
               fontWeight: FontWeight.w500,
             ),
           ],

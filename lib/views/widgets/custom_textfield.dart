@@ -8,7 +8,7 @@ class CustomTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final Widget? suffix;
-  final String Function(String?)? validator;
+  final String? Function(String?)? validator;
   final Function(String?)? onSaved;
   final String? hintText;
   final bool? normal;
@@ -152,7 +152,7 @@ class CustomTextField extends StatelessWidget {
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: AppColors.red,
+                color: AppColors.grey2,
                 width: 2.h,
               ),
               borderRadius: BorderRadius.circular(6.h),

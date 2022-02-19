@@ -1,12 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 import 'package:mms_app/app/colors.dart';
+import 'package:mms_app/core/models/user_model.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
+import 'package:mms_app/core/viewmodels/auth_vm.dart';
 import 'package:mms_app/views/widgets/buttons.dart';
 import 'package:mms_app/views/widgets/custom_textfield.dart';
+import 'package:mms_app/views/widgets/snackbar.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'package:mms_app/views/widgets/utils.dart';
+
+import '../base_view.dart';
 
 class FanBio extends StatefulWidget {
   const FanBio({Key? key}) : super(key: key);
@@ -23,196 +30,252 @@ class _FanBioState extends State<FanBio> {
   TextEditingController youtube = TextEditingController();
   TextEditingController fb = TextEditingController();
   TextEditingController websiteUrl = TextEditingController();
+  String? imageUrl;
+  bool autoValidate = false;
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    UserData user = AppCache.getUser()!;
+    firstName = TextEditingController(text: user.firstName);
+    lastName = TextEditingController(text: user.lastName);
+    twitter = TextEditingController(text: user.twitterLink);
+    ig = TextEditingController(text: user.instagramLink);
+    youtube = TextEditingController(text: user.youtubeLink);
+    fb = TextEditingController(text: user.facebookLink);
+    websiteUrl = TextEditingController(text: user.websiteUrl);
+    imageUrl = user.picture;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: AppColors.white,
-        centerTitle: true,        leading: SizedBox(),
-
-        title: Image.asset('assets/images/logo.png', height: 32.h),
-      ),
-      body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 24.h),
-        children: [
-          SizedBox(height: 10.h),
-          Row(
-            children: [
-              InkWell(
-                onTap: () => Navigator.pop(context),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.arrow_back_rounded,
-                      color: AppColors.lightBlack,
-                      size: 16.h,
-                    ),
-                    SizedBox(width: 6.h),
-                    regularText(
-                      'SETTINGS',
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.lightBlack,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 32.h),
-          regularText(
-            'Update User Details',
-            fontSize: 24.sp,
-            textAlign: TextAlign.center,
-            fontWeight: FontWeight.w700,
-            color: AppColors.black,
-          ),
-          SizedBox(height: 32.h),
-          InkWell(
-            onTap: getImageGallery,
-            child: DottedBorder(
-                borderType: BorderType.RRect,
-                radius: Radius.circular(10.h),
-                dashPattern: [3, 3],
-                color: AppColors.textGrey,
-                child: imageFile != null
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(10.h),
-                        child: Image.file(
-                          imageFile!,
-                          width: ScreenUtil.defaultSize.width,
-                          height: 100.h,
-                        ),
-                      )
-                    : Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 20.h, horizontal: 55.h),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/camera.png',
-                              height: 30.h,
+    return BaseView<AuthViewModel>(
+        onModelReady: (m) => null,
+        builder: (_, AuthViewModel model, __) => GestureDetector(
+            onTap: Utils.offKeyboard,
+            child: Form(
+                key: formKey,
+                autovalidateMode: autoValidate
+                    ? AutovalidateMode.always
+                    : AutovalidateMode.disabled,
+                child: Scaffold(
+                  backgroundColor: AppColors.white,
+                  appBar: AppBar(
+                    elevation: 0,
+                    backgroundColor: AppColors.white,
+                    centerTitle: true,
+                    leading: SizedBox(),
+                    title: Image.asset('assets/images/logo.png', height: 32.h),
+                  ),
+                  body: ListView(
+                    padding: EdgeInsets.symmetric(horizontal: 24.h),
+                    children: [
+                      SizedBox(height: 10.h),
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: () => Navigator.pop(context),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.arrow_back_rounded,
+                                  color: AppColors.lightBlack,
+                                  size: 16.h,
+                                ),
+                                SizedBox(width: 6.h),
+                                regularText(
+                                  'SETTINGS',
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.lightBlack,
+                                ),
+                              ],
                             ),
-                            Row(),
-                            SizedBox(height: 17.h),
-                            regularText(
-                              'Upload profile picture',
-                              fontSize: 12.sp,
-                              textAlign: TextAlign.center,
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.lightBlack,
-                            ),
-                          ],
-                        ),
-                      )),
-          ),
-          SizedBox(height: 32.h),
-          CustomTextField(
-            title: 'Basic Information',
-            hintText: 'First Name',
-            controller: firstName,
-            textInputType: TextInputType.text,
-            textInputAction: TextInputAction.next,
-          ),
-          CustomTextField(
-            hintText: 'Last Name',
-            controller: lastName,
-            textInputType: TextInputType.text,
-            textInputAction: TextInputAction.next,
-          ),
-          SizedBox(height: 24.h),
-          regularText(
-            'Social Platforms',
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w700,
-            color: AppColors.black,
-          ),
-          SizedBox(height: 8.h),
-          regularText(
-            'Enter the username of the social media platforms\nyou are on',
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w500,
-            color: AppColors.textGrey,
-          ),
-          SizedBox(height: 8.h),
-          CustomTextField(
-            hintText: '@username',
-            controller: twitter,
-            textInputType: TextInputType.text,
-            textInputAction: TextInputAction.next,
-            prefixIcon: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('assets/images/tw.png', height: 20.h),
-              ],
-            ),
-          ),
-          CustomTextField(
-            hintText: '@username',
-            controller: ig,
-            textInputType: TextInputType.text,
-            textInputAction: TextInputAction.next,
-            prefixIcon: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('assets/images/ig.png', height: 20.h),
-              ],
-            ),
-          ),
-          CustomTextField(
-            hintText: '@username',
-            controller: youtube,
-            textInputType: TextInputType.text,
-            textInputAction: TextInputAction.next,
-            prefixIcon: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('assets/images/yt.png', height: 20.h),
-              ],
-            ),
-          ),
-          CustomTextField(
-            hintText: '@username',
-            controller: fb,
-            textInputType: TextInputType.text,
-            textInputAction: TextInputAction.next,
-            prefixIcon: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('assets/images/fb.png', height: 20.h),
-              ],
-            ),
-          ),
-          CustomTextField(
-            hintText: 'website url',
-            controller: websiteUrl,
-            textInputType: TextInputType.text,
-            textInputAction: TextInputAction.next,
-            prefixIcon: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('assets/images/web.png', height: 20.h),
-              ],
-            ),
-          ),
-          SizedBox(height: 42.h),
-          buttonWithBorder(
-            'Update User Details',
-            buttonColor: AppColors.red,
-            fontSize: 16.sp,
-            height: 52.h,
-            textColor: AppColors.white,
-            fontWeight: FontWeight.w700,
-           ),
-          SizedBox(height: 24.h),
-        ],
-      ),
-    );
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 32.h),
+                      regularText(
+                        'Update User Details',
+                        fontSize: 24.sp,
+                        textAlign: TextAlign.center,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.black,
+                      ),
+                      SizedBox(height: 32.h),
+                      InkWell(
+                        onTap: getImageGallery,
+                        child: DottedBorder(
+                            borderType: BorderType.RRect,
+                            radius: Radius.circular(10.h),
+                            dashPattern: [3, 3],
+                            color: AppColors.textGrey,
+                            child: imageUrl != null
+                                ? CachedNetworkImage(
+                                    imageUrl: imageUrl!,
+                                    height: 100.h,
+                                    width: 100.h,
+                                    fit: BoxFit.cover,
+                                    placeholder: (_, __) => Image.asset(
+                                      'images/person.png',
+                                      height: 100.h,
+                                      width: 100.h,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    errorWidget: (BuildContext context,
+                                            String url, dynamic error) =>
+                                        Image.asset(
+                                      'images/person.png',
+                                      height: 100.h,
+                                      width: 100.h,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : imageFile != null
+                                    ? ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(10.h),
+                                        child: Image.file(
+                                          imageFile!,
+                                          width: ScreenUtil.defaultSize.width,
+                                          height: 100.h,
+                                        ),
+                                      )
+                                    : Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 20.h, horizontal: 55.h),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/camera.png',
+                                              height: 30.h,
+                                            ),
+                                            Row(),
+                                            SizedBox(height: 17.h),
+                                            regularText(
+                                              'Upload profile picture',
+                                              fontSize: 12.sp,
+                                              textAlign: TextAlign.center,
+                                              fontWeight: FontWeight.w400,
+                                              color: AppColors.lightBlack,
+                                            ),
+                                          ],
+                                        ),
+                                      )),
+                      ),
+                      SizedBox(height: 32.h),
+                      CustomTextField(
+                        title: 'Basic Information',
+                        hintText: 'First Name',
+                        controller: firstName,
+                        textInputType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        validator: (a) {
+                          return Utils.isValidName(a, '"First Name"', 2);
+                        },
+                      ),
+                      CustomTextField(
+                        hintText: 'Last Name',
+                        controller: lastName,
+                        textInputType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        validator: (a) {
+                          return Utils.isValidName(a, '"Last Name"', 2);
+                        },
+                      ),
+                      SizedBox(height: 24.h),
+                      regularText(
+                        'Social Platforms',
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.black,
+                      ),
+                      SizedBox(height: 8.h),
+                      regularText(
+                        'Enter the username of the social media platforms\nyou are on',
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.textGrey,
+                      ),
+                      SizedBox(height: 8.h),
+                      CustomTextField(
+                        hintText: 'username',
+                        controller: twitter,
+                        textInputType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        prefixIcon: prefix('tw'),
+                      ),
+                      CustomTextField(
+                        hintText: 'username',
+                        controller: ig,
+                        textInputType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        prefixIcon: prefix('ig'),
+                      ),
+                      CustomTextField(
+                        hintText: 'username',
+                        controller: youtube,
+                        textInputType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        prefixIcon: prefix('yt'),
+                      ),
+                      CustomTextField(
+                        hintText: 'username',
+                        controller: fb,
+                        textInputType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        prefixIcon: prefix('fb'),
+                      ),
+                      CustomTextField(
+                        hintText: 'website url',
+                        controller: websiteUrl,
+                        textInputType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        prefixIcon: prefix('web'),
+                      ),
+                      SizedBox(height: 42.h),
+                      buttonWithBorder('Update User Details',
+                          buttonColor: AppColors.red,
+                          fontSize: 16.sp,
+                          height: 52.h,
+                          busy: model.busy,
+                          textColor: AppColors.white,
+                          fontWeight: FontWeight.w700, onTap: () async {
+                        autoValidate = true;
+                        setState(() {});
+                        if (formKey.currentState!.validate()) {
+                          Utils.offKeyboard();
+                          String? img;
+                          if (imageFile != null) {
+                            img = await model.uploadImage(imageFile!);
+                          }
+                          Map<String, String> data = {
+                            "firstName": firstName.text,
+                            "lastName": lastName.text,
+                            "facebookLink": fb.text,
+                            "twitterLink": twitter.text,
+                            "instagramLink": ig.text,
+                            "youtubeLink": youtube.text,
+                            "websiteUrl": websiteUrl.text,
+                          };
+                          if (img != null) {
+                            data.putIfAbsent('picture', () => img!);
+                          }
+                          bool res = await model.updateProfile(data, null);
+                          if (res) {
+                            showSnackBar(context, 'Success',
+                                'Your profile has been updated successfully');
+                          }
+                        }
+                      }),
+                      SizedBox(height: 24.h),
+                    ],
+                  ),
+                ))));
   }
 
   File? imageFile;
@@ -229,4 +292,26 @@ class _FanBioState extends State<FanBio> {
       return;
     }
   }
+
+  Widget prefix(String a) => Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(width: 12.h),
+          Image.asset('assets/images/$a.png', height: 20.h),
+          SizedBox(width: 8.h),
+          regularText(
+            a == 'web' ? 'https://' : '@',
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w700,
+            color: AppColors.black,
+          ),
+        ],
+      )
+    ],
+  );
+
 }

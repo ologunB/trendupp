@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/views/widgets/card_item.dart';
+import 'package:mms_app/views/widgets/supporter_item.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
+
+import 'creators_layout.dart';
 
 class CreatorHome extends StatefulWidget {
   const CreatorHome({Key? key}) : super(key: key);
@@ -11,6 +14,17 @@ class CreatorHome extends StatefulWidget {
 }
 
 class _CreatorHomeState extends State<CreatorHome> {
+  bool isEmpty = true;
+
+  @override
+  void initState() {
+    Future.delayed(Duration(seconds: 3), () {
+      isEmpty = !isEmpty;
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -25,6 +39,60 @@ class _CreatorHomeState extends State<CreatorHome> {
         cardItem('list1', '₦22,500', 'Current Earning', Color(0xffEDEEEE),
             Color(0xff6E757C)),
         SizedBox(height: 8.h),
+        if (!isEmpty)
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 28.h),
+            margin: EdgeInsets.only(bottom: 16.h),
+            decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(8.h),
+                boxShadow: [
+                  BoxShadow(
+                      color: AppColors.grey, blurRadius: 6, spreadRadius: 2)
+                ]),
+            child: ListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              physics: ClampingScrollPhysics(),
+              children: [
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.h),
+                    child: Row(
+                      children: [
+                        regularText(
+                          'RECENT SUPPORTERS',
+                          fontSize: 14.sp,
+                          color: AppColors.lightBlack,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: () {
+                            cIndexNotifier.value = 4;
+                          },
+                          child: Image.asset(
+                            'assets/images/view-all.png',
+                            height: 24.h,
+                          ),
+                        )
+                      ],
+                    )),
+                ListView.separated(
+                    separatorBuilder: (_, __) {
+                      return Divider(
+                          color: AppColors.textGrey.withOpacity(.4),
+                          height: 2.h);
+                    },
+                    itemCount: 3,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    physics: ClampingScrollPhysics(),
+                    itemBuilder: (BuildContext ctx, index) {
+                      return SupporterItem();
+                    }),
+              ],
+            ),
+          ),
         Container(
           padding: EdgeInsets.symmetric(vertical: 28.h),
           decoration: BoxDecoration(
@@ -35,27 +103,46 @@ class _CreatorHomeState extends State<CreatorHome> {
               ]),
           child: Column(
             children: [
+              if (!isEmpty)
+                Padding(
+                    padding: EdgeInsets.only(left: 24.h, bottom: 20.h),
+                    child: Row(
+                      children: [
+                        regularText(
+                          'SHARE YOUR PAGE',
+                          fontSize: 14.sp,
+                          color: AppColors.lightBlack,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        Spacer(),
+                      ],
+                    )),
               Image.asset(
                 'assets/images/love.png',
                 height: 41.h,
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: 12.h),
               regularText(
-                'You don’t have any supporters yet',
+                isEmpty
+                    ? 'You don’t have any supporters yet'
+                    : 'Share your page with your audience',
                 fontSize: 14.sp,
                 color: AppColors.black,
                 fontWeight: FontWeight.w700,
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 8.h),
-              regularText(
-                'Share your page with your audience to\nget started.',
-                fontSize: 12.sp,
-                color: AppColors.textGrey,
-                fontWeight: FontWeight.w500,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 32.h),
+              if (isEmpty)
+                Padding(
+                  padding: EdgeInsets.only(top: 8.h),
+                  child: regularText(
+                    'Share your page with your audience to\nget started.',
+                    fontSize: 12.sp,
+                    color: AppColors.textGrey,
+                    fontWeight: FontWeight.w500,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              SizedBox(height: 24.h),
               Container(
                   margin: EdgeInsets.symmetric(horizontal: 24.h),
                   decoration: BoxDecoration(
