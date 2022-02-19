@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:logger/logger.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/api/auth_api.dart';
 import 'package:mms_app/core/models/user_model.dart';
@@ -23,6 +27,9 @@ class AuthViewModel extends BaseModel {
     try {
       await _authApi.signup(a);
       isVerified = true;
+      if (a['isVerified'] == '1') {
+        pushAndRemoveUntil(c(), ChooseType());
+      }
       setBusy(false);
     } on CustomException catch (e) {
       error = e.message;
@@ -64,9 +71,11 @@ class AuthViewModel extends BaseModel {
     try {
       await _authApi.verify(a);
       setBusy(false);
-      UserData user = AppCache.getUser()!;
-      user.verified = true;
-      AppCache.setUser(user);
+      if (AppCache.getUser() != null) {
+        UserData user = AppCache.getUser()!;
+        user.verified = true;
+        AppCache.setUser(user);
+      }
       pushReplacement(c(), ChooseType());
     } on CustomException catch (e) {
       error = e.message;
@@ -150,6 +159,55 @@ class AuthViewModel extends BaseModel {
       error = e.message;
       setBusy(false);
       return false;
+    }
+  }
+
+  Future signInWithGoogle(BuildContext buildContext) async {
+    setBusy(true);
+
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      await googleSignIn.signOut();
+
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
+      print(googleSignInAccount);
+
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+
+        Map<String, dynamic> data = {
+          'email': googleSignInAccount.email,
+          'password': googleSignInAuthentication.accessToken,
+          'isVerified': '1',
+          'onboardingStep': '1'
+        };
+
+        signup(data);
+      } else {
+        setBusy(false);
+        showSnackBar(buildContext, "Error", 'Choose an account');
+      }
+    } on PlatformException catch (e) {
+      setBusy(false);
+
+      showSnackBar(buildContext, "Error", e.message!);
+    } catch (e) {
+      setBusy(false);
+      showSnackBar(buildContext, "Error", e.toString());
+    }
+  }
+
+  Future signInWithFB(BuildContext buildContext) async {
+    final LoginResult result = await FacebookAuth.instance.login();
+    if (result.status == LoginStatus.success) {
+      final AccessToken accessToken = result.accessToken!;
+
+      Logger().d(accessToken.toJson());
+    } else {
+      print(result.status);
+      print(result.message);
     }
   }
 

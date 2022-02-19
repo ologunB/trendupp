@@ -5,7 +5,6 @@ import 'package:mms_app/views/creators/creators_layout.dart';
 import 'package:mms_app/views/fan/fan_layout.dart';
 import 'package:mms_app/views/widgets/utils.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'choose_type.dart';
 import 'choose_signup.dart';
 import 'login.dart';
 
