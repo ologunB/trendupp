@@ -5,7 +5,7 @@ import 'package:mms_app/app/colors.dart';
 
 void showSnackBar(BuildContext context, String title, String msg,
     {int duration = 6,
-    Color color = Colors.grey,
+    Color color = AppColors.green,
     TextAlign align = TextAlign.start}) {
   final Flushbar<void> flushBar = Flushbar<void>(
     titleText: regularText(

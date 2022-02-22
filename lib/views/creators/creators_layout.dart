@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
+import 'package:mms_app/core/models/post_model.dart';
 import 'package:mms_app/core/routes/router.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/views/creators/add_post.dart';
 import 'package:mms_app/views/creators/posts_history.dart';
 import 'package:mms_app/views/creators/settings.dart';
@@ -26,7 +28,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
   List<Widget> views() => [
         CreatorHome(),
         FanHome(),
-        CreatorDetails(isFan: false),
+        CreatorDetails(isFan: false, userData: AppCache.getUser()!),
         PostsHistory(),
         SupportersHistory(),
         WalletHistory(),
@@ -145,8 +147,9 @@ class _CreatorLayoutState extends State<CreatorLayout> {
             regularText(
               a,
               fontSize: 14.sp,
-              color:
-                  cIndexNotifier.value == i ? AppColors.red : AppColors.textGrey,
+              color: cIndexNotifier.value == i
+                  ? AppColors.red
+                  : AppColors.textGrey,
               fontWeight: FontWeight.w500,
             ),
           ],
@@ -207,7 +210,8 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                       onTap: () {
                         postIsOpen = !postIsOpen;
                         setState(() {});
-                        push(context, AddPost(type: 0));
+                        push(
+                            context, AddPost(model: PostModel(type: 'public')));
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,7 +219,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                           Image.asset(
                             'assets/images/people.png',
                             height: 20.h,
-                            color: Color(0xffD38CA5),
+                            color: Color(0xffd38ca5),
                           ),
                           SizedBox(width: 16.h),
                           Expanded(
@@ -245,7 +249,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                       onTap: () {
                         postIsOpen = !postIsOpen;
                         setState(() {});
-                        push(context, AddPost(type: 1));
+                        push(context, AddPost(model: PostModel(type: 'supporters')));
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -261,13 +265,13 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 regularText(
-                                  'Your Supporters',
+                                  'Supporters',
                                   fontSize: 12.sp,
                                   color: AppColors.white,
                                   fontWeight: FontWeight.w700,
                                 ),
                                 regularText(
-                                  'Post to general viewers of your page',
+                                  'Post to your supporters of your page',
                                   fontSize: 8.sp,
                                   color: AppColors.white,
                                   fontWeight: FontWeight.w700,

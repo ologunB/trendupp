@@ -62,49 +62,68 @@ class _ChooseSignupState extends State<ChooseSignup>
                   shrinkWrap: true,
                   children: [
                     Hero(
-                        tag: 'splash',
-                        child: Image.asset('assets/images/logo2.png',
-                            height: 100.h)),
+                      tag: 'splash',
+                      child:
+                          Image.asset('assets/images/logo2.png', height: 100.h),
+                    ),
                     SizedBox(height: 150.h),
                     SlideTransition(
                       position: _offsetFloat!,
-                      child: Column(
-                        children: [
-                          InkWell(
-                            onTap: () => push(context, Signup()),
-                            child: item('Sign  up with  Email', 'mail'),
-                          ),
-                          SizedBox(height: 18.h),
-                          InkWell(
-                              onTap: () {
-                                model.signInWithGoogle(context);
-                              },
-                              child: item('Continue with Google', 'gg')),
-                          SizedBox(height: 18.h),
-                          InkWell(
-                              onTap: () {
-                                model.signInWithFB(context);
-                              },
-                              child: item('Continue with Facebook', 'fb')),
-                          SizedBox(height: 51.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  push(context, Login());
-                                },
-                                child: regularText(
-                                  'Login',
-                                  fontSize: 16.sp,
+                      child: model.busy
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 3,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
+                                  ),
+                                  height: 20.h,
+                                  width: 20.h,
+                                ),
+                                SizedBox(height: 18.h),
+                                regularText(
+                                  'Signing In...',
+                                  fontSize: 13.sp,
                                   color: AppColors.white,
                                   fontWeight: FontWeight.w700,
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                InkWell(
+                                  onTap: () => push(context, Signup()),
+                                  child: item('Sign  up with  Email', 'mail'),
+                                ),
+                                SizedBox(height: 18.h),
+                                InkWell(
+                                  onTap: () => model.signInWithGoogle(context),
+                                  child: item('Continue with Google', 'gg'),
+                                ),
+                                SizedBox(height: 18.h),
+                                InkWell(
+                                  onTap: () => model.signInWithFB(context),
+                                  child: item('Continue with Facebook', 'fb'),
+                                ),
+                                SizedBox(height: 51.h),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: () => push(context, Login()),
+                                      child: regularText(
+                                        'Login',
+                                        fontSize: 16.sp,
+                                        color: AppColors.white,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
                     )
                   ],
                 ),

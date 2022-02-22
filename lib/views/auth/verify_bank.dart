@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mms_app/app/colors.dart';
-import 'package:mms_app/core/routes/router.dart';
 import 'package:mms_app/core/viewmodels/auth_vm.dart';
 import 'package:mms_app/views/creators/creators_layout.dart';
 import 'package:mms_app/views/widgets/buttons.dart';
@@ -23,7 +23,6 @@ class VerifyBank extends StatefulWidget {
 
 class _VerifyBankState extends State<VerifyBank> {
   TextEditingController number = TextEditingController();
-
   bool isDone = false;
 
   @override
@@ -112,7 +111,8 @@ class _VerifyBankState extends State<VerifyBank> {
                           showDialog<AlertDialog>(
                             context: context,
                             barrierDismissible: true,
-                            builder: (BuildContext context) => congratsDialog(),
+                            builder: (BuildContext cContext) =>
+                                congratsDialog(data['userName']!, cContext),
                           );
                         }
 
@@ -120,7 +120,7 @@ class _VerifyBankState extends State<VerifyBank> {
                       } else {
                         if (number.text.length == 10 && bank != null) {
                           Utils.offKeyboard();
-                          String c = banks.firstWhere(
+                          String c = allNigerianBanks.firstWhere(
                               (e) => e['bank_name'] == bank)['bank_code'];
                           bool res = await model.resolveAccount(number.text, c);
                           if (res) {
@@ -153,7 +153,7 @@ class _VerifyBankState extends State<VerifyBank> {
             setState(() {});
             return bank!;
           },
-          list: banks.map((e) => e['bank_name'].toString()).toList(),
+          list: allNigerianBanks.map((e) => e['bank_name'].toString()).toList(),
           value: bank,
         ),
         CustomTextField(
@@ -197,7 +197,7 @@ class _VerifyBankState extends State<VerifyBank> {
     );
   }
 
-  Widget congratsDialog() {
+  Widget congratsDialog(String a, BuildContext cContext) {
     return Container(
       color: AppColors.black.withOpacity(.1),
       child: AlertDialog(
@@ -214,7 +214,7 @@ class _VerifyBankState extends State<VerifyBank> {
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pop(cContext);
                     },
                     child: Image.asset(
                       'assets/images/close.png',
@@ -263,7 +263,7 @@ class _VerifyBankState extends State<VerifyBank> {
                         ),
                         SizedBox(width: 12.h),
                         regularText(
-                          'trendupp.com/randomname',
+                          'trendupp.com/$a',
                           fontSize: 12.sp,
                           textAlign: TextAlign.center,
                           fontWeight: FontWeight.w700,
@@ -271,7 +271,15 @@ class _VerifyBankState extends State<VerifyBank> {
                         ),
                       ],
                     ),
-                    Image.asset('assets/images/tap.png', height: 24.h)
+                    InkWell(
+                        onTap: () {
+                          Clipboard.setData(
+                              ClipboardData(text: 'trendupp.com/$a'));
+                          showSnackBar(context, 'Copied',
+                              'Link has been copied to clipboard', );
+                        },
+                        child:
+                            Image.asset('assets/images/tap.png', height: 24.h))
                   ],
                 )),
             SizedBox(height: 32.h),
@@ -294,7 +302,10 @@ class _VerifyBankState extends State<VerifyBank> {
             ),
             SizedBox(height: 24.h),
             InkWell(
-              onTap: () => pushAndRemoveUntil(context, CreatorLayout()),
+              onTap: () {
+                Navigator.pop(cContext);
+                cIndexNotifier.value = 2;
+              },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 8.h),
                 decoration: BoxDecoration(
@@ -325,7 +336,7 @@ class _VerifyBankState extends State<VerifyBank> {
   }
 }
 
-List banks = [
+List allNigerianBanks = [
   {"bank_name": "3LINE CARD MANAGEMENT LIMITED", "bank_code": "110005"},
   {"bank_name": "9 PAYMENT SOLUTIONS BANK", "bank_code": "120001"},
   {"bank_name": "AB MICROFINANCE BANK", "bank_code": "090270"},

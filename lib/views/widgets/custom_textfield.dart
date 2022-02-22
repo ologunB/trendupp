@@ -85,7 +85,7 @@ class CustomTextField extends StatelessWidget {
                   child: CircularProgressIndicator(
                     strokeWidth: 3,
                     valueColor:
-                        AlwaysStoppedAnimation<Color>(AppColors.darkBlue),
+                        AlwaysStoppedAnimation<Color>(AppColors.red),
                   ),
                   height: 10.h,
                   width: 10.h,

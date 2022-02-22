@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/core/routes/router.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
+import 'package:mms_app/views/auth/choose_type.dart';
 import 'package:mms_app/views/creators/creators_layout.dart';
 import 'package:mms_app/views/fan/fan_layout.dart';
 import 'package:mms_app/views/widgets/utils.dart';
@@ -16,7 +17,6 @@ class SplashView extends StatefulWidget {
 class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
-    //  AppCache.clear();
     Future.delayed(Duration(seconds: 2), () {
       if (AppCache.getUser() == null) {
         Navigator.pushReplacement(
@@ -25,7 +25,9 @@ class _SplashViewState extends State<SplashView> {
                 transitionDuration: Duration(seconds: 1),
                 pageBuilder: (_, __, ___) => ChooseSignup()));
       } else {
-        if (AppCache.getUser()!.userType == 'fan') {
+        if (AppCache.getUser()!.userType == null) {
+          pushReplacement(context, ChooseType());
+        } else if (AppCache.getUser()!.userType == 'fan') {
           pushReplacement(context, FanLayout());
         } else if (AppCache.getUser()!.userType == 'creator') {
           pushReplacement(context, CreatorLayout());

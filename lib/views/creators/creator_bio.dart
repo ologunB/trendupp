@@ -44,8 +44,8 @@ class _CreatorBioState extends State<CreatorBio> {
     brand = TextEditingController(text: user.userName);
     firstName = TextEditingController(text: user.firstName);
     lastName = TextEditingController(text: user.lastName);
-    whatYouCreate = TextEditingController(text: user.twitterLink);
-    about = TextEditingController(text: user.twitterLink);
+    whatYouCreate = TextEditingController(text: user.creating);
+    about = TextEditingController(text: user.about);
     twitter = TextEditingController(text: user.twitterLink);
     ig = TextEditingController(text: user.instagramLink);
     youtube = TextEditingController(text: user.youtubeLink);
@@ -119,36 +119,50 @@ class _CreatorBioState extends State<CreatorBio> {
                             radius: Radius.circular(10.h),
                             dashPattern: [3, 3],
                             color: AppColors.textGrey,
-                            child: imageUrl != null
-                                ? CachedNetworkImage(
-                                    imageUrl: imageUrl!,
-                                    height: 100.h,
-                                    width: 100.h,
-                                    fit: BoxFit.cover,
-                                    placeholder: (_, __) => Image.asset(
-                                      'images/person.png',
-                                      height: 100.h,
-                                      width: 100.h,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    errorWidget: (BuildContext context,
-                                            String url, dynamic error) =>
-                                        Image.asset(
-                                      'images/person.png',
-                                      height: 100.h,
-                                      width: 100.h,
-                                      fit: BoxFit.cover,
+                            child: imageFile != null
+                                ? Center(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.h),
+                                      child: Image.file(
+                                        imageFile!,
+                                        width: 100.h,
+                                        height: 100.h,
+                                      ),
                                     ),
                                   )
-                                : imageFile != null
-                                    ? ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.h),
-                                        child: Image.file(
-                                          imageFile!,
-                                          width: ScreenUtil.defaultSize.width,
-                                          height: 100.h,
-                                        ),
+                                : imageUrl != null
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10.h),
+                                            child: CachedNetworkImage(
+                                              imageUrl: imageUrl!,
+                                              height: 100.h,
+                                              width: 100.h,
+                                              fit: BoxFit.cover,
+                                              placeholder: (_, __) =>
+                                                  Image.asset(
+                                                'assets/images/person.png',
+                                                height: 100.h,
+                                                width: 100.h,
+                                                fit: BoxFit.cover,
+                                              ),
+                                              errorWidget:
+                                                  (BuildContext context,
+                                                          String url,
+                                                          dynamic error) =>
+                                                      Image.asset(
+                                                'assets/images/person.png',
+                                                height: 100.h,
+                                                width: 100.h,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          )
+                                        ],
                                       )
                                     : Container(
                                         padding: EdgeInsets.symmetric(
@@ -293,6 +307,7 @@ class _CreatorBioState extends State<CreatorBio> {
                           String? img;
                           if (imageFile != null) {
                             img = await model.uploadImage(imageFile!);
+                            if (img == null) return;
                           }
                           Map<String, String> data = {
                             "userName": brand.text,

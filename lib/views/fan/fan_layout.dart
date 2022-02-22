@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
-import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/views/widgets/logout_dialog.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'explore_creators.dart';
@@ -31,7 +30,7 @@ class _FanLayoutState extends State<FanLayout> {
 
   @override
   Widget build(bContext) {
-    print(AppCache.getToken());
+   // print(AppCache.getUser()!.toJson());
     return ValueListenableBuilder<int>(
         valueListenable: fIndexNotifier,
         builder: (_, a, __) {

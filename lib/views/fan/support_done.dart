@@ -2,16 +2,20 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mms_app/app/colors.dart';
+import 'package:mms_app/core/models/user_model.dart';
 import 'package:mms_app/core/routes/router.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/views/auth/choose_signup.dart';
- import 'package:mms_app/views/widgets/text_widgets.dart';
+import 'package:mms_app/views/widgets/text_widgets.dart';
 
 class SupportDone extends StatelessWidget {
-  const SupportDone({Key? key}) : super(key: key);
+  const SupportDone(this.creator, this.hasAccount);
+
+  final UserData creator;
+  final bool hasAccount;
 
   @override
   Widget build(BuildContext context) {
-    bool isLoggedIn = true;
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -54,83 +58,84 @@ class SupportDone extends StatelessWidget {
                   ),
                   SizedBox(height: 24.h),
                   regularText(
-                    'Thank you for supporting Twyse',
+                    'Thank you for supporting ${creator.firstName}',
                     fontSize: 16.sp,
                     color: AppColors.black,
                     fontWeight: FontWeight.w700,
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 16.h),
-                  isLoggedIn
-                      ? RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text: 'You can ',
-                            style: GoogleFonts.dmSans(
-                              color: AppColors.textGrey,
-                              height: 1.8,
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            children: [
-                              TextSpan(
-                                  text: 'log in',
+                  if (AppCache.getUser() == null)
+                    hasAccount
+                        ? RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              text: 'You can ',
+                              style: GoogleFonts.dmSans(
+                                color: AppColors.textGrey,
+                                height: 1.8,
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              children: [
+                                TextSpan(
+                                    text: 'log in',
+                                    style: GoogleFonts.dmSans(
+                                      color: AppColors.red,
+                                      fontSize: 15.sp,
+                                      height: 1.8,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        pushAndRemoveUntil(context, ChooseSignup());
+                                      }),
+                                TextSpan(
+                                  text: ' to track your support to creators',
                                   style: GoogleFonts.dmSans(
-                                    color: AppColors.red,
+                                    color: AppColors.textGrey,
                                     fontSize: 15.sp,
                                     height: 1.8,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w500,
                                   ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      push(context, ChooseSignup());
-                                    }),
-                              TextSpan(
-                                text: ' to track your support to creators',
-                                style: GoogleFonts.dmSans(
-                                  color: AppColors.textGrey,
-                                  fontSize: 15.sp,
-                                  height: 1.8,
-                                  fontWeight: FontWeight.w500,
                                 ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : regularText(
-                          'An account has been created for you to track your support to creators.\nThe log in details has been sent to your email',
-                          fontSize: 14.sp,
-                          height: 1.8,
-                          textAlign: TextAlign.center,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.textGrey,
-                        ),
-                  SizedBox(height: 24.h),
-                //  if (isLoggedIn)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 40.h, vertical: 7.h),
-                            decoration: BoxDecoration(
-                                color: AppColors.red,
-                                borderRadius: BorderRadius.circular(6.h)),
-                            child: regularText(
-                              'Go back to twyse page',
-                              fontSize: 12.sp,
-                              color: AppColors.white,
-                              fontWeight: FontWeight.w500,
-                              textAlign: TextAlign.center,
+                              ],
                             ),
+                          )
+                        : regularText(
+                            'An account has been created for you to track your support to creators.\nThe log in details has been sent to your email',
+                            fontSize: 14.sp,
+                            height: 1.8,
+                            textAlign: TextAlign.center,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.textGrey,
+                          ),
+                  SizedBox(height: 24.h),
+                  //  if (isLoggedIn)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 40.h, vertical: 7.h),
+                          decoration: BoxDecoration(
+                              color: AppColors.red,
+                              borderRadius: BorderRadius.circular(6.h)),
+                          child: regularText(
+                            'Go back to ${creator.firstName} page',
+                            fontSize: 12.sp,
+                            color: AppColors.white,
+                            fontWeight: FontWeight.w500,
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
                   SizedBox(height: 8.h),
                 ],
               ),

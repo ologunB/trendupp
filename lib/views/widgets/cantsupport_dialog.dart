@@ -3,11 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mms_app/app/colors.dart';
+import 'package:mms_app/core/models/user_model.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'buttons.dart';
 
 class CantSupportDialog extends StatefulWidget {
-  const CantSupportDialog({Key? key}) : super(key: key);
+  const CantSupportDialog({Key? key, this.user}) : super(key: key);
+  final UserData? user;
 
   @override
   _CantSupportDialogState createState() => _CantSupportDialogState();
@@ -60,7 +62,7 @@ class _CantSupportDialogState extends State<CantSupportDialog> {
                   padding:
                       EdgeInsets.symmetric(horizontal: 45.h, vertical: 40.h),
                   child: buttonWithBorder(
-                    'Go back to twyse page',
+                    'Go back to ${widget.user!.firstName} page',
                     buttonColor: AppColors.red,
                     fontSize: 14.sp,
                     height: 40.h,

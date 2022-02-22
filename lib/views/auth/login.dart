@@ -20,7 +20,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  TextEditingController otp = TextEditingController();
+  TextEditingController code = TextEditingController();
 
   bool obscureText = true;
   bool autoValidate = false;
@@ -112,8 +112,8 @@ class _LoginState extends State<Login> {
                 if (model.isVerified)
                   CustomTextField(
                     hintText: 'Paste Verification Code',
-                    controller: otp,
-                    textInputType: TextInputType.number,
+                    controller: code,
+                    textInputType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     isCode: true,
                     maxLength: 6,
@@ -139,7 +139,10 @@ class _LoginState extends State<Login> {
                                       )
                                     : InkWell(
                                         onTap: () {
-                                          resendModel.resendOtp(email.text);
+                                          resendModel.resendOtp({
+                                            'email': email.text,
+                                            'password': password.text,
+                                          });
                                         },
                                         child: Padding(
                                           padding: EdgeInsets.only(right: 30.h),
@@ -162,23 +165,24 @@ class _LoginState extends State<Login> {
                     busy: model.busy,
                     textColor: AppColors.white,
                     fontWeight: FontWeight.w700, onTap: () {
+                  Map<String, dynamic> data = {
+                    'email': email.text,
+                    'password': password.text,
+                    'code': code.text,
+                  };
                   if (model.isVerified) {
-                    if (otp.text.isEmpty) {
+                    if (code.text.isEmpty) {
                       showSnackBar(context, 'Error', 'Enter OTP');
                       return;
                     }
                     Utils.offKeyboard();
-                    model.verify({'otp': otp.text});
+                    model.verify(data);
                     return;
                   }
                   autoValidate = true;
                   setState(() {});
                   if (formKey.currentState!.validate()) {
                     Utils.offKeyboard();
-                    Map<String, dynamic> data = {
-                      'email': email.text,
-                      'password': password.text,
-                    };
                     model.login(data);
                   }
                 }),

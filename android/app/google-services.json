@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "568741488955",
+    "project_id": "trendupp-f1208",
+    "storage_bucket": "trendupp-f1208.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:568741488955:android:56c18c3bd6522a9b1def1e",
+        "android_client_info": {
+          "package_name": "com.trendup.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "568741488955-44f1u5atvh2aama6dbb8g1l8muct9hvd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trendup.app",
+            "certificate_hash": "c6e94cdc70d739c33571dad023b3455635423255"
+          }
+        },
+        {
+          "client_id": "568741488955-p2f8ob9farvsc7bm0sgdt1ud7si357ud.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE8gaqkIGAt_rN7WxwCO9gSMslTRTGtmU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "568741488955-p2f8ob9farvsc7bm0sgdt1ud7si357ud.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

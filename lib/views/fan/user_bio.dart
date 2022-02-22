@@ -50,6 +50,7 @@ class _FanBioState extends State<FanBio> {
 
   @override
   Widget build(BuildContext context) {
+    print(imageUrl);
     return BaseView<AuthViewModel>(
         onModelReady: (m) => null,
         builder: (_, AuthViewModel model, __) => GestureDetector(
@@ -112,60 +113,74 @@ class _FanBioState extends State<FanBio> {
                             radius: Radius.circular(10.h),
                             dashPattern: [3, 3],
                             color: AppColors.textGrey,
-                            child: imageUrl != null
-                                ? CachedNetworkImage(
+                            child: imageFile != null
+                                ? Center(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.h),
+                                child: Image.file(
+                                  imageFile!,
+                                  width: 100.h,
+                                  height: 100.h,
+                                ),
+                              ),
+                            )
+                                : imageUrl != null
+                                ? Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius:
+                                  BorderRadius.circular(10.h),
+                                  child: CachedNetworkImage(
                                     imageUrl: imageUrl!,
                                     height: 100.h,
                                     width: 100.h,
                                     fit: BoxFit.cover,
-                                    placeholder: (_, __) => Image.asset(
-                                      'images/person.png',
-                                      height: 100.h,
-                                      width: 100.h,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    errorWidget: (BuildContext context,
-                                            String url, dynamic error) =>
+                                    placeholder: (_, __) =>
                                         Image.asset(
-                                      'images/person.png',
-                                      height: 100.h,
-                                      width: 100.h,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                : imageFile != null
-                                    ? ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.h),
-                                        child: Image.file(
-                                          imageFile!,
-                                          width: ScreenUtil.defaultSize.width,
+                                          'assets/images/person.png',
                                           height: 100.h,
+                                          width: 100.h,
+                                          fit: BoxFit.cover,
                                         ),
-                                      )
-                                    : Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 20.h, horizontal: 55.h),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Image.asset(
-                                              'assets/images/camera.png',
-                                              height: 30.h,
-                                            ),
-                                            Row(),
-                                            SizedBox(height: 17.h),
-                                            regularText(
-                                              'Upload profile picture',
-                                              fontSize: 12.sp,
-                                              textAlign: TextAlign.center,
-                                              fontWeight: FontWeight.w400,
-                                              color: AppColors.lightBlack,
-                                            ),
-                                          ],
+                                    errorWidget:
+                                        (BuildContext context,
+                                        String url,
+                                        dynamic error) =>
+                                        Image.asset(
+                                          'assets/images/person.png',
+                                          height: 100.h,
+                                          width: 100.h,
+                                          fit: BoxFit.cover,
                                         ),
-                                      )),
+                                  ),
+                                )
+                              ],
+                            )
+                                : Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 20.h, horizontal: 55.h),
+                              child: Column(
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/camera.png',
+                                    height: 30.h,
+                                  ),
+                                  Row(),
+                                  SizedBox(height: 17.h),
+                                  regularText(
+                                    'Upload profile picture',
+                                    fontSize: 12.sp,
+                                    textAlign: TextAlign.center,
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColors.lightBlack,
+                                  ),
+                                ],
+                              ),
+                            )),
                       ),
                       SizedBox(height: 32.h),
                       CustomTextField(
@@ -252,6 +267,7 @@ class _FanBioState extends State<FanBio> {
                           String? img;
                           if (imageFile != null) {
                             img = await model.uploadImage(imageFile!);
+                            if (img == null) return;
                           }
                           Map<String, String> data = {
                             "firstName": firstName.text,
@@ -294,24 +310,23 @@ class _FanBioState extends State<FanBio> {
   }
 
   Widget prefix(String a) => Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(width: 12.h),
-          Image.asset('assets/images/$a.png', height: 20.h),
-          SizedBox(width: 8.h),
-          regularText(
-            a == 'web' ? 'https://' : '@',
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w700,
-            color: AppColors.black,
-          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(width: 12.h),
+              Image.asset('assets/images/$a.png', height: 20.h),
+              SizedBox(width: 8.h),
+              regularText(
+                a == 'web' ? 'https://' : '@',
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w700,
+                color: AppColors.black,
+              ),
+            ],
+          )
         ],
-      )
-    ],
-  );
-
+      );
 }

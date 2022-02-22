@@ -4,8 +4,9 @@ import 'package:mms_app/views/fan/support_dialog.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 
 class PostDetail extends StatelessWidget {
-  const PostDetail({Key? key}) : super(key: key);
+  const PostDetail({Key? key, this.data}) : super(key: key);
 
+  final dynamic data;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

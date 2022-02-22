@@ -41,259 +41,265 @@ class _FillBioState extends State<FillBio> {
   Widget build(BuildContext context) {
     return BaseView<AuthViewModel>(
         onModelReady: (m) => null,
-        builder: (_, AuthViewModel model, __) => Form(
-            key: formKey,
-            autovalidateMode: autoValidate
-                ? AutovalidateMode.always
-                : AutovalidateMode.disabled,
-            child: Scaffold(
-              backgroundColor: AppColors.white,
-              appBar: AppBar(
-                elevation: 0,
-                leading: SizedBox(),
-                backgroundColor: AppColors.white,
-                centerTitle: true,
-                title: Image.asset('assets/images/logo.png', height: 32.h),
-              ),
-              body: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 24.h),
-                children: [
-                  SizedBox(height: 20.h),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+        builder: (_, AuthViewModel model, __) => GestureDetector(
+              onTap: Utils.offKeyboard,
+              child: Form(
+                  key: formKey,
+                  autovalidateMode: autoValidate
+                      ? AutovalidateMode.always
+                      : AutovalidateMode.disabled,
+                  child: Scaffold(
+                    backgroundColor: AppColors.white,
+                    appBar: AppBar(
+                      elevation: 0,
+                      leading: SizedBox(),
+                      backgroundColor: AppColors.white,
+                      centerTitle: true,
+                      title:
+                          Image.asset('assets/images/logo.png', height: 32.h),
+                    ),
+                    body: ListView(
+                      padding: EdgeInsets.symmetric(horizontal: 24.h),
                       children: [
-                        itemCircle(AppColors.red, isDone: true),
-                        itemLine(AppColors.red),
-                        itemCircle(AppColors.red),
-                        itemLine(AppColors.red),
-                        itemCircle(AppColors.grey1),
+                        SizedBox(height: 20.h),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              itemCircle(AppColors.red, isDone: true),
+                              itemLine(AppColors.red),
+                              itemCircle(AppColors.red),
+                              itemLine(AppColors.red),
+                              itemCircle(AppColors.grey1),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 6.h),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 5.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              itemText('Are you a\ncreator?',
+                                  MainAxisAlignment.start),
+                              itemText(
+                                  'User Details', MainAxisAlignment.center),
+                              itemText('Bank Account\nDetails',
+                                  MainAxisAlignment.end),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 44.h),
+                        regularText(
+                          'You’re almost done!',
+                          fontSize: 24.sp,
+                          textAlign: TextAlign.center,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.black,
+                        ),
+                        SizedBox(height: 10.h),
+                        regularText(
+                          'Please fill in basic information about yourself\nand the creative work',
+                          fontSize: 12.sp,
+                          textAlign: TextAlign.center,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textGrey,
+                        ),
+                        SizedBox(height: 32.h),
+                        InkWell(
+                          onTap: getImageGallery,
+                          child: DottedBorder(
+                              borderType: BorderType.RRect,
+                              radius: Radius.circular(10.h),
+                              dashPattern: [3, 3],
+                              color: AppColors.textGrey,
+                              child: imageFile != null
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.h),
+                                      child: Image.file(
+                                        imageFile!,
+                                        width: ScreenUtil.defaultSize.width,
+                                        height: 100.h,
+                                      ),
+                                    )
+                                  : Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 20.h, horizontal: 55.h),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/camera.png',
+                                            height: 30.h,
+                                          ),
+                                          Row(),
+                                          SizedBox(height: 17.h),
+                                          regularText(
+                                            'Upload profile picture',
+                                            fontSize: 12.sp,
+                                            textAlign: TextAlign.center,
+                                            fontWeight: FontWeight.w400,
+                                            color: AppColors.textGrey,
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                        ),
+                        SizedBox(height: 32.h),
+                        CustomTextField(
+                          title: 'Basic Information',
+                          hintText: 'Brand Name',
+                          controller: brand,
+                          textInputType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          validator: (a) {
+                            return Utils.isValidName(a, '"Brand Name"', 2);
+                          },
+                        ),
+                        CustomTextField(
+                          hintText: 'First Name',
+                          controller: firstName,
+                          textInputType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          validator: (a) {
+                            return Utils.isValidName(a, '"First Name"', 2);
+                          },
+                        ),
+                        CustomTextField(
+                          hintText: 'Last Name',
+                          controller: lastName,
+                          textInputType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          validator: (a) {
+                            return Utils.isValidName(a, '"Last Name"', 2);
+                          },
+                        ),
+                        SizedBox(height: 8.h),
+                        CustomTextField(
+                          title: 'What are you creating?',
+                          hintText:
+                              'Creating Piano music,building, Coronarelief  orange..',
+                          controller: whatYouCreate,
+                          textInputType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          validator: (a) {
+                            return Utils.isValidName(
+                                a, '"What You Creating"', 10);
+                          },
+                        ),
+                        SizedBox(height: 8.h),
+                        CustomTextField(
+                          title: 'About me',
+                          hintText:
+                              'Hey there! I just created a page here. You can\nnow buyacoffee!',
+                          controller: about,
+                          maxLines: 3,
+                          textInputType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          validator: (a) {
+                            return Utils.isValidName(a, '"About Me"', 10);
+                          },
+                        ),
+                        SizedBox(height: 24.h),
+                        regularText(
+                          'Social Platforms',
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.black,
+                        ),
+                        SizedBox(height: 8.h),
+                        regularText(
+                          'Hey there! I just created a page here. You can now buyacoffee!',
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textGrey,
+                        ),
+                        SizedBox(height: 8.h),
+                        CustomTextField(
+                          hintText: 'username',
+                          controller: twitter,
+                          textInputType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          prefixIcon: prefix('tw'),
+                        ),
+                        CustomTextField(
+                          hintText: 'username',
+                          controller: ig,
+                          textInputType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          prefixIcon: prefix('ig'),
+                        ),
+                        CustomTextField(
+                          hintText: 'username',
+                          controller: youtube,
+                          textInputType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          prefixIcon: prefix('yt'),
+                        ),
+                        CustomTextField(
+                          hintText: 'username',
+                          controller: fb,
+                          textInputType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          prefixIcon: prefix('fb'),
+                        ),
+                        CustomTextField(
+                          hintText: 'website url',
+                          controller: websiteUrl,
+                          textInputType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          prefixIcon: prefix('web'),
+                        ),
+                        SizedBox(height: 42.h),
+                        buttonWithBorder(
+                          'Complete',
+                          buttonColor: AppColors.red,
+                          fontSize: 16.sp,
+                          height: 52.h,
+                          busy: model.busy,
+                          textColor: AppColors.white,
+                          fontWeight: FontWeight.w700,
+                          onTap: () async {
+                            autoValidate = true;
+                            setState(() {});
+                            if (formKey.currentState!.validate()) {
+                              Utils.offKeyboard();
+                              String? img;
+                              if (imageFile != null) {
+                                img = await model.uploadImage(imageFile!);
+                                if (img == null) return;
+                              }
+                              Map<String, String> data = {
+                                "websiteUrl": websiteUrl.text,
+                                "about": about.text,
+                                "firstName": firstName.text,
+                                "lastName": lastName.text,
+                                "brandName": brand.text,
+                                "creating": whatYouCreate.text,
+                                "onboardingStep": "4",
+                                "userName": widget.link,
+                                "userType": "creator",
+                                "facebookLink": fb.text,
+                                "twitterLink": twitter.text,
+                                "instagramLink": ig.text,
+                                "youtubeLink": youtube.text,
+                              };
+
+                              if (img != null) {
+                                data.putIfAbsent('picture', () => img!);
+                              }
+
+                              push(context, VerifyBank(data: data));
+                            }
+                          },
+                        ),
+                        SizedBox(height: 24.h),
                       ],
                     ),
-                  ),
-                  SizedBox(height: 6.h),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        itemText(
-                            'Are you a\ncreator?', MainAxisAlignment.start),
-                        itemText('User Details', MainAxisAlignment.center),
-                        itemText(
-                            'Bank Account\nDetails', MainAxisAlignment.end),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 44.h),
-                  regularText(
-                    'You’re almost done!',
-                    fontSize: 24.sp,
-                    textAlign: TextAlign.center,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.black,
-                  ),
-                  SizedBox(height: 10.h),
-                  regularText(
-                    'Please fill in basic information about yourself\nand the creative work',
-                    fontSize: 12.sp,
-                    textAlign: TextAlign.center,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.textGrey,
-                  ),
-                  SizedBox(height: 32.h),
-                  InkWell(
-                    onTap: getImageGallery,
-                    child: DottedBorder(
-                        borderType: BorderType.RRect,
-                        radius: Radius.circular(10.h),
-                        dashPattern: [3, 3],
-                        color: AppColors.textGrey,
-                        child: imageFile != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(10.h),
-                                child: Image.file(
-                                  imageFile!,
-                                  width: ScreenUtil.defaultSize.width,
-                                  height: 100.h,
-                                ),
-                              )
-                            : Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 20.h, horizontal: 55.h),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/camera.png',
-                                      height: 30.h,
-                                    ),
-                                    Row(),
-                                    SizedBox(height: 17.h),
-                                    regularText(
-                                      'Upload profile picture',
-                                      fontSize: 12.sp,
-                                      textAlign: TextAlign.center,
-                                      fontWeight: FontWeight.w400,
-                                      color: AppColors.textGrey,
-                                    ),
-                                  ],
-                                ),
-                              )),
-                  ),
-                  SizedBox(height: 32.h),
-                  CustomTextField(
-                    title: 'Basic Information',
-                    hintText: 'Brand Name',
-                    controller: brand,
-                    textInputType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    validator: (a) {
-                      return Utils.isValidName(a, '"Brand Name"', 2);
-                    },
-                  ),
-                  CustomTextField(
-                    hintText: 'First Name',
-                    controller: firstName,
-                    textInputType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    validator: (a) {
-                      return Utils.isValidName(a, '"First Name"', 2);
-                    },
-                  ),
-                  CustomTextField(
-                    hintText: 'Last Name',
-                    controller: lastName,
-                    textInputType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    validator: (a) {
-                      return Utils.isValidName(a, '"Last Name"', 2);
-                    },
-                  ),
-                  SizedBox(height: 8.h),
-                  CustomTextField(
-                    title: 'What are you creating?',
-                    hintText:
-                        'Creating Piano music,building, Coronarelief  orange..',
-                    controller: whatYouCreate,
-                    textInputType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    validator: (a) {
-                      return Utils.isValidName(a, '"What You Creating"', 10);
-                    },
-                  ),
-                  SizedBox(height: 8.h),
-                  CustomTextField(
-                    title: 'About me',
-                    hintText:
-                        'Hey there! I just created a page here. You can\nnow buyacoffee!',
-                    controller: about,
-                    maxLines: 3,
-                    textInputType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    validator: (a) {
-                      return Utils.isValidName(a, '"About Me"', 10);
-                    },
-                  ),
-                  SizedBox(height: 24.h),
-                  regularText(
-                    'Social Platforms',
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.black,
-                  ),
-                  SizedBox(height: 8.h),
-                  regularText(
-                    'Hey there! I just created a page here. You can now buyacoffee!',
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.textGrey,
-                  ),
-                  SizedBox(height: 8.h),
-                  CustomTextField(
-                    hintText: 'username',
-                    controller: twitter,
-                    textInputType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: prefix('tw'),
-                  ),
-                  CustomTextField(
-                    hintText: 'username',
-                    controller: ig,
-                    textInputType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: prefix('ig'),
-                  ),
-                  CustomTextField(
-                    hintText: 'username',
-                    controller: youtube,
-                    textInputType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: prefix('yt'),
-                  ),
-                  CustomTextField(
-                    hintText: 'username',
-                    controller: fb,
-                    textInputType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: prefix('fb'),
-                  ),
-                  CustomTextField(
-                    hintText: 'website url',
-                    controller: websiteUrl,
-                    textInputType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: prefix('web'),
-                  ),
-                  SizedBox(height: 42.h),
-                  buttonWithBorder(
-                    'Complete',
-                    buttonColor: AppColors.red,
-                    fontSize: 16.sp,
-                    height: 52.h,
-                    busy: model.busy,
-                    textColor: AppColors.white,
-                    fontWeight: FontWeight.w700,
-                    onTap: () async {
-                      autoValidate = true;
-                      setState(() {});
-                      if (formKey.currentState!.validate()) {
-                        String? img;
-                        if (imageFile != null) {
-                          img = await model.uploadImage(imageFile!);
-                        }
-                        Utils.offKeyboard();
-                        Map<String, String> data = {
-                          "websiteUrl": websiteUrl.text,
-                          "about": about.text,
-                          "firstName": firstName.text,
-                          "lastName": lastName.text,
-                          "userName": brand.text,
-                          "creating": whatYouCreate.text,
-                          "onboardingStep": "4",
-                          "link": widget.link,
-                          "userType": "creator",
-                          //   "email": "user@example.com",
-                          "facebookLink": fb.text,
-                          "twitterLink": twitter.text,
-                          "instagramLink": ig.text,
-                          "youtubeLink": youtube.text,
-                          //   "account": "string"
-                        };
-
-                        if (img != null) {
-                          data.putIfAbsent('picture', () => img!);
-                        }
-
-                        push(context, VerifyBank(data: data));
-                      }
-                    },
-                  ),
-                  SizedBox(height: 24.h),
-                ],
-              ),
-            )));
+                  )),
+            ));
   }
 
   File? imageFile;

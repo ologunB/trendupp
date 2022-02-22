@@ -41,7 +41,6 @@ class App extends StatelessWidget {
           primaryColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-
         home: SplashView(),
         navigatorKey: locator<NavigationService>().navigationKey,
         onGenerateRoute: generateRoute,

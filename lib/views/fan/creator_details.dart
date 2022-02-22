@@ -1,23 +1,40 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mms_app/app/colors.dart';
+import 'package:mms_app/core/models/user_model.dart';
 import 'package:mms_app/views/fan/support_dialog.dart';
 import 'package:mms_app/views/widgets/cantsupport_dialog.dart';
 import 'package:mms_app/views/widgets/creator_post.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share/share.dart';
+import 'package:social_share/social_share.dart';
+import 'dart:io';
 
 class CreatorDetails extends StatefulWidget {
-  const CreatorDetails({Key? key, this.isFan = true}) : super(key: key);
+  const CreatorDetails({Key? key, this.isFan = true, this.userData})
+      : super(key: key);
 
   final bool isFan;
+  final UserData? userData;
 
   @override
   _CreatorDetailsState createState() => _CreatorDetailsState();
 }
 
 class _CreatorDetailsState extends State<CreatorDetails> {
+  UserData user = UserData();
+
+  @override
+  void initState() {
+    user = widget.userData!;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
+    return Scaffold(
       appBar: !widget.isFan
           ? null
           : AppBar(
@@ -43,11 +60,12 @@ class _CreatorDetailsState extends State<CreatorDetails> {
         child: SafeArea(
           child: InkWell(
             onTap: () {
-               showDialog<AlertDialog>(
+              showDialog<AlertDialog>(
                 context: context,
                 barrierDismissible: true,
-                builder: (BuildContext context) =>
-                    widget.isFan ? SupportDialog() : CantSupportDialog(),
+                builder: (BuildContext context) => !widget.isFan
+                    ? SupportDialog(creator: user)
+                    : CantSupportDialog(user: user),
               );
             },
             child: Container(
@@ -61,7 +79,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                   Icon(Icons.favorite, color: AppColors.lightRed, size: 20.h),
                   SizedBox(width: 8.h),
                   regularText(
-                    'Support Twyse',
+                    'Support ${user.firstName}',
                     fontSize: 12.sp,
                     color: AppColors.white,
                     fontWeight: FontWeight.w500,
@@ -102,10 +120,25 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(50.h),
-                            child: Image.asset(
-                              'assets/images/placeholder.png',
+                            child: CachedNetworkImage(
+                              imageUrl: user.picture!,
                               height: 100.h,
                               width: 100.h,
+                              fit: BoxFit.cover,
+                              placeholder: (_, __) => Image.asset(
+                                'assets/images/person.png',
+                                height: 100.h,
+                                width: 100.h,
+                                fit: BoxFit.cover,
+                              ),
+                              errorWidget: (BuildContext context, String url,
+                                      dynamic error) =>
+                                  Image.asset(
+                                'assets/images/person.png',
+                                height: 100.h,
+                                width: 100.h,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ],
@@ -115,9 +148,9 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                     children: [
                       SizedBox(height: 58.h),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal:16.h),
+                        padding: EdgeInsets.symmetric(horizontal: 16.h),
                         child: regularText(
-                          'Twyse Ereme',
+                          '${user.firstName} ${user.lastName}',
                           fontSize: 16.sp,
                           color: AppColors.black,
                           fontWeight: FontWeight.w700,
@@ -128,7 +161,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 50.h),
                         child: regularText(
-                          'Travel & Lifestyle Youtuber Living in Lagos, Nigeria.',
+                          '${user.about}',
                           fontSize: 14.sp,
                           color: AppColors.textGrey,
                           textAlign: TextAlign.center,
@@ -140,9 +173,9 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                           showDialog<AlertDialog>(
                             context: context,
                             barrierDismissible: true,
-                            builder: (BuildContext context) =>
-
-                            widget.isFan ? SupportDialog() : CantSupportDialog(),
+                            builder: (BuildContext context) => widget.isFan
+                                ? SupportDialog(creator: user)
+                                : CantSupportDialog(user: user),
                           );
                         },
                         child: Container(
@@ -159,7 +192,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                                   color: AppColors.lightRed, size: 20.h),
                               SizedBox(width: 8.h),
                               regularText(
-                                'Support Twyse',
+                                'Support ${user.firstName}',
                                 fontSize: 12.sp,
                                 color: AppColors.white,
                                 fontWeight: FontWeight.w500,
@@ -170,37 +203,20 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                         ),
                       ),
                       SizedBox(height: 24.h),
-                      Divider(
-                          height: 0, thickness: 1, color: AppColors.grey2),
+                      Divider(height: 0, thickness: 1, color: AppColors.grey2),
                       SizedBox(height: 13.h),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal:16.h),
+                        padding: EdgeInsets.symmetric(horizontal: 16.h),
                         child: regularText(
-                          'Kia ora and hello from Aotearoa, the land of the long white cloud. Join my Virtual Walking Tours around New Zealand. Enjoy beautiful nature, local lifestyle, food and fun. Join Lunch with Louise for cooking and food, coffee and cafes. Let’s Go to the real Middle Earth and walk on Rainbows and Fossil Forests. Join me daily on Happs.tv,IG,Youtube & Twitter.I love my coffee. Your coffees keep me inspired and motivated so I can share lots more with you. Thank you.',
+                          '${user.creating}',
                           fontSize: 12.sp,
                           height: 1.6,
                           color: AppColors.textGrey,
                         ),
                       ),
                       SizedBox(height: 16.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List<String>.generate(
-                                5, (index) => 'sh' + index.toString())
-                            .map((e) => Padding(
-                                  padding: EdgeInsets.all(4.h),
-                                  child: InkWell(
-                                    onTap: () {},
-                                    child: Image.asset(
-                                      'assets/images/$e.png',
-                                      width: 38.h,
-                                    ),
-                                  ),
-                                ))
-                            .toList(),
-                      ),
+                      linksWidget(),
                       SizedBox(height: 16.h),
-
                     ],
                   ),
                 ],
@@ -217,5 +233,61 @@ class _CreatorDetailsState extends State<CreatorDetails> {
         ],
       ),
     );
+  }
+
+  File? imageFile;
+
+  Widget linksWidget() {
+    String link = 'https://trendupp.com/' + user.userName!;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List<String>.generate(5, (index) => 'sh' + index.toString())
+          .map((e) => Padding(
+                padding: EdgeInsets.all(4.h),
+                child: InkWell(
+                  onTap: () async {
+                    try {
+                      String path =
+                          '${(await getTemporaryDirectory()).path}/bg.png';
+                      await getImageFileFromAssets(path);
+
+                      print(path);
+                      if (e == 'sh0') {
+                        SocialShare.shareTwitter("Support me on Trendupp ",
+                            hashtags: ["trendupp", "support"], url: link);
+                      } else if (e == 'sh1') {
+                        Share.share("Support me on Trendupp on $link",
+                            subject: 'Share Support');
+                      } else if (e == 'sh2') {
+                        Share.share("Support me on Trendupp on $link",
+                            subject: 'Share Support');
+                      } else if (e == 'sh3') {
+                        SocialShare.shareFacebookStory(
+                            path, "#ffffff", "#000000", link,
+                            appId: '481033083584762');
+                      } else if (e == 'sh4') {
+                        Share.share("Support me on Trendupp on $link",
+                            subject: 'Share Support');
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  child: Image.asset(
+                    'assets/images/$e.png',
+                    width: 38.h,
+                  ),
+                ),
+              ))
+          .toList(),
+    );
+  }
+
+  Future<File> getImageFileFromAssets(String _path) async {
+    final byteData = await rootBundle.load('assets/images/bg.png');
+    final File file = File(_path);
+    await file.writeAsBytes(byteData.buffer
+        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+    return file;
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
- import 'package:mms_app/core/viewmodels/auth_vm.dart';
- import 'package:mms_app/views/widgets/buttons.dart';
+import 'package:mms_app/core/viewmodels/auth_vm.dart';
+import 'package:mms_app/views/widgets/buttons.dart';
 import 'package:mms_app/views/widgets/custom_textfield.dart';
 import 'package:mms_app/views/widgets/snackbar.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
@@ -19,7 +19,7 @@ class Signup extends StatefulWidget {
 class _SignupState extends State<Signup> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  TextEditingController otp = TextEditingController();
+  TextEditingController code = TextEditingController();
 
   bool obscureText = true;
   bool autoValidate = false;
@@ -109,26 +109,48 @@ class _SignupState extends State<Signup> {
                 if (model.isVerified)
                   CustomTextField(
                     hintText: 'Paste Verification Code',
-                    controller: otp,
-                    textInputType: TextInputType.number,
+                    controller: code,
+                    textInputType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     isCode: true,
                     maxLength: 6,
                     suffixIcon: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InkWell(
-                          onTap: () {},
-                          child: Padding(
-                            padding: EdgeInsets.only(right: 30.h),
-                            child: regularText(
-                              'Resend',
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.black,
-                            ),
-                          ),
-                        ),
+                        BaseView<AuthViewModel>(
+                            onModelReady: (m) => null,
+                            builder: (_, AuthViewModel resendModel, __) =>
+                                resendModel.busy
+                                    ? Padding(
+                                        padding: EdgeInsets.only(right: 30.h),
+                                        child: SizedBox(
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 3,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                    Colors.black),
+                                          ),
+                                          height: 10.h,
+                                          width: 10.h,
+                                        ),
+                                      )
+                                    : InkWell(
+                                        onTap: () {
+                                          resendModel.resendOtp({
+                                            'email': email.text,
+                                            'password': password.text,
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.only(right: 30.h),
+                                          child: regularText(
+                                            'Resend',
+                                            fontSize: 12.sp,
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColors.black,
+                                          ),
+                                        ),
+                                      )),
                       ],
                     ),
                   ),
@@ -149,25 +171,25 @@ class _SignupState extends State<Signup> {
                     busy: model.busy,
                     textColor: AppColors.white,
                     fontWeight: FontWeight.w700, onTap: () {
+                  Map<String, dynamic> data = {
+                    'email': email.text,
+                    'password': password.text,
+                    'code': code.text,
+                  };
                   if (model.isVerified) {
-                    if (otp.text.isEmpty) {
+                    if (code.text.isEmpty) {
                       showSnackBar(context, 'Error', 'Enter OTP');
                       return;
                     }
                     Utils.offKeyboard();
-                    model.verify({'otp': otp.text});
-                    return;
-                  }
-                  autoValidate = true;
-                  setState(() {});
-                  if (formKey.currentState!.validate()) {
-                    Utils.offKeyboard();
-                    Map<String, dynamic> data = {
-                      'email': email.text,
-                      'password': password.text,
-                      'onboardingStep': '1'
-                    };
-                    model.signup(data);
+                    model.verify(data);
+                  } else {
+                    autoValidate = true;
+                    setState(() {});
+                    if (formKey.currentState!.validate()) {
+                      Utils.offKeyboard();
+                      model.signup(data);
+                    }
                   }
                 }),
                 SizedBox(height: 16.h),

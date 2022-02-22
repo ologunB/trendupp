@@ -7,6 +7,60 @@ import 'dart:io';
 import 'base_api.dart';
 
 class AuthApi extends BaseAPI {
+  Future<String> socialCheck(Map<String, dynamic> data) async {
+    String url = 'user/social-check';
+    log(data);
+    try {
+      final Response<dynamic> res = await dio().post<dynamic>(url, data: data);
+      log(res.data);
+      switch (res.statusCode) {
+        case SERVER_OKAY:
+          return res.data['message'];
+        default:
+          throw res.data['message'];
+      }
+    } catch (e) {
+      log(e);
+      throw CustomException(DioErrorUtil.handleError(e));
+    }
+  }
+
+  Future<UserData> socialSignup(Map<String, dynamic> data) async {
+    String url = 'user/social-signup';
+    log(data);
+    try {
+      final Response<dynamic> res = await dio().post<dynamic>(url, data: data);
+      log(res.data);
+      switch (res.statusCode) {
+        case CREATED:
+          return UserData.fromJson(res.data['data']);
+        default:
+          throw res.data['message'];
+      }
+    } catch (e) {
+      log(e);
+      throw CustomException(DioErrorUtil.handleError(e));
+    }
+  }
+
+  Future<UserData> socialLogin(Map<String, dynamic> data) async {
+    String url = 'user/social-login';
+    log(data);
+    try {
+      final Response<dynamic> res = await dio().post<dynamic>(url, data: data);
+      log(res.data);
+      switch (res.statusCode) {
+        case SERVER_OKAY:
+          return UserData.fromJson(res.data['data']);
+        default:
+          throw res.data['message'];
+      }
+    } catch (e) {
+      log(e);
+      throw CustomException(DioErrorUtil.handleError(e));
+    }
+  }
+
   Future<int> signup(Map<String, dynamic> data) async {
     String url = 'user/signup';
     log(data);
@@ -43,11 +97,7 @@ class AuthApi extends BaseAPI {
     }
   }
 
-  Future<bool> verify(Map<String, dynamic> data) async {
-    await Future.delayed(Duration(seconds: 2), () {
-      return true;
-    });
-    return true;
+  Future<String> verify(Map<String, dynamic> data) async {
     String url = 'user/verify';
     log(data);
     try {
@@ -55,7 +105,7 @@ class AuthApi extends BaseAPI {
       log(res.data);
       switch (res.statusCode) {
         case SERVER_OKAY:
-          return true;
+          return res.data['data']['token'];
         default:
           throw res.data['message'];
       }
@@ -66,11 +116,7 @@ class AuthApi extends BaseAPI {
   }
 
   Future<bool> resendOtp(Map<String, dynamic> data) async {
-    await Future.delayed(Duration(seconds: 2), () {
-      return true;
-    });
-    return true;
-    String url = 'user/resend';
+    String url = 'user/resend-code';
     log(data);
     try {
       final Response<dynamic> res = await dio().post<dynamic>(url, data: data);
@@ -110,7 +156,7 @@ class AuthApi extends BaseAPI {
     FormData data = FormData();
     data.files.add(
       MapEntry(
-        'image',
+        'picture',
         MultipartFile.fromFileSync(imageFile.path,
             filename: imageFile.path.split('/').last),
       ),
@@ -121,21 +167,38 @@ class AuthApi extends BaseAPI {
           options: Options(
             contentType: 'multipart/form-data',
           ));
-      log(res.requestOptions.headers);
+      log(res.data);
       switch (res.statusCode) {
         case SERVER_OKAY:
-          return res.data['data']['link'];
+          return res.data['data'];
         default:
           throw res.data['message'];
       }
     } catch (e) {
-   //   log(e);
+        log(e);
       throw CustomException(DioErrorUtil.handleError(e));
     }
   }
 
-  Future<bool> checkLink(dynamic data) async {
-    String url = 'check';
+  Future<UserData> getAccount() async {
+    String url = 'user';
+    try {
+      final Response<dynamic> res = await dio().get<dynamic>(url);
+      log(res.data);
+      switch (res.statusCode) {
+        case SERVER_OKAY:
+          return UserData.fromJson(res.data['data']);
+        default:
+          throw res.data['message'];
+      }
+    } catch (e) {
+      log(e);
+      throw CustomException(DioErrorUtil.handleError(e));
+    }
+  }
+
+  Future<bool> changePassword(Map<String, dynamic> data) async {
+    String url = 'user/reset';
     log(data);
     try {
       final Response<dynamic> res = await dio().patch<dynamic>(url, data: data);
@@ -152,14 +215,15 @@ class AuthApi extends BaseAPI {
     }
   }
 
-  Future<UserData> getAccount() async {
-    String url = 'user';
+  Future<bool> checkLink(String a) async {
+    String url = 'user/checkUser';
     try {
-      final Response<dynamic> res = await dio().get<dynamic>(url);
+      final Response<dynamic> res =
+          await dio().post<dynamic>(url, data: {'username': a});
       log(res.data);
       switch (res.statusCode) {
         case SERVER_OKAY:
-          return UserData.fromJson(res.data['data']);
+          return res.data['message'] == 'Success';
         default:
           throw res.data['message'];
       }

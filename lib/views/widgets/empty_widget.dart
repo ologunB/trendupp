@@ -49,7 +49,7 @@ class AppEmptyWidget extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20.h),
               child: buttonWithBorder(
                 actionTitle!,
-                buttonColor: AppColors.darkBlue,
+                buttonColor: AppColors.green,
                 fontSize: 14.sp,
                 height: 50.h,
                 textColor: AppColors.white,

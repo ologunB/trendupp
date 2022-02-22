@@ -14,7 +14,7 @@ class CustomLoader extends StatelessWidget {
             return DecoratedBox(
               decoration: BoxDecoration(
                   color:
-                      index.isEven ? AppColors.darkBlue : AppColors.textGrey,
+                      index.isEven ? AppColors.red : AppColors.textGrey,
                   borderRadius: BorderRadius.circular(100.h)),
             );
           },

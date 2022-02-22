@@ -46,6 +46,23 @@ class Utils {
     return result;
   }
 
+  static String stringToDate(String a) {
+    DateTime now = DateTime.now();
+    DateTime then = DateTime.parse(a);
+
+    if (now.year == then.year &&
+        now.month == then.month &&
+        now.day == then.day) {
+      return 'Today';
+    } else if (now.year == then.year &&
+        now.month == then.month &&
+        now.day - 1 == then.day) {
+      return 'Yesterday';
+    } else {
+      return DateFormat('EEEE, MMM dd').format(DateTime.parse(a));
+    }
+  }
+
   static String? validateEmail(String? value) {
     value = value!.trim();
     final RegExp regex = RegExp(
