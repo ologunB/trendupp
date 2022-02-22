@@ -1,6 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
-import 'package:mms_app/core/storage/local_storage.dart';
+import 'package:mms_app/core/models/creator_stat_model.dart';
 import 'package:mms_app/core/viewmodels/stat_api.dart';
 import 'package:mms_app/views/widgets/empty_widget.dart';
 import 'package:mms_app/views/widgets/error_widget.dart';
@@ -9,23 +10,107 @@ import 'package:shimmer/shimmer.dart';
 
 import '../base_view.dart';
 
-class SupportHistory extends StatefulWidget {
-  const SupportHistory({Key? key}) : super(key: key);
+class FanSupportHistory extends StatefulWidget {
+  const FanSupportHistory(this.support);
+
+  final Supporters support;
 
   @override
-  _SupportHistoryState createState() => _SupportHistoryState();
+  _FanSupportHistoryState createState() => _FanSupportHistoryState();
 }
 
-class _SupportHistoryState extends State<SupportHistory> {
+class _FanSupportHistoryState extends State<FanSupportHistory> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BaseView<StatViewModel>(
-          onModelReady: (m) =>
-              m.creatorGetFanSupportHistory(AppCache.getUser()!.email!),
-          builder: (_, StatViewModel historyModel, __) => ListView(
+    return BaseView<StatViewModel>(
+        onModelReady: (m) =>
+            m.creatorGetFanSupportHistory(widget.support.email!),
+        builder: (_, StatViewModel historyModel, __) => Scaffold(
+              appBar: AppBar(
+                elevation: 0,
+                leadingWidth: 0,
+                backgroundColor: Colors.transparent,
+                titleSpacing: 0,
+                centerTitle: true,
+                leading: SizedBox(),
+                title: Image.asset('assets/images/logo.png', height: 32.h),
+              ),
+              body: ListView(
                 padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 13.h),
                 children: [
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () => Navigator.pop(context),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.arrow_back_rounded,
+                              color: AppColors.lightBlack,
+                              size: 16.h,
+                            ),
+                            SizedBox(width: 6.h),
+                            regularText(
+                              'BACK',
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.lightBlack,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16.h),
+                  Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(50.h),
+                        child: CachedNetworkImage(
+                          imageUrl: widget.support.lastName!,
+                          height: 50.h,
+                          width: 50.h,
+                          fit: BoxFit.cover,
+                          placeholder: (_, __) => Image.asset(
+                            'assets/images/person.png',
+                            height: 50.h,
+                            width: 50.h,
+                            fit: BoxFit.cover,
+                          ),
+                          errorWidget: (BuildContext context, String url,
+                                  dynamic error) =>
+                              Image.asset(
+                            'assets/images/person.png',
+                            height: 50.h,
+                            width: 50.h,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8.h),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            regularText(
+                              '${widget.support.firstName} ${widget.support.lastName}',
+                              fontSize: 14.sp,
+                              color: AppColors.black,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            regularText(
+                              '${widget.support.email}',
+                              fontSize: 12.sp,
+                              color: AppColors.black,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 16.h),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 28.h),
                     decoration: BoxDecoration(
@@ -56,13 +141,13 @@ class _SupportHistoryState extends State<SupportHistory> {
                                 shrinkWrap: true,
                                 physics: ClampingScrollPhysics(),
                                 padding: EdgeInsets.symmetric(horizontal: 15.h),
-                                itemCount: 6,
+                                itemCount: 5,
                                 itemBuilder: (context, index) {
                                   return Shimmer.fromColors(
                                       baseColor: Colors.grey.withOpacity(.1),
                                       highlightColor: Colors.white60,
                                       child: Container(
-                                        height: 70.h,
+                                        height: 60.h,
                                         margin: EdgeInsets.only(top: 8.h),
                                         width: ScreenUtil.defaultSize.width,
                                         decoration: BoxDecoration(
@@ -75,13 +160,10 @@ class _SupportHistoryState extends State<SupportHistory> {
                             : historyModel.allPayoutHistory == null
                                 ? ErrorOccurredWidget(
                                     error: historyModel.error,
-                                    onPressed: () {
-                                      historyModel
-                                          .creatorGetFanSupportHistory('email');
-                                    },
+                                    onPressed: historyModel.payoutHistory,
                                   )
                                 : historyModel.allPayoutHistory!.isEmpty
-                                    ? AppEmptyWidget('Support History is empty')
+                                    ? AppEmptyWidget('Payout is empty')
                                     : ListView.separated(
                                         separatorBuilder: (_, __) {
                                           return Divider(
@@ -133,7 +215,7 @@ class _SupportHistoryState extends State<SupportHistory> {
                   ),
                   SizedBox(height: 24.h),
                 ],
-              )),
-    );
+              ),
+            ));
   }
 }

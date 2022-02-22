@@ -7,13 +7,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/post_model.dart';
 import 'package:mms_app/core/routes/router.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/core/viewmodels/post_vm.dart';
 import 'package:mms_app/views/fan/post_details.dart';
 import 'package:mms_app/views/widgets/buttons.dart';
-import 'package:mms_app/views/widgets/custom_loader.dart';
 import 'package:mms_app/views/widgets/error_widget.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'package:mms_app/views/widgets/utils.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../base_view.dart';
 import 'add_post.dart';
@@ -30,122 +31,158 @@ class _PostsHistoryState extends State<PostsHistory> {
   Widget build(BuildContext context) {
     return BaseView<PostViewModel>(
         onModelReady: (m) => m.getPosts(),
-        builder: (_, PostViewModel model, __) => ListView(
-                padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 13.h),
-                children: [
-                  Container(
-                      padding: EdgeInsets.symmetric(vertical: 28.h),
-                      decoration: BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.circular(8.h),
-                          boxShadow: [
-                            BoxShadow(
-                                color: AppColors.grey,
-                                blurRadius: 6,
-                                spreadRadius: 2)
-                          ]),
-                      child: ListView(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.zero,
-                        physics: ClampingScrollPhysics(),
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 24.h),
-                            child: regularText(
-                              'POSTS',
-                              fontSize: 14.sp,
-                              color: AppColors.lightBlack,
-                              fontWeight: FontWeight.w700,
+        builder: (_, PostViewModel model, __) => RefreshIndicator(
+              onRefresh: () async {
+                await Future.delayed(Duration(milliseconds: 200), () {});
+                return model.getPosts();
+              },
+              color: AppColors.red,
+              child: ListView(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 24.h, vertical: 13.h),
+                  children: [
+                    Container(
+                        padding: EdgeInsets.symmetric(vertical: 28.h),
+                        decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(8.h),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: AppColors.grey,
+                                  blurRadius: 6,
+                                  spreadRadius: 2)
+                            ]),
+                        child: ListView(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          physics: ClampingScrollPhysics(),
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 24.h),
+                              child: regularText(
+                                'POSTS',
+                                fontSize: 14.sp,
+                                color: AppColors.lightBlack,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
-                          model.busy
-                              ? Center(child: CustomLoader())
-                              : model.allPosts == null
-                                  ? ErrorOccurredWidget(
-                                      error: model.error!,
-                                      onPressed: () {
-                                        model.getPosts();
-                                      },
-                                    )
-                                  : model.allPosts!.isEmpty
-                                      ? Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 24.h, vertical: 16.h),
-                                          child: RichText(
-                                            textAlign: TextAlign.start,
-                                            text: TextSpan(
-                                              text:
-                                                  'You have not made any posts yet. ',
-                                              style: GoogleFonts.dmSans(
-                                                color: AppColors.textGrey,
-                                                height: 1.8,
-                                                fontSize: 12.sp,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              children: [
-                                                TextSpan(
-                                                    text:
-                                                        'Click here to make a post',
-                                                    style: GoogleFonts.dmSans(
-                                                      color: AppColors.red,
-                                                      fontSize: 12.sp,
-                                                      height: 1.8,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                    ),
-                                                    recognizer:
-                                                        TapGestureRecognizer()
-                                                          ..onTap = () async {
-                                                            dynamic res = await Navigator.push(
-                                                              context,
-                                                              CupertinoPageRoute<dynamic>(
-                                                                  builder: (BuildContext context) =>
-                                                                      AddPost(model: PostModel(
-                                                                          type:
-                                                                          'public'),),
-                                                                  fullscreenDialog: true),
-                                                            );
-
-                                                            if (res != null) {
-                                                              PostModel post = PostModel();
-                                                              post.id = res['id'];
-                                                              post.type = res['postType'];
-                                                              post.title = res['title'];
-                                                              post.message = res['description'];
-                                                              model.allPosts!.add(post);
-                                                              setState(() {});
-                                                            }
-
-                                                          }),
-                                              ],
+                            model.busy
+                                ? ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: ClampingScrollPhysics(),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 15.h),
+                                    itemCount: 3,
+                                    itemBuilder: (context, index) {
+                                      return Shimmer.fromColors(
+                                          baseColor:
+                                              Colors.grey.withOpacity(.1),
+                                          highlightColor: Colors.white60,
+                                          child: Container(
+                                            height: 120.h,
+                                            margin: EdgeInsets.only(top: 16.h),
+                                            width: ScreenUtil.defaultSize.width,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  Colors.grey.withOpacity(.7),
+                                              borderRadius:
+                                                  BorderRadius.circular(5.h),
                                             ),
+                                          ));
+                                    })
+                                : model.allPosts == null
+                                    ? ErrorOccurredWidget(
+                                        error: model.error!,
+                                        onPressed: () {
+                                          model.getPosts();
+                                        },
+                                      )
+                                    : model.allPosts!.isEmpty
+                                        ? Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 24.h,
+                                                vertical: 16.h),
+                                            child: RichText(
+                                              textAlign: TextAlign.start,
+                                              text: TextSpan(
+                                                text:
+                                                    'You have not made any posts yet. ',
+                                                style: GoogleFonts.dmSans(
+                                                  color: AppColors.textGrey,
+                                                  height: 1.8,
+                                                  fontSize: 12.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                      text:
+                                                          'Click here to make a post',
+                                                      style: GoogleFonts.dmSans(
+                                                        color: AppColors.red,
+                                                        fontSize: 12.sp,
+                                                        height: 1.8,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                      recognizer:
+                                                          TapGestureRecognizer()
+                                                            ..onTap = () async {
+                                                              dynamic res =
+                                                                  await Navigator
+                                                                      .push(
+                                                                context,
+                                                                CupertinoPageRoute<
+                                                                    dynamic>(
+                                                                  builder: (BuildContext
+                                                                          context) =>
+                                                                      AddPost(
+                                                                    model: PostModel(
+                                                                        postType:
+                                                                            'public'),
+                                                                  ),
+                                                                ),
+                                                              );
+
+                                                              if (res != null) {
+                                                                PostModel post =
+                                                                    res;
+
+                                                                model.allPosts!
+                                                                    .add(post);
+                                                                setState(() {});
+                                                              }
+                                                            }),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        : Column(
+                                            children: [
+                                              ListView.separated(
+                                                  separatorBuilder: (_, __) {
+                                                    return Divider(
+                                                        color: AppColors
+                                                            .textGrey
+                                                            .withOpacity(.4),
+                                                        height: 2.h);
+                                                  },
+                                                  itemCount:
+                                                      model.allPosts!.length,
+                                                  shrinkWrap: true,
+                                                  padding: EdgeInsets.zero,
+                                                  physics:
+                                                      ClampingScrollPhysics(),
+                                                  itemBuilder: (_, index) {
+                                                    PostModel data =
+                                                        model.allPosts![index];
+                                                    return item(data, model);
+                                                  }),
+                                            ],
                                           ),
-                                        )
-                                      : Column(
-                                          children: [
-                                            ListView.separated(
-                                                separatorBuilder: (_, __) {
-                                                  return Divider(
-                                                      color: AppColors.textGrey
-                                                          .withOpacity(.4),
-                                                      height: 2.h);
-                                                },
-                                                itemCount:
-                                                    model.allPosts!.length,
-                                                shrinkWrap: true,
-                                                padding: EdgeInsets.zero,
-                                                physics:
-                                                    ClampingScrollPhysics(),
-                                                itemBuilder: (_, index) {
-                                                  PostModel data =
-                                                      model.allPosts![index];
-                                                  return item(data, model);
-                                                }),
-                                          ],
-                                        ),
-                        ],
-                      ))
-                ]));
+                          ],
+                        ))
+                  ]),
+            ));
   }
 
   Widget item(PostModel data, PostViewModel vm) {
@@ -158,7 +195,7 @@ class _PostsHistoryState extends State<PostsHistory> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   regularText(
-                    data.title!,
+                    data.title ?? '',
                     fontSize: 14.sp,
                     color: AppColors.black,
                     fontWeight: FontWeight.w700,
@@ -179,15 +216,17 @@ class _PostsHistoryState extends State<PostsHistory> {
             PopupMenuButton(
                 onSelected: (int a) async {
                   if (a == 0) {
-                    push(context, PostDetail(data: data));
+                    PostModel post = data;
+                    post.userName = (AppCache.getUser()!.firstName ?? "") ;
+                    post.userImage = (AppCache.getUser()!.picture);
+                    push(context, PostDetail(post));
                   }
                   if (a == 1) {
                     dynamic res = await Navigator.push(
                       context,
                       CupertinoPageRoute<dynamic>(
-                          builder: (BuildContext context) =>
-                              AddPost(model: data),
-                          fullscreenDialog: true),
+                        builder: (BuildContext context) => AddPost(model: data),
+                      ),
                     );
 
                     if (res != null) {
@@ -253,13 +292,13 @@ class _PostsHistoryState extends State<PostsHistory> {
                                       textColor: AppColors.white,
                                       fontWeight: FontWeight.w700,
                                       onTap: () async {
-                                       bool res = await vm.deletePost(data.id!);
-                                       Navigator.pop(cContext);
-                                       if (res) {
-                                         vm.allPosts!
-                                             .removeWhere((element) => element.id == data.id);
-                                         setState(() {});
-                                       }
+                                        Navigator.pop(cContext);
+                                        vm.allPosts!.removeWhere(
+                                            (element) => element.id == data.id);
+                                        setState(() {});
+
+                                        await vm
+                                            .deletePost(data.id!.toString());
                                       },
                                     ),
                                   ),

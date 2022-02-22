@@ -59,6 +59,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                     Spacer(),
                     InkWell(
                         onTap: () {
+                          setState(() {});
                           mainLayoutScaffoldKey.currentState!.openDrawer();
                         },
                         child: Image.asset('assets/images/menu.png',
@@ -91,7 +92,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                 ),
                 SizedBox(height: 10.h),
                 regularText(
-                  'Twyse Ereme',
+                  '${AppCache.getUser()!.firstName} ${AppCache.getUser()!.lastName}',
                   fontSize: 16.sp,
                   color: AppColors.black,
                   fontWeight: FontWeight.w700,
@@ -211,7 +212,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                         postIsOpen = !postIsOpen;
                         setState(() {});
                         push(
-                            context, AddPost(model: PostModel(type: 'public')));
+                            context, AddPost(model: PostModel(postType: 'public')));
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,7 +250,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                       onTap: () {
                         postIsOpen = !postIsOpen;
                         setState(() {});
-                        push(context, AddPost(model: PostModel(type: 'supporters')));
+                        push(context, AddPost(model: PostModel(postType: 'supporters')));
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,12 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mms_app/app/colors.dart';
+import 'package:mms_app/core/models/post_model.dart';
+import 'package:mms_app/core/models/user_model.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/views/fan/support_dialog.dart';
+import 'package:mms_app/views/widgets/cantsupport_dialog.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 
 class PostDetail extends StatelessWidget {
-  const PostDetail({Key? key, this.data}) : super(key: key);
+  const PostDetail(this.post);
 
-  final dynamic data;
+  final PostModel post;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +53,7 @@ class PostDetail extends StatelessWidget {
                         ),
                         SizedBox(width: 6.h),
                         regularText(
-                          'TWYSE’S PAGE',
+                          '${post.userName!.toUpperCase()}’S PAGE',
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w700,
                           color: AppColors.lightBlack,
@@ -76,9 +83,25 @@ class PostDetail extends StatelessWidget {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(40.h),
-                        child: Image.asset(
-                          'assets/images/placeholder.png',
+                        child: CachedNetworkImage(
+                          imageUrl: post.userImage ?? "c",
                           height: 40.h,
+                          width: 40.h,
+                          fit: BoxFit.cover,
+                          placeholder: (_, __) => Image.asset(
+                            'assets/images/person.png',
+                            height: 40.h,
+                            width: 40.h,
+                            fit: BoxFit.cover,
+                          ),
+                          errorWidget: (BuildContext context, String url,
+                                  dynamic error) =>
+                              Image.asset(
+                            'assets/images/person.png',
+                            height: 40.h,
+                            width: 40.h,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       SizedBox(width: 13.h),
@@ -87,13 +110,14 @@ class PostDetail extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             regularText(
-                              'Twyse Ereme',
+                              '${post.userName}',
                               fontSize: 12.sp,
                               color: AppColors.black,
                               fontWeight: FontWeight.w700,
                             ),
                             regularText(
-                              'March 2, 2022',
+                              DateFormat('MMMM dd, yyyy')
+                                  .format(DateTime.parse(post.updatedAt!)),
                               fontSize: 10.sp,
                               color: AppColors.textGrey,
                               fontWeight: FontWeight.w500,
@@ -103,31 +127,48 @@ class PostDetail extends StatelessWidget {
                       )
                     ],
                   ),
-                  SizedBox(height: 16.h),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8.h),
-                    child: Image.asset(
-                      'assets/images/placeholder.png',
-                      height: 172.h,
-                      width: ScreenUtil.defaultSize.width,
-                      fit: BoxFit.fitWidth,
+                  if (post.image != null)
+                    Padding(
+                      padding: EdgeInsets.only(top: 16.h),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.h),
+                        child: CachedNetworkImage(
+                          imageUrl: post.image!,
+                          height: 172.h,
+                          width: ScreenUtil.defaultSize.width,
+                          fit: BoxFit.fitWidth,
+                          placeholder: (_, __) => Image.asset(
+                            'assets/images/placeholder.png',
+                            height: 172.h,
+                            width: ScreenUtil.defaultSize.width,
+                            fit: BoxFit.fitWidth,
+                          ),
+                          errorWidget: (BuildContext context, String url,
+                                  dynamic error) =>
+                              Image.asset(
+                            'assets/images/placeholder.png',
+                            height: 172.h,
+                            width: ScreenUtil.defaultSize.width,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
                   SizedBox(height: 16.h),
                   regularText(
-                    'We went on tour in Cairo, Egypt',
+                    post.title!,
                     fontSize: 16.sp,
                     color: AppColors.black,
                     fontWeight: FontWeight.w700,
                   ),
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 12.h),
                   regularText(
-                    'Lore  Mauris vitae p e t i lus convallis. Eu dolor sit amet, consectetur adipiscing elit. Mauris vitae pellentesque tellus convallis. Eu dolor sit amet, consectetur adipiscing elit. Mauris vitae pellentesque tellus convallis. Eu dolor sit amet, consectetur adipiscing elit. Mauris vitae pellentesque tellus convallis. Eu dolor sit amet, consectetur adipiscing elit. Mauris vitae pellentesque tellus convallis. Eu allis. Eu faucibus augue eu euismod congue nunc, urna. Cursus ac, viverra sit varius nisi, ultricies.',
+                    post.message!,
                     fontSize: 12.sp,
                     height: 1.8,
                     color: AppColors.textGrey,
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 12.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -136,7 +177,12 @@ class PostDetail extends StatelessWidget {
                           showDialog<AlertDialog>(
                             context: context,
                             barrierDismissible: true,
-                            builder: (BuildContext context) => SupportDialog(),
+                            builder: (BuildContext context) =>
+                                AppCache.getUser()!.userType == 'fan'
+                                    ? SupportDialog()
+                                    : CantSupportDialog(
+                                        user:
+                                            UserData(firstName: post.userName)),
                           );
                         },
                         child: Container(
@@ -152,7 +198,7 @@ class PostDetail extends StatelessWidget {
                                   color: AppColors.lightRed, size: 20.h),
                               SizedBox(width: 8.h),
                               regularText(
-                                'Support Twyse',
+                                'Support ${post.userName}',
                                 fontSize: 12.sp,
                                 color: AppColors.white,
                                 fontWeight: FontWeight.w500,

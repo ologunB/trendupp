@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/views/widgets/logout_dialog.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'explore_creators.dart';
@@ -30,7 +31,6 @@ class _FanLayoutState extends State<FanLayout> {
 
   @override
   Widget build(bContext) {
-   // print(AppCache.getUser()!.toJson());
     return ValueListenableBuilder<int>(
         valueListenable: fIndexNotifier,
         builder: (_, a, __) {
@@ -51,6 +51,7 @@ class _FanLayoutState extends State<FanLayout> {
                     Spacer(),
                     InkWell(
                         onTap: () {
+                          setState(() {});
                           mainLayoutScaffoldKey.currentState!.openDrawer();
                         },
                         child: Image.asset('assets/images/menu.png',
@@ -83,7 +84,7 @@ class _FanLayoutState extends State<FanLayout> {
                 ),
                 SizedBox(height: 10.h),
                 regularText(
-                  'Twyse Ereme',
+                  '${AppCache.getUser()!.firstName} ${AppCache.getUser()!.lastName}',
                   fontSize: 16.sp,
                   color: AppColors.black,
                   fontWeight: FontWeight.w700,

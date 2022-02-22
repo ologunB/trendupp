@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
- import 'package:mms_app/views/widgets/text_widgets.dart';
+import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'buttons.dart';
 
 class AppEmptyWidget extends StatelessWidget {
@@ -21,11 +21,12 @@ class AppEmptyWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
+          SizedBox(height: 16.h),
           Image.asset(
-            image ?? 'assets/images/empty-pay.png',
+            image ?? 'assets/images/My Post.png',
             width: isOther ? 100 : 80.h,
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 8.h),
           regularText(
             title!,
             fontSize: isOther ? 18.sp : 14.sp,

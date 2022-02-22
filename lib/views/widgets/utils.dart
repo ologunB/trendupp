@@ -1,9 +1,14 @@
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
+  static String raveEncryptionKey = 'FLWSECK_TEST079f656d190b';
+  static String ravePublicKey =
+      'FLWPUBK_TEST-4775239fc89f256ef2f24cddcebc17e1-X';
+
   static void offKeyboard() async {
     await SystemChannels.textInput.invokeMethod<dynamic>('TextInput.hide');
   }
@@ -84,6 +89,16 @@ class Utils {
       return;
     }
     currentFocus.unfocus();
+  }
+
+  static SliverGridDelegate gridDelegate() {
+    return SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,
+      crossAxisSpacing: 16.h,
+      mainAxisSpacing: 16.h,
+      childAspectRatio:
+          ScreenUtil.defaultSize.width / ScreenUtil.defaultSize.width * .85,
+    );
   }
 }
 

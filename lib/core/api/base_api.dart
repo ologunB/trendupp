@@ -12,7 +12,7 @@ class BaseAPI {
       BaseOptions(
         baseUrl: GlobalConfiguration().get('base_url'),
         sendTimeout: 30000,
-        connectTimeout: 50000,
+        connectTimeout: 500000,
         receiveTimeout: 50000,
         contentType: 'application/json',
         validateStatus: (int? s) => s! < 500,

@@ -192,7 +192,7 @@ class _CreatorBioState extends State<CreatorBio> {
                       CustomTextField(
                         title: 'Basic Information',
                         hintText: 'Brand Name',
-                        controller: firstName,
+                        controller: brand,
                         textInputType: TextInputType.text,
                         textInputAction: TextInputAction.next,
                         validator: (a) {

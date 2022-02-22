@@ -8,8 +8,10 @@ import 'package:mms_app/views/widgets/card_item.dart';
 import 'package:mms_app/views/widgets/snackbar.dart';
 import 'package:mms_app/views/widgets/supporter_item.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
+import 'package:share/share.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:mms_app/views/widgets/utils.dart';
+import 'package:social_share/social_share.dart';
 import '../base_view.dart';
 import 'creators_layout.dart';
 
@@ -61,7 +63,7 @@ class _CreatorHomeState extends State<CreatorHome> {
                               AppColors.red),
                           cardItem(
                               'love1',
-                              '${statModel.creatorStat?.supporters?.length ?? 0}',
+                              '${statModel.creatorStat?.supportersNumber?.toString() ?? 0}',
                               'Supporters',
                               Color(0xffFCEFE7),
                               Color(0xffF09A4A)),
@@ -241,28 +243,7 @@ class _CreatorHomeState extends State<CreatorHome> {
                         color: AppColors.black,
                       ),
                       SizedBox(height: 8.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          InkWell(
-                            onTap: () {},
-                            child: Image.asset('assets/images/tw.png',
-                                width: 28.h),
-                          ),
-                          SizedBox(width: 30.h),
-                          InkWell(
-                            onTap: () {},
-                            child: Image.asset('assets/images/fb.png',
-                                width: 28.h),
-                          ),
-                          SizedBox(width: 30.h),
-                          InkWell(
-                            onTap: () {},
-                            child: Image.asset('assets/images/ws.png',
-                                width: 28.h),
-                          ),
-                        ],
-                      ),
+                      linksWidget(),
                       SizedBox(height: 24.h),
                     ],
                   ),
@@ -344,5 +325,36 @@ class _CreatorHomeState extends State<CreatorHome> {
                 SizedBox(height: 30.h),
               ],
             ));
+  }
+
+  Widget linksWidget() {
+    String link = 'https://trendupp.com/' + AppCache.getUser()!.userName!;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        InkWell(
+          onTap: () {
+            SocialShare.shareTwitter("Support me on Trendupp ",
+                hashtags: ["trendupp", "support"], url: link);
+          },
+          child: Image.asset('assets/images/tw.png', width: 28.h),
+        ),
+        SizedBox(width: 30.h),
+        InkWell(
+          onTap: () {
+            Share.share("Support me on Trendupp on $link",
+                subject: 'Share Link');
+          },
+          child: Image.asset('assets/images/fb.png', width: 28.h),
+        ),
+        SizedBox(width: 30.h),
+        InkWell(
+          onTap: () {
+            SocialShare.shareWhatsapp("Support me on Trendupp on $link");
+          },
+          child: Image.asset('assets/images/ws.png', width: 28.h),
+        ),
+      ],
+    );
   }
 }

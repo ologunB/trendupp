@@ -1,14 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mms_app/app/colors.dart';
+import 'package:mms_app/core/models/post_model.dart';
 import 'package:mms_app/core/routes/router.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/views/fan/post_details.dart';
 import 'package:mms_app/views/fan/support_dialog.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 
-Widget creatorPost(BuildContext context, int index) {
+Widget creatorPost(BuildContext context, PostModel post) {
   return InkWell(
     onTap: () {
-      if (index % 3 == 2) {
+      if (post.postType == 'supporters'&& AppCache.getUser()?.userType == 'fan') {
         showDialog<AlertDialog>(
           context: context,
           barrierDismissible: true,
@@ -16,7 +20,7 @@ Widget creatorPost(BuildContext context, int index) {
         );
         return;
       }
-      push(context, PostDetail());
+      push(context, PostDetail(post));
     },
     child: Container(
       padding: EdgeInsets.all(16.h),
@@ -35,9 +39,25 @@ Widget creatorPost(BuildContext context, int index) {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(40.h),
-                child: Image.asset(
-                  'assets/images/placeholder.png',
+                child: CachedNetworkImage(
+                  imageUrl: post.userImage ?? "c",
                   height: 40.h,
+                  width: 40.h,
+                  fit: BoxFit.cover,
+                  placeholder: (_, __) => Image.asset(
+                    'assets/images/person.png',
+                    height: 40.h,
+                    width: 40.h,
+                    fit: BoxFit.cover,
+                  ),
+                  errorWidget:
+                      (BuildContext context, String url, dynamic error) =>
+                          Image.asset(
+                    'assets/images/person.png',
+                    height: 40.h,
+                    width: 40.h,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               SizedBox(width: 13.h),
@@ -46,13 +66,14 @@ Widget creatorPost(BuildContext context, int index) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     regularText(
-                      'Twyse Ereme',
+                      '${post.userName}',
                       fontSize: 12.sp,
                       color: AppColors.black,
                       fontWeight: FontWeight.w700,
                     ),
                     regularText(
-                      'March 2, 2022',
+                      DateFormat('MMMM dd, yyyy')
+                          .format(DateTime.parse(post.updatedAt!)),
                       fontSize: 10.sp,
                       color: AppColors.textGrey,
                       fontWeight: FontWeight.w500,
@@ -62,11 +83,12 @@ Widget creatorPost(BuildContext context, int index) {
               )
             ],
           ),
-          SizedBox(height: 16.h),
-          index % 3 == 2
+          post.postType == 'supporters' && AppCache.getUser()?.userType == 'fan'
               ? Container(
                   height: 172.h,
-                  child: Stack(
+            padding: EdgeInsets.only(top: 16.h),
+
+            child: Stack(
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12.h),
@@ -121,27 +143,48 @@ Widget creatorPost(BuildContext context, int index) {
                     ],
                   ),
                 )
-              : ClipRRect(
-                  borderRadius: BorderRadius.circular(8.h),
-                  child: Image.asset(
-                    'assets/images/placeholder.png',
-                    height: 172.h,
-                    width: ScreenUtil.defaultSize.width,
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
+              : post.image == null
+                  ? SizedBox()
+                  : Padding(
+                      padding: EdgeInsets.only(top: 16.h),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.h),
+                        child: CachedNetworkImage(
+                          imageUrl: post.image!,
+                          height: 172.h,
+                          width: ScreenUtil.defaultSize.width,
+                          fit: BoxFit.fitWidth,
+                          placeholder: (_, __) => Image.asset(
+                            'assets/images/placeholder.png',
+                            height: 172.h,
+                            width: ScreenUtil.defaultSize.width,
+                            fit: BoxFit.fitWidth,
+                          ),
+                          errorWidget: (BuildContext context, String url,
+                                  dynamic error) =>
+                              Image.asset(
+                            'assets/images/placeholder.png',
+                            height: 172.h,
+                            width: ScreenUtil.defaultSize.width,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                    ),
           SizedBox(height: 16.h),
           regularText(
-            'We went on tour in Cairo, Egypt',
+            post.title!,
             fontSize: 16.sp,
             color: AppColors.black,
             fontWeight: FontWeight.w700,
           ),
           SizedBox(height: 8.h),
           regularText(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae pellentesque tellus convallis. Eu faucibus augue eu euismod congue nunc, urna. Cursus ac, viverra sit varius nisi, ultricies.',
+            post.message!,
             fontSize: 12.sp,
             height: 1.8,
+            maxLines: 5,
+            overflow: TextOverflow.ellipsis,
             color: AppColors.textGrey,
           ),
         ],

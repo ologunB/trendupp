@@ -2,15 +2,22 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mms_app/app/colors.dart';
+import 'package:mms_app/core/models/post_model.dart';
 import 'package:mms_app/core/models/user_model.dart';
+import 'package:mms_app/core/viewmodels/post_vm.dart';
 import 'package:mms_app/views/fan/support_dialog.dart';
 import 'package:mms_app/views/widgets/cantsupport_dialog.dart';
 import 'package:mms_app/views/widgets/creator_post.dart';
+import 'package:mms_app/views/widgets/empty_widget.dart';
+import 'package:mms_app/views/widgets/error_widget.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:social_share/social_share.dart';
 import 'dart:io';
+
+import '../base_view.dart';
 
 class CreatorDetails extends StatefulWidget {
   const CreatorDetails({Key? key, this.isFan = true, this.userData})
@@ -63,7 +70,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
               showDialog<AlertDialog>(
                 context: context,
                 barrierDismissible: true,
-                builder: (BuildContext context) => !widget.isFan
+                builder: (BuildContext context) => widget.isFan
                     ? SupportDialog(creator: user)
                     : CantSupportDialog(user: user),
               );
@@ -221,14 +228,53 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                   ),
                 ],
               )),
-          ListView.builder(
-              itemCount: 3,
-              shrinkWrap: true,
-              padding: EdgeInsets.zero,
-              physics: ClampingScrollPhysics(),
-              itemBuilder: (BuildContext ctx, index) {
-                return creatorPost(context, index);
-              }),
+          widget.isFan
+              ? ListView.builder(
+                  itemCount: 3,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  physics: ClampingScrollPhysics(),
+                  itemBuilder: (BuildContext ctx, index) {
+                    return creatorPost(context, PostModel());
+                  })
+              : BaseView<PostViewModel>(
+                  onModelReady: (m) => m.getPosts(),
+                  builder: (_, PostViewModel model, __) => model.busy
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          physics: ClampingScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          itemCount: 3,
+                          itemBuilder: (context, index) {
+                            return Shimmer.fromColors(
+                                baseColor: Colors.grey.withOpacity(.1),
+                                highlightColor: Colors.white60,
+                                child: Container(
+                                  height: 120.h,
+                                  margin: EdgeInsets.only(top: 16.h),
+                                  width: ScreenUtil.defaultSize.width,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(.7),
+                                    borderRadius: BorderRadius.circular(5.h),
+                                  ),
+                                ));
+                          })
+                      : model.allPosts == null
+                          ? ErrorOccurredWidget(
+                              error: model.error!,
+                              onPressed: model.getPosts,
+                            )
+                          : model.allPosts!.isEmpty
+                              ? AppEmptyWidget('You have not made any post')
+                              : ListView.builder(
+                                  itemCount: model.allPosts!.length,
+                                  shrinkWrap: true,
+                                  padding: EdgeInsets.zero,
+                                  physics: ClampingScrollPhysics(),
+                                  itemBuilder: (BuildContext ctx, i) {
+                                    PostModel post = model.allPosts![i];
+                                    return creatorPost(context, post);
+                                  })),
           SizedBox(height: 10.h),
         ],
       ),

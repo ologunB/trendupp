@@ -50,7 +50,6 @@ class _FanBioState extends State<FanBio> {
 
   @override
   Widget build(BuildContext context) {
-    print(imageUrl);
     return BaseView<AuthViewModel>(
         onModelReady: (m) => null,
         builder: (_, AuthViewModel model, __) => GestureDetector(

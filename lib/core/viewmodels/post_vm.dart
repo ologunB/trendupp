@@ -12,12 +12,12 @@ class PostViewModel extends BaseModel {
   final PostApi _postApi = locator<PostApi>();
   String? error;
 
-  Future<String?> createPost(Map<String, dynamic> a, File? file) async {
+  Future<PostModel?> createPost(Map<String, dynamic> a, File? file) async {
     setBusy(true);
     try {
-      String id = await _postApi.createPost(a, file);
+      PostModel post = await _postApi.createPost(a, file);
       setBusy(false);
-      return id;
+      return post;
     } on CustomException catch (e) {
       error = e.message;
       setBusy(false);

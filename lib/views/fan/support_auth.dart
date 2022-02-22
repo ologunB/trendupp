@@ -231,8 +231,8 @@ class _SupportAuthState extends State<SupportAuth> {
         // pay now
         final Flutterwave flutterwave = Flutterwave.forUIPayment(
           context: context,
-          encryptionKey: "FLWSECK_TEST079f656d190b",
-          publicKey: "FLWPUBK_TEST-4775239fc89f256ef2f24cddcebc17e1-X",
+          encryptionKey: Utils.raveEncryptionKey,
+          publicKey: Utils.ravePublicKey,
           currency: FlutterwaveCurrency.NGN,
           amount: data1['amount']!,
           email: email.text,

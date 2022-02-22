@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/routes/router.dart';
@@ -51,9 +52,15 @@ class _FanSettingsState extends State<FanSettings> {
                   physics: ClampingScrollPhysics(),
                   itemBuilder: (BuildContext ctx, index) {
                     return InkWell(
-                      onTap: () {
+                      onTap: () async {
                         if (index == 0) {
-                          push(context, FanBio());
+                          await Navigator.push(
+                            context,
+                            CupertinoPageRoute<dynamic>(
+                              builder: (BuildContext context) => FanBio(),
+                            ),
+                          );
+                          setState(() {});
                         } else {
                           push(context, ChangePassword());
                         }

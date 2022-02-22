@@ -4,7 +4,7 @@ import 'package:mms_app/core/routes/router.dart';
 import 'package:mms_app/views/fan/creator_details.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 
-Widget creatorItem(BuildContext context) {
+Widget creatorItem(BuildContext context, dynamic data) {
   return Container(
     padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 22.h),
     margin: EdgeInsets.all(2),

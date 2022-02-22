@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/routes/router.dart';
@@ -53,9 +54,15 @@ class _CreatorSettingsState extends State<CreatorSettings> {
                   physics: ClampingScrollPhysics(),
                   itemBuilder: (BuildContext ctx, index) {
                     return InkWell(
-                      onTap: () {
+                      onTap: () async {
                         if (index == 0) {
-                          push(context, CreatorBio());
+                          await Navigator.push(
+                            context,
+                            CupertinoPageRoute<dynamic>(
+                              builder: (BuildContext context) => CreatorBio(),
+                            ),
+                          );
+                          setState(() {});
                         } else if (index == 1) {
                           push(context, ChangePassword());
                         } else if (index == 2) {
@@ -98,5 +105,10 @@ class _CreatorSettingsState extends State<CreatorSettings> {
     );
   }
 
-  List<String> list = ['User Details', 'Change password', 'Change your link', 'Update Bank Account'];
+  List<String> list = [
+    'User Details',
+    'Change password',
+    'Change your link',
+    'Update Bank Account'
+  ];
 }

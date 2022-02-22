@@ -22,10 +22,8 @@ dependencies:
   global_configuration: ^2.0.0-nullsafety.1
   shimmer: ^2.0.0
   cached_network_image: ^3.0.0
-  flutter_spinkit: ^5.0.0
   another_flushbar: ^1.10.20
   flutter_svg: ^0.22.0
-  url_launcher:
   flutter_screenutil: 5.0.3
   dotted_border: ^2.0.0+1
   file_picker: ^4.3.2
@@ -35,7 +33,9 @@ dependencies:
   social_share: ^2.2.1
   path_provider: ^2.0.9
   flutterwave: ^1.0.1
-  intl:
+  loadmore: ^2.0.1
+  intl: ^0.17.0
+  url_launcher: ^6.0.20
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:mms_app/app/constants.dart';
 import 'package:mms_app/core/models/creator_stat_model.dart';
+import 'package:mms_app/core/models/payout.dart';
 import 'package:mms_app/core/utils/custom_exception.dart';
 import 'package:mms_app/core/utils/error_util.dart';
 import 'base_api.dart';
@@ -31,7 +32,7 @@ class StatApi extends BaseAPI {
       switch (res.statusCode) {
         case SERVER_OKAY:
           List<Supporters> list = [];
-          res.data['data'].forEach((a) {
+          res.data['data']['supporters'].forEach((a) {
             list.add(Supporters.fromJson(a));
           });
           return list;
@@ -44,8 +45,9 @@ class StatApi extends BaseAPI {
     }
   }
 
-  Future<List<int>> paymentHistory() async {
-    String url = 'statistic/payment-history';
+  Future<List<int>> paymentHistory(String email) async {
+    String url = 'statistic/payment-history?q=$email';
+    print(url);
     try {
       final Response<dynamic> res = await dio().get<dynamic>(url);
       log(res.data);
@@ -61,8 +63,47 @@ class StatApi extends BaseAPI {
     }
   }
 
-  Future<List<int>> creatorGetFanSupportHistory() async {
-    String url = 'statistic/history';
+  Future<String> initPayout(Map<String, dynamic> data) async {
+    String url = 'payout';
+    log(data);
+    try {
+      final Response<dynamic> res = await dio().post<dynamic>(url, data: data);
+      log(res.data);
+      switch (res.statusCode) {
+        case SERVER_OKAY:
+          return res.data['data']['reference'];
+        default:
+          throw res.data['message'];
+      }
+    } catch (e) {
+      log(e);
+      throw CustomException(DioErrorUtil.handleError(e));
+    }
+  }
+
+  Future<List<PayoutModel>> payoutHistory() async {
+    String url = 'payout/history';
+    try {
+      final Response<dynamic> res = await dio().get<dynamic>(url);
+      log(res.data);
+      switch (res.statusCode) {
+        case SERVER_OKAY:
+          List<PayoutModel> list = [];
+          res.data['data'].forEach((a) {
+            list.add(PayoutModel.fromJson(a));
+          });
+          return list;
+        default:
+          throw res.data['message'];
+      }
+    } catch (e) {
+      log(e);
+      throw CustomException(DioErrorUtil.handleError(e));
+    }
+  }
+
+  Future<List<int>> creatorGetFanSupportHistory(String email) async {
+    String url = 'statistic/history?q=$email';
     try {
       final Response<dynamic> res = await dio().get<dynamic>(url);
       log(res.data);
@@ -105,6 +146,57 @@ class StatApi extends BaseAPI {
       switch (res.statusCode) {
         case SERVER_OKAY:
           return true;
+        default:
+          throw res.data['message'];
+      }
+    } catch (e) {
+      log(e);
+      throw CustomException(DioErrorUtil.handleError(e));
+    }
+  }
+
+  Future<List<int>> getUsersPosts(String email) async {
+    String url = 'statistic/history?q=$email';
+    try {
+      final Response<dynamic> res = await dio().get<dynamic>(url);
+      log(res.data);
+      switch (res.statusCode) {
+        case SERVER_OKAY:
+          return res.data['data']['id'];
+        default:
+          throw res.data['message'];
+      }
+    } catch (e) {
+      log(e);
+      throw CustomException(DioErrorUtil.handleError(e));
+    }
+  }
+  
+  Future<List<int>> getSupportedCreators(String email) async {
+    String url = 'statistic/history?q=$email';
+    try {
+      final Response<dynamic> res = await dio().get<dynamic>(url);
+      log(res.data);
+      switch (res.statusCode) {
+        case SERVER_OKAY:
+          return res.data['data']['id'];
+        default:
+          throw res.data['message'];
+      }
+    } catch (e) {
+      log(e);
+      throw CustomException(DioErrorUtil.handleError(e));
+    }
+  }
+
+  Future<List<int>> getExploredCreators(String email) async {
+    String url = 'statistic/history?q=$email';
+    try {
+      final Response<dynamic> res = await dio().get<dynamic>(url);
+      log(res.data);
+      switch (res.statusCode) {
+        case SERVER_OKAY:
+          return res.data['data']['id'];
         default:
           throw res.data['message'];
       }

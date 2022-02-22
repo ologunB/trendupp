@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/creator_stat_model.dart';
 import 'package:mms_app/core/routes/router.dart';
-import 'package:mms_app/views/fan/support_history.dart';
+import 'package:mms_app/views/creators/fan_support_history.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'package:mms_app/views/widgets/utils.dart';
 
@@ -32,7 +32,11 @@ class SupporterItem extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 6.h),
                     child: regularText(
-                      DateFormat('MMM dd, yyyy - hh:mm a').format(DateTime.parse(support.createdAt!))   ,
+                      DateFormat('MMM dd, yyyy')
+                              .format(DateTime.parse(support.createdAt!)) +
+                          ' at ' +
+                          DateFormat(' hh:mm a')
+                              .format(DateTime.parse(support.createdAt!)),
                       fontSize: 12.sp,
                       color: AppColors.textGrey,
                     ),
@@ -59,7 +63,7 @@ class SupporterItem extends StatelessWidget {
             PopupMenuButton(
                 onSelected: (int a) {
                   if (a == 0) {
-                    push(context, SupportHistory(hasHeader: true));
+                    push(context, FanSupportHistory(support));
                   }
                 },
                 child: Image.asset(

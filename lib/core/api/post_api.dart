@@ -1,17 +1,20 @@
 import 'package:dio/dio.dart';
 import 'package:mms_app/app/constants.dart';
 import 'package:mms_app/core/models/post_model.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/core/utils/custom_exception.dart';
 import 'package:mms_app/core/utils/error_util.dart';
 import 'dart:io';
 import 'base_api.dart';
 
 class PostApi extends BaseAPI {
-  Future<String> createPost(Map<String, dynamic> data, File? imageFile) async {
+  Future<PostModel> createPost(
+      Map<String, dynamic> data, File? imageFile) async {
     String url = imageFile == null ? 'post/noimage' : 'post';
 
-    FormData formData = FormData.fromMap(data);
+    dynamic formData;
     if (imageFile != null) {
+      formData = FormData.fromMap(data);
       formData.files.add(
         MapEntry(
           'image',
@@ -19,6 +22,8 @@ class PostApi extends BaseAPI {
               filename: imageFile.path.split('/').last),
         ),
       );
+    } else {
+      formData = data;
     }
 
     log(data);
@@ -27,8 +32,8 @@ class PostApi extends BaseAPI {
           await dio().post<dynamic>(url, data: formData);
       log(res.data);
       switch (res.statusCode) {
-        case CREATED:
-          return res.data['data']['id'];
+        case SERVER_OKAY:
+          return PostModel.fromJson(res.data['data']);
         default:
           throw res.data['message'];
       }
@@ -38,7 +43,7 @@ class PostApi extends BaseAPI {
     }
   }
 
-  Future<int> updatePost(Map<String, dynamic> data) async {
+  Future<bool> updatePost(Map<String, dynamic> data) async {
     String url = 'post/${data['id']}';
     log(data);
     try {
@@ -46,7 +51,7 @@ class PostApi extends BaseAPI {
       log(res.data);
       switch (res.statusCode) {
         case SERVER_OKAY:
-          return res.data['data']['id'];
+          return true;
         default:
           throw res.data['message'];
       }
@@ -74,7 +79,7 @@ class PostApi extends BaseAPI {
   }
 
   Future<List<PostModel>> getPosts() async {
-    String url = 'post';
+    String url = 'post/all';
     try {
       final Response<dynamic> res = await dio().get<dynamic>(url);
       log(res.data);
@@ -82,7 +87,10 @@ class PostApi extends BaseAPI {
         case SERVER_OKAY:
           List<PostModel> list = [];
           res.data['data'].forEach((a) {
-            list.add(PostModel.fromJson(a));
+            PostModel post = PostModel.fromJson(a);
+            post.userImage = AppCache.getUser()!.picture;
+            post.userName = AppCache.getUser()!.firstName;
+            list.add(post);
           });
           return list;
         default:

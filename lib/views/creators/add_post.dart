@@ -10,7 +10,6 @@ import 'package:mms_app/views/widgets/custom_textfield.dart';
 import 'package:mms_app/views/widgets/snackbar.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'package:mms_app/views/widgets/utils.dart';
-
 import '../base_view.dart';
 
 class AddPost extends StatefulWidget {
@@ -37,7 +36,7 @@ class _AddPostState extends State<AddPost> {
     isEdit = widget.model.title != null;
     title = TextEditingController(text: widget.model.title);
     message = TextEditingController(text: widget.model.message);
-    chosenType = widget.model.type == 'public' ? 0 : 1;
+    chosenType = widget.model.postType == 'public' ? 0 : 1;
     super.initState();
   }
 
@@ -113,113 +112,116 @@ class _AddPostState extends State<AddPost> {
                                 fontWeight: FontWeight.w700,
                                 color: AppColors.textGrey,
                               ),
-                              SizedBox(height: 16.h),
-                              Row(
-                                children: [
-                                  Expanded(
-                                      child: InkWell(
-                                    onTap: () {
-                                      chosenType = 0;
-                                      setState(() {});
-                                    },
-                                    child: Container(
-                                      height: 100.h,
-                                      padding: EdgeInsets.all(8.h),
-                                      decoration: BoxDecoration(
-                                        color: chosenType == 0
-                                            ? AppColors.lightRed
-                                            : AppColors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(8.h),
+                              Padding(
+                                padding: EdgeInsets.only(top: 16.h),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        child: InkWell(
+                                      onTap: () {
+                                        if (isEdit) return;
+                                        chosenType = 0;
+                                        setState(() {});
+                                      },
+                                      child: Container(
+                                        height: 100.h,
+                                        padding: EdgeInsets.all(8.h),
+                                        decoration: BoxDecoration(
+                                          color: chosenType == 0
+                                              ? AppColors.lightRed
+                                              : AppColors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(8.h),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  chosenType == 0
+                                                      ? Icons
+                                                          .radio_button_checked_outlined
+                                                      : Icons
+                                                          .radio_button_off_outlined,
+                                                  size: 20.h,
+                                                  color: AppColors.red,
+                                                ),
+                                                SizedBox(width: 8.h),
+                                                regularText(
+                                                  'Public',
+                                                  fontSize: 12.sp,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: AppColors.lightBlack,
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 8.h),
+                                            regularText(
+                                              'Visible to all your followers and the public',
+                                              fontSize: 12.sp,
+                                              color: AppColors.textGrey,
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(
-                                                chosenType == 0
-                                                    ? Icons
-                                                        .radio_button_checked_outlined
-                                                    : Icons
-                                                        .radio_button_off_outlined,
-                                                size: 20.h,
-                                                color: AppColors.red,
-                                              ),
-                                              SizedBox(width: 8.h),
-                                              regularText(
-                                                'Public',
-                                                fontSize: 12.sp,
-                                                fontWeight: FontWeight.w700,
-                                                color: AppColors.lightBlack,
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 8.h),
-                                          regularText(
-                                            'Visible to all your followers and the public',
-                                            fontSize: 12.sp,
-                                            color: AppColors.textGrey,
-                                          ),
-                                        ],
+                                    )),
+                                    SizedBox(width: 16.h),
+                                    Expanded(
+                                        child: InkWell(
+                                      onTap: () {
+                                        if (isEdit) return;
+                                        chosenType = 1;
+                                        setState(() {});
+                                      },
+                                      child: Container(
+                                        height: 100.h,
+                                        padding: EdgeInsets.all(8.h),
+                                        decoration: BoxDecoration(
+                                          color: chosenType == 1
+                                              ? AppColors.lightRed
+                                              : AppColors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(8.h),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  chosenType == 1
+                                                      ? Icons
+                                                          .radio_button_checked_outlined
+                                                      : Icons
+                                                          .radio_button_off_outlined,
+                                                  size: 20.h,
+                                                  color: AppColors.red,
+                                                ),
+                                                SizedBox(width: 8.h),
+                                                regularText(
+                                                  'Your Supporters',
+                                                  fontSize: 12.sp,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: AppColors.lightBlack,
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 8.h),
+                                            regularText(
+                                              'Visible to your followers only',
+                                              fontSize: 12.sp,
+                                              color: AppColors.textGrey,
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  )),
-                                  SizedBox(width: 16.h),
-                                  Expanded(
-                                      child: InkWell(
-                                    onTap: () {
-                                      chosenType = 1;
-                                      setState(() {});
-                                    },
-                                    child: Container(
-                                      height: 100.h,
-                                      padding: EdgeInsets.all(8.h),
-                                      decoration: BoxDecoration(
-                                        color: chosenType == 1
-                                            ? AppColors.lightRed
-                                            : AppColors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(8.h),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(
-                                                chosenType == 1
-                                                    ? Icons
-                                                        .radio_button_checked_outlined
-                                                    : Icons
-                                                        .radio_button_off_outlined,
-                                                size: 20.h,
-                                                color: AppColors.red,
-                                              ),
-                                              SizedBox(width: 8.h),
-                                              regularText(
-                                                'Your Supporters',
-                                                fontSize: 12.sp,
-                                                fontWeight: FontWeight.w700,
-                                                color: AppColors.lightBlack,
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 8.h),
-                                          regularText(
-                                            'Visible to your followers only',
-                                            fontSize: 12.sp,
-                                            color: AppColors.textGrey,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  )),
-                                ],
+                                    )),
+                                  ],
+                                ),
                               ),
-                              SizedBox(height: 20.h),
                               CustomTextField(
                                 title: 'Title',
                                 controller: title,
@@ -294,6 +296,7 @@ class _AddPostState extends State<AddPost> {
                                   buttonColor: AppColors.red,
                                   fontSize: 14.sp,
                                   height: 52.h,
+                                  busy: model.busy,
                                   textColor: AppColors.white,
                                   fontWeight: FontWeight.w700, onTap: () async {
                                 autoValidate = true;
@@ -308,9 +311,9 @@ class _AddPostState extends State<AddPost> {
                                     };
                                     bool res = await model.updatePost(data);
                                     if (res) {
+                                      Navigator.pop(context, data);
                                       showSnackBar(context, 'Success',
                                           'Post has been updated');
-                                      Navigator.pop(context, data);
                                     }
                                   } else {
                                     Map<String, dynamic> data = {
@@ -320,13 +323,12 @@ class _AddPostState extends State<AddPost> {
                                           ? 'public'
                                           : 'supporters',
                                     };
-                                    String? id =
+                                    PostModel? post =
                                         await model.createPost(data, imageFile);
-                                    if (id != null) {
-                                      data['id'] = id;
+                                    if (post != null) {
+                                      Navigator.pop(context, post);
                                       showSnackBar(context, 'Success',
                                           'Post has been created');
-                                      Navigator.pop(context, data);
                                     }
                                   }
                                 }

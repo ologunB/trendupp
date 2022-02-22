@@ -27,7 +27,7 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final bool autoFocus;
   final bool busy;
-  final bool enableCopy;
+  final bool requestField;
   final FocusNode? focusNode;
   final String? obscuringCharacter;
   final List<TextInputFormatter>? inputFormatters;
@@ -58,7 +58,7 @@ class CustomTextField extends StatelessWidget {
     this.inputFormatters,
     this.isCode = false,
     this.busy = false,
-    this.enableCopy = true,
+    this.requestField = true,
   });
 
   @override
@@ -95,7 +95,7 @@ class CustomTextField extends StatelessWidget {
         else
           SizedBox(height: 16.h),
         TextFormField(
-          enableInteractiveSelection: enableCopy,
+          enableInteractiveSelection: requestField,
           cursorColor: AppColors.black.withOpacity(0.4),
           cursorWidth: 1.h,
           focusNode: focusNode,
@@ -104,7 +104,11 @@ class CustomTextField extends StatelessWidget {
           enabled: enabled ?? true,
           maxLength: maxLength,
           textInputAction: textInputAction,
-          style: GoogleFonts.dmSans(
+          style:requestField ?  GoogleFonts.inter(
+            color: AppColors.black,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w700,
+          ): GoogleFonts.dmSans(
             color: AppColors.black,
             fontSize: 12.sp,
             fontWeight: FontWeight.w700,
@@ -119,9 +123,14 @@ class CustomTextField extends StatelessWidget {
               fontSize: 12.sp,
               fontWeight: FontWeight.w500,
             ),
+
             filled: true,
             fillColor:isCode ? AppColors.white: AppColors.grey2,
-            errorStyle: GoogleFonts.dmSans(
+            errorStyle:requestField ?  GoogleFonts.inter(
+              color: AppColors.red,
+              fontSize: 10.5.sp,
+              fontWeight: FontWeight.w400,
+            ): GoogleFonts.dmSans(
               color: AppColors.red,
               fontSize: 10.5.sp,
               fontWeight: FontWeight.w400,
