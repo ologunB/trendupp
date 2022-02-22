@@ -1,8 +1,11 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
+import 'package:mms_app/views/fan/user_bio.dart';
 import 'package:mms_app/views/widgets/logout_dialog.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'explore_creators.dart';
@@ -76,18 +79,56 @@ class _FanLayoutState extends State<FanLayout> {
             color: AppColors.white,
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/person.png', width: 60.h),
-                  ],
-                ),
-                SizedBox(height: 10.h),
-                regularText(
-                  '${AppCache.getUser()!.firstName} ${AppCache.getUser()!.lastName}',
-                  fontSize: 16.sp,
-                  color: AppColors.black,
-                  fontWeight: FontWeight.w700,
+                InkWell(
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      CupertinoPageRoute<dynamic>(
+                        builder: (BuildContext context) => FanBio(),
+                      ),
+                    );
+                    setState(() {});
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(50.h),
+                            child: CachedNetworkImage(
+                              imageUrl: AppCache.getUser()!.picture ?? 'a',
+                              height: 60.h,
+                              width: 60.h,
+                              fit: BoxFit.cover,
+                              placeholder: (_, __) => Image.asset(
+                                'assets/images/person.png',
+                                height: 60.h,
+                                width: 60.h,
+                                fit: BoxFit.cover,
+                              ),
+                              errorWidget: (BuildContext context, String url,
+                                      dynamic error) =>
+                                  Image.asset(
+                                'assets/images/person.png',
+                                height: 60.h,
+                                width: 60.h,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10.h),
+                      regularText(
+                        '${AppCache.getUser()!.firstName} ${AppCache.getUser()!.lastName}',
+                        fontSize: 16.sp,
+                        color: AppColors.black,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(height: 32.h),
                 item('Home', 0),

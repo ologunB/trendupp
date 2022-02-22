@@ -166,7 +166,6 @@ class StatViewModel extends BaseModel {
     }
   }
 
-
   List<int>? allExploredCreators;
 
   Future<void> getExploreCreators(String email) async {
@@ -181,7 +180,6 @@ class StatViewModel extends BaseModel {
     }
   }
 
-
   List<int>? allUsersPosts;
 
   Future<void> getUsersPosts(String email) async {
@@ -192,10 +190,8 @@ class StatViewModel extends BaseModel {
     } on CustomException catch (e) {
       error = e.message;
       setBusy(false);
-      showDialog(e);
     }
   }
-
 
   BuildContext c() => navigate.navigationKey.currentContext!;
 

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/routes/router.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'user_bio.dart';
 import 'change_password.dart';
@@ -46,7 +47,7 @@ class _FanSettingsState extends State<FanSettings> {
                     return Divider(
                         color: AppColors.textGrey.withOpacity(.4), height: 2.h);
                   },
-                  itemCount: 2,
+                  itemCount: AppCache.getUser()!.verified == null ? 1 : 2,
                   shrinkWrap: true,
                   padding: EdgeInsets.zero,
                   physics: ClampingScrollPhysics(),
