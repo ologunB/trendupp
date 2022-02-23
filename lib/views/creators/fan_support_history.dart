@@ -23,11 +23,11 @@ class FanSupportHistory extends StatefulWidget {
 
 class _FanSupportHistoryState extends State<FanSupportHistory> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
     return BaseView<StatViewModel>(
         onModelReady: (m) =>
-            m.creatorGetFanSupportHistory(widget.support.email!),
-        builder: (_, StatViewModel historyModel, __) => Scaffold(
+            m.creatorGetFanSupportHistory(widget.support.email!, context),
+        builder: (_, StatViewModel model, __) => Scaffold(
               appBar: AppBar(
                 elevation: 0,
                 leadingWidth: 0,
@@ -71,8 +71,7 @@ class _FanSupportHistoryState extends State<FanSupportHistory> {
                         borderRadius: BorderRadius.circular(50.h),
                         child: CachedNetworkImage(
                           imageUrl:
-                              historyModel.fanSupportHistory?.user?.picture ??
-                                  'a',
+                              model.fanSupportHistory?.user?.picture ?? 'a',
                           height: 50.h,
                           width: 50.h,
                           fit: BoxFit.cover,
@@ -140,7 +139,7 @@ class _FanSupportHistoryState extends State<FanSupportHistory> {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        historyModel.busy
+                        model.busy && model.fanSupportHistory == null
                             ? ListView.builder(
                                 shrinkWrap: true,
                                 physics: ClampingScrollPhysics(),
@@ -161,16 +160,15 @@ class _FanSupportHistoryState extends State<FanSupportHistory> {
                                         ),
                                       ));
                                 })
-                            : historyModel.fanSupportHistory == null
+                            : model.fanSupportHistory == null
                                 ? ErrorOccurredWidget(
-                                    error: historyModel.error,
+                                    error: model.error,
                                     onPressed: () {
-                                      historyModel.creatorGetFanSupportHistory(
-                                          widget.support.email!);
+                                      model.creatorGetFanSupportHistory(
+                                          widget.support.email!, context);
                                     },
                                   )
-                                : historyModel
-                                        .fanSupportHistory!.history!.isEmpty
+                                : model.fanSupportHistory!.history!.isEmpty
                                     ? AppEmptyWidget('Support History is empty')
                                     : ListView.separated(
                                         separatorBuilder: (_, __) {
@@ -179,15 +177,14 @@ class _FanSupportHistoryState extends State<FanSupportHistory> {
                                                   .withOpacity(.4),
                                               height: 2.h);
                                         },
-                                        itemCount: historyModel
+                                        itemCount: model
                                             .fanSupportHistory!.history!.length,
                                         shrinkWrap: true,
                                         padding: EdgeInsets.zero,
                                         physics: ClampingScrollPhysics(),
                                         itemBuilder: (BuildContext ctx, i) {
-                                          FanHistoryModel fanModel =
-                                              historyModel.fanSupportHistory!
-                                                  .history![i];
+                                          FanHistoryModel fanModel = model
+                                              .fanSupportHistory!.history![i];
                                           return Padding(
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 16.h,
@@ -207,7 +204,8 @@ class _FanSupportHistoryState extends State<FanSupportHistory> {
                                                   padding: EdgeInsets.symmetric(
                                                       vertical: 6.h),
                                                   child: regularText(
-                                                    Utils.stringToDate(fanModel.updatedAt!),
+                                                    Utils.stringToDate(
+                                                        fanModel.updatedAt!),
                                                     fontSize: 12.sp,
                                                     color: AppColors.textGrey,
                                                   ),

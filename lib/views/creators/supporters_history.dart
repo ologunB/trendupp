@@ -20,9 +20,9 @@ class SupportersHistory extends StatefulWidget {
 
 class _SupportersHistoryState extends State<SupportersHistory> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
     return BaseView<StatViewModel>(
-        onModelReady: (m) => m.getSupporters(),
+        onModelReady: (m) => m.getSupporters(context),
         builder: (_, StatViewModel model, __) => ListView(
               padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 13.h),
               children: [
@@ -53,7 +53,7 @@ class _SupportersHistoryState extends State<SupportersHistory> {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      model.busy
+                      model.busy && model.allSupporters == null
                           ? ListView.builder(
                               shrinkWrap: true,
                               physics: ClampingScrollPhysics(),
@@ -77,7 +77,9 @@ class _SupportersHistoryState extends State<SupportersHistory> {
                           : model.allSupporters == null
                               ? ErrorOccurredWidget(
                                   error: model.error,
-                                  onPressed: model.getSupporters,
+                                  onPressed: (){
+                                    model.getSupporters(context);
+                                  },
                                 )
                               : model.allSupporters!.isEmpty
                                   ? AppEmptyWidget(

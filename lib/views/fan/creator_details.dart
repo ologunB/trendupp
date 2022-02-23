@@ -41,7 +41,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
     return Scaffold(
       appBar: !widget.isFan
           ? null
@@ -167,9 +167,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                                 width: 100.h,
                                 fit: BoxFit.cover,
                               ),
-                              errorWidget: (BuildContext context, String url,
-                                      dynamic error) =>
-                                  Image.asset(
+                              errorWidget: (_, __, ___) => Image.asset(
                                 'assets/images/person.png',
                                 height: 100.h,
                                 width: 100.h,
@@ -193,7 +191,21 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      SizedBox(height: 8.h),
+                      SizedBox(height: 4.h),
+                      BaseView<PostViewModel>(
+                          onModelReady: (m) => m
+                              .supportersByUsername(widget.userData!.userName!),
+                          builder: (_, PostViewModel sModel, __) => Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 16.h),
+                                child: regularText(
+                                  '${sModel.supportersNumber} ${sModel.supportersNumber > 1 ? 'Supporters' : "Supporter"}',
+                                  fontSize: 14.sp,
+                                  color: AppColors.black,
+                                  fontWeight: FontWeight.w500,
+                                  textAlign: TextAlign.center,
+                                ),
+                              )),
+                      SizedBox(height: 4.h),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 30.h),
                         child: regularText(
@@ -218,8 +230,9 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                           padding: EdgeInsets.symmetric(
                               horizontal: 40.h, vertical: 7.h),
                           decoration: BoxDecoration(
-                              color: AppColors.red,
-                              borderRadius: BorderRadius.circular(6.h)),
+                            color: AppColors.red,
+                            borderRadius: BorderRadius.circular(6.h),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
@@ -259,9 +272,10 @@ class _CreatorDetailsState extends State<CreatorDetails> {
               )),
           BaseView<PostViewModel>(
               onModelReady: (m) => widget.isFan
-                  ? m.postByUsername(widget.userData!.userName!)
-                  : m.getPosts(),
-              builder: (_, PostViewModel model, __) => model.busy
+                  ? m.postByUsername(widget.userData!, context)
+                  : m.getPosts(context),
+              builder: (_, PostViewModel model, __) => model.busy &&
+                      model.creatorsPost == null
                   ? ListView.builder(
                       shrinkWrap: true,
                       physics: ClampingScrollPhysics(),
@@ -281,22 +295,28 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                               ),
                             ));
                       })
-                  : model.allPosts == null
+                  : model.creatorsPost == null
                       ? ErrorOccurredWidget(
                           error: model.error!,
-                          onPressed: model.getPosts,
+                          onPressed: () {
+                            widget.isFan
+                                ? model.postByUsername(
+                                    widget.userData!, context)
+                                : model.getPosts(context);
+                          },
                         )
-                      : model.allPosts!.isEmpty
+                      : model.creatorsPost!.isEmpty
                           ? AppEmptyWidget(AppCache.getUser()!.userType == 'fan'
                               ? '${user.userName ?? user.firstName} has no post yet'
                               : 'You have not made any post')
                           : ListView.builder(
-                              itemCount: model.allPosts!.length,
+                              itemCount: model.creatorsPost!.length,
                               shrinkWrap: true,
                               padding: EdgeInsets.zero,
                               physics: ClampingScrollPhysics(),
                               itemBuilder: (BuildContext ctx, i) {
-                                PostModel post = model.allPosts![i];
+                                PostModel post = model.creatorsPost![i];
+                                post.user = widget.userData;
                                 return creatorPost(context, post);
                               })),
           SizedBox(height: 10.h),

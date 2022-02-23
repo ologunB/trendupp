@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
- import 'package:mms_app/core/models/post_model.dart';
+import 'package:mms_app/core/models/post_model.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/core/viewmodels/stat_vm.dart';
 import 'package:mms_app/views/widgets/empty_widget.dart';
@@ -20,11 +20,11 @@ class SupportHistory extends StatefulWidget {
 
 class _SupportHistoryState extends State<SupportHistory> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
     return Scaffold(
       body: BaseView<StatViewModel>(
           onModelReady: (m) =>
-              m.getUserPaymentHistory(AppCache.getUser()!.email!),
+              m.getUserPaymentHistory(AppCache.getUser()!.email!, context),
           builder: (_, StatViewModel historyModel, __) => ListView(
                 padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 13.h),
                 children: [
@@ -53,7 +53,7 @@ class _SupportHistoryState extends State<SupportHistory> {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        historyModel.busy
+                        historyModel.busy && historyModel.allFanPayment == null
                             ? ListView.builder(
                                 shrinkWrap: true,
                                 physics: ClampingScrollPhysics(),
@@ -79,7 +79,7 @@ class _SupportHistoryState extends State<SupportHistory> {
                                     error: historyModel.error,
                                     onPressed: () {
                                       historyModel.getUserPaymentHistory(
-                                          AppCache.getUser()!.email!);
+                                          AppCache.getUser()!.email!, context);
                                     },
                                   )
                                 : historyModel.allFanPayment!.isEmpty
@@ -117,7 +117,8 @@ class _SupportHistoryState extends State<SupportHistory> {
                                                   padding: EdgeInsets.symmetric(
                                                       vertical: 6.h),
                                                   child: regularText(
-                                                    Utils.stringToDate(fanModel.createdAt!),
+                                                    Utils.stringToDate(
+                                                        fanModel.createdAt!),
                                                     fontSize: 12.sp,
                                                     color: AppColors.textGrey,
                                                   ),

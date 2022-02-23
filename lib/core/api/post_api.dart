@@ -89,6 +89,7 @@ class PostApi extends BaseAPI {
           res.data['data'].forEach((a) {
             PostModel post = PostModel.fromJson(a);
             post.userImage = post.user!.picture;
+            post.hidden = false;
             list.add(post);
           });
           return list;
@@ -113,6 +114,7 @@ class PostApi extends BaseAPI {
             PostModel post = PostModel.fromJson(a);
             post.userImage = AppCache.getUser()!.picture;
             post.userName = AppCache.getUser()!.firstName;
+            post.hidden = false;
             list.add(post);
           });
           return list;
@@ -125,20 +127,61 @@ class PostApi extends BaseAPI {
     }
   }
 
+  Future<bool> userSupportsCreator(String user) async {
+    String url = 'statistic/$user';
+
+    return false;
+    try {
+      final Response<dynamic> res = await dio().get<dynamic>(url);
+      log(res.data);
+      switch (res.statusCode) {
+        case SERVER_OKAY:
+          return res.data['data']['isFan'] ?? true;
+        default:
+          throw res.data['message'];
+      }
+    } catch (e) {
+      log(e);
+      throw CustomException(DioErrorUtil.handleError(e));
+    }
+  }
+
   Future<List<PostModel>> postByUsername(String user) async {
+    String url = 'post?username=$user';
+    try {
+      final Response<dynamic> res = await dio().get<dynamic>(url);
+      log(res.data);
+      switch (res.statusCode) {
+        case SERVER_OKAY:
+          bool isFan = await userSupportsCreator(user);
+          List<PostModel> list = [];
+          res.data['data'].forEach((a) {
+            PostModel post = PostModel.fromJson(a);
+            post.hidden = post.postType == 'public'
+                ? false
+                : isFan
+                    ? false
+                    : true;
+            list.add(post);
+          });
+          return list;
+        default:
+          throw res.data['message'];
+      }
+    } catch (e) {
+      log(e);
+      throw CustomException(DioErrorUtil.handleError(e));
+    }
+  }
+
+  Future<int> supportersByUsername(String user) async {
     String url = 'statistic/$user';
     try {
       final Response<dynamic> res = await dio().get<dynamic>(url);
       log(res.data);
       switch (res.statusCode) {
         case SERVER_OKAY:
-          List<PostModel> list = [];
-          res.data['data'].forEach((a) {
-            PostModel post = PostModel.fromJson(a);
-            post.userImage = post.user!.picture;
-            list.add(post);
-          });
-          return list;
+          return res.data['data']['supporters_number'];
         default:
           throw res.data['message'];
       }

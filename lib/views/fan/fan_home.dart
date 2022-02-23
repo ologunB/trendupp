@@ -24,22 +24,22 @@ class _FanHomeState extends State<FanHome> {
   bool loadMorePosts = false;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
     return BaseView<StatViewModel>(
-      onModelReady: (m) => m.getFanPosts(AppCache.getUser()!.email!),
+      onModelReady: (m) => m.getFanPosts(AppCache.getUser()!.email!, context),
       builder: (_, StatViewModel postsModel, __) => BaseView<StatViewModel>(
-        onModelReady: (m) => m.getExploreCreators(),
+        onModelReady: (m) => m.getExploreCreators(context),
         builder: (_, StatViewModel exploreModel, __) => RefreshIndicator(
           onRefresh: () async {
             await Future.delayed(Duration(milliseconds: 200), () {});
-            exploreModel.getExploreCreators();
-            return postsModel.getFanPosts(AppCache.getUser()!.email!);
+            exploreModel.getExploreCreators(context);
+            return postsModel.getFanPosts(AppCache.getUser()!.email!, context);
           },
           color: AppColors.red,
           child: ListView(
             padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 13.h),
             children: [
-              postsModel.busy
+              (postsModel.busy && postsModel.allPosts == null)
                   ? ListView.builder(
                       shrinkWrap: true,
                       physics: ClampingScrollPhysics(),
@@ -63,7 +63,7 @@ class _FanHomeState extends State<FanHome> {
                       ? ErrorOccurredWidget(
                           error: postsModel.error,
                           onPressed: () {
-                            postsModel.getExploreCreators();
+                            postsModel.getFanPosts(AppCache.getUser()!.email!, context);
                           },
                         )
                       : postsModel.allPosts!.isEmpty
@@ -167,7 +167,7 @@ class _FanHomeState extends State<FanHome> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              exploreModel.busy
+              exploreModel.busy &&exploreModel.allCreators == null
                   ? GridView.builder(
                       shrinkWrap: true,
                       gridDelegate: Utils.gridDelegate(),
@@ -192,7 +192,7 @@ class _FanHomeState extends State<FanHome> {
                       ? ErrorOccurredWidget(
                           error: exploreModel.error,
                           onPressed: () {
-                            exploreModel.getExploreCreators();
+                            exploreModel.getExploreCreators(context);
                           },
                         )
                       : exploreModel.allCreators!.isEmpty

@@ -6,6 +6,7 @@ class PostModel {
   String? message;
   String? image;
   String? postType;
+  bool? hidden;
   String? youtube;
   int? userId;
   String? userName;
@@ -28,7 +29,10 @@ class PostModel {
     this.youtube,
     this.userName,
     this.userImage,
-    this.user,this.paymentPlan, this.amount,
+    this.user,
+    this.paymentPlan,
+    this.amount,
+    this.hidden,
   });
 
   PostModel.fromJson(dynamic json) {
@@ -37,6 +41,7 @@ class PostModel {
     message = json['message'];
     image = json['image'];
     postType = json['postType'];
+    hidden = json['hidden'];
     youtube = json['youtube'];
     userId = json['userId'];
     userName = json['userName'];
@@ -52,6 +57,7 @@ class PostModel {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['title'] = this.title;
+    data['hidden'] = this.hidden;
     data['message'] = this.message;
     data['image'] = this.image;
     data['about'] = this.postType;

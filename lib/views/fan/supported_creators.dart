@@ -23,9 +23,10 @@ class _SupportedCreatorsState extends State<SupportedCreators> {
   TextEditingController search = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
     return BaseView<StatViewModel>(
-        onModelReady: (m) => m.getSupportedCreators(AppCache.getUser()!.email!),
+        onModelReady: (m) =>
+            m.getSupportedCreators(AppCache.getUser()!.email!, context),
         builder: (_, StatViewModel historyModel, __) => GestureDetector(
             onTap: Utils.offKeyboard,
             child: Column(
@@ -66,7 +67,8 @@ class _SupportedCreatorsState extends State<SupportedCreators> {
                         EdgeInsets.symmetric(horizontal: 24.h, vertical: 8.h),
                     shrinkWrap: true,
                     children: [
-                      historyModel.busy
+                      historyModel.busy &&
+                              historyModel.filteredSupportedCreators == null
                           ? GridView.builder(
                               shrinkWrap: true,
                               gridDelegate: Utils.gridDelegate(),
@@ -88,27 +90,27 @@ class _SupportedCreatorsState extends State<SupportedCreators> {
                                       ),
                                     ));
                               })
-                          : historyModel.filteredCreators == null
+                          : historyModel.filteredSupportedCreators == null
                               ? ErrorOccurredWidget(
                                   error: historyModel.error,
                                   onPressed: () {
                                     historyModel.getSupportedCreators(
-                                        AppCache.getUser()!.email!);
+                                        AppCache.getUser()!.email!, context);
                                   },
                                 )
-                              : historyModel.filteredCreators!.isEmpty
+                              : historyModel.filteredSupportedCreators!.isEmpty
                                   ? AppEmptyWidget(
                                       'You have not supported any\ncreators')
                                   : GridView.builder(
                                       gridDelegate: Utils.gridDelegate(),
-                                      itemCount:
-                                          historyModel.filteredCreators!.length,
+                                      itemCount: historyModel
+                                          .filteredSupportedCreators!.length,
                                       shrinkWrap: true,
                                       padding: EdgeInsets.zero,
                                       physics: ClampingScrollPhysics(),
                                       itemBuilder: (ctx, i) {
-                                        UserData c =
-                                            historyModel.filteredCreators![i];
+                                        UserData c = historyModel
+                                            .filteredSupportedCreators![i];
                                         return creatorItem(ctx, c);
                                       }),
                       /*    SizedBox(height: 24.h),

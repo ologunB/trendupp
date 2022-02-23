@@ -28,160 +28,197 @@ class PostsHistory extends StatefulWidget {
 
 class _PostsHistoryState extends State<PostsHistory> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
     return BaseView<PostViewModel>(
-        onModelReady: (m) => m.getPosts(),
-        builder: (_, PostViewModel model, __) => RefreshIndicator(
-              onRefresh: () async {
-                await Future.delayed(Duration(milliseconds: 200), () {});
-                return model.getPosts();
-              },
-              color: AppColors.red,
-              child: ListView(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 24.h, vertical: 13.h),
-                  children: [
-                    Container(
-                        padding: EdgeInsets.symmetric(vertical: 28.h),
-                        decoration: BoxDecoration(
-                            color: AppColors.white,
-                            borderRadius: BorderRadius.circular(8.h),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: AppColors.grey,
-                                  blurRadius: 6,
-                                  spreadRadius: 2)
-                            ]),
-                        child: ListView(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          physics: ClampingScrollPhysics(),
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 24.h),
-                              child: regularText(
-                                'POSTS',
-                                fontSize: 14.sp,
-                                color: AppColors.lightBlack,
-                                fontWeight: FontWeight.w700,
+        onModelReady: (m) => m.getPosts(context),
+        builder: (_, PostViewModel model, __) => Scaffold(
+              floatingActionButton: (model.creatorsPost?.isEmpty ?? true)
+                  ? null
+                  : Padding(
+                      padding: EdgeInsets.only(bottom: 30.h),
+                      child: FloatingActionButton(
+                          backgroundColor: AppColors.red,
+                          child: Icon(Icons.add, color: AppColors.white),
+                          onPressed: () async {
+                            dynamic res = await Navigator.push(
+                              context,
+                              CupertinoPageRoute<dynamic>(
+                                builder: (BuildContext context) => AddPost(
+                                  model: PostModel(postType: 'public'),
+                                ),
                               ),
-                            ),
-                            model.busy
-                                ? ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: ClampingScrollPhysics(),
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 15.h),
-                                    itemCount: 3,
-                                    itemBuilder: (context, index) {
-                                      return Shimmer.fromColors(
-                                          baseColor:
-                                              Colors.grey.withOpacity(.1),
-                                          highlightColor: Colors.white60,
-                                          child: Container(
-                                            height: 120.h,
-                                            margin: EdgeInsets.only(top: 16.h),
-                                            width: ScreenUtil.defaultSize.width,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  Colors.grey.withOpacity(.7),
-                                              borderRadius:
-                                                  BorderRadius.circular(5.h),
-                                            ),
-                                          ));
-                                    })
-                                : model.allPosts == null
-                                    ? ErrorOccurredWidget(
-                                        error: model.error!,
-                                        onPressed: () {
-                                          model.getPosts();
-                                        },
-                                      )
-                                    : model.allPosts!.isEmpty
-                                        ? Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 24.h,
-                                                vertical: 16.h),
-                                            child: RichText(
-                                              textAlign: TextAlign.start,
-                                              text: TextSpan(
-                                                text:
-                                                    'You have not made any posts yet. ',
-                                                style: GoogleFonts.dmSans(
-                                                  color: AppColors.textGrey,
-                                                  height: 1.8,
-                                                  fontSize: 12.sp,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                      text:
-                                                          'Click here to make a post',
-                                                      style: GoogleFonts.dmSans(
-                                                        color: AppColors.red,
-                                                        fontSize: 12.sp,
-                                                        height: 1.8,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                      ),
-                                                      recognizer:
-                                                          TapGestureRecognizer()
-                                                            ..onTap = () async {
-                                                              dynamic res =
-                                                                  await Navigator
-                                                                      .push(
-                                                                context,
-                                                                CupertinoPageRoute<
-                                                                    dynamic>(
-                                                                  builder: (BuildContext
-                                                                          context) =>
-                                                                      AddPost(
-                                                                    model: PostModel(
-                                                                        postType:
-                                                                            'public'),
-                                                                  ),
-                                                                ),
-                                                              );
+                            );
 
-                                                              if (res != null) {
-                                                                PostModel post =
-                                                                    res;
+                            if (res != null) {
+                              PostModel post = res;
 
-                                                                model.allPosts!
-                                                                    .add(post);
-                                                                setState(() {});
-                                                              }
-                                                            }),
-                                                ],
+                              model.creatorsPost!.add(post);
+                              setState(() {});
+                            }
+                          }),
+                    ),
+              body: RefreshIndicator(
+                onRefresh: () async {
+                  await Future.delayed(Duration(milliseconds: 200), () {});
+                  return model.getPosts(context);
+                },
+                color: AppColors.red,
+                child: ListView(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 24.h, vertical: 13.h),
+                    children: [
+                      Container(
+                          padding: EdgeInsets.symmetric(vertical: 28.h),
+                          decoration: BoxDecoration(
+                              color: AppColors.white,
+                              borderRadius: BorderRadius.circular(8.h),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: AppColors.grey,
+                                    blurRadius: 6,
+                                    spreadRadius: 2)
+                              ]),
+                          child: ListView(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            physics: ClampingScrollPhysics(),
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 24.h),
+                                child: regularText(
+                                  'POSTS',
+                                  fontSize: 14.sp,
+                                  color: AppColors.lightBlack,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              model.busy &&
+                                  model.creatorsPost == null
+                                  ? ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: ClampingScrollPhysics(),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 15.h),
+                                      itemCount: 3,
+                                      itemBuilder: (context, index) {
+                                        return Shimmer.fromColors(
+                                            baseColor:
+                                                Colors.grey.withOpacity(.1),
+                                            highlightColor: Colors.white60,
+                                            child: Container(
+                                              height: 120.h,
+                                              margin:
+                                                  EdgeInsets.only(top: 16.h),
+                                              width:
+                                                  ScreenUtil.defaultSize.width,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    Colors.grey.withOpacity(.7),
+                                                borderRadius:
+                                                    BorderRadius.circular(5.h),
                                               ),
+                                            ));
+                                      })
+                                  : model.creatorsPost == null
+                                      ? ErrorOccurredWidget(
+                                          error: model.error!,
+                                          onPressed: () {
+                                            model.getPosts(context);
+                                          },
+                                        )
+                                      : model.creatorsPost!.isEmpty
+                                          ? Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 24.h,
+                                                  vertical: 16.h),
+                                              child: RichText(
+                                                textAlign: TextAlign.start,
+                                                text: TextSpan(
+                                                  text:
+                                                      'You have not made any posts yet. ',
+                                                  style: GoogleFonts.dmSans(
+                                                    color: AppColors.textGrey,
+                                                    height: 1.8,
+                                                    fontSize: 12.sp,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                        text:
+                                                            'Click here to make a post',
+                                                        style:
+                                                            GoogleFonts.dmSans(
+                                                          color: AppColors.red,
+                                                          fontSize: 12.sp,
+                                                          height: 1.8,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                        recognizer:
+                                                            TapGestureRecognizer()
+                                                              ..onTap =
+                                                                  () async {
+                                                                dynamic res =
+                                                                    await Navigator
+                                                                        .push(
+                                                                  context,
+                                                                  CupertinoPageRoute<
+                                                                      dynamic>(
+                                                                    builder: (BuildContext
+                                                                            context) =>
+                                                                        AddPost(
+                                                                      model: PostModel(
+                                                                          postType:
+                                                                              'public'),
+                                                                    ),
+                                                                  ),
+                                                                );
+
+                                                                if (res !=
+                                                                    null) {
+                                                                  PostModel
+                                                                      post =
+                                                                      res;
+
+                                                                  model
+                                                                      .creatorsPost!
+                                                                      .add(
+                                                                          post);
+                                                                  setState(
+                                                                      () {});
+                                                                }
+                                                              }),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          : Column(
+                                              children: [
+                                                ListView.separated(
+                                                    separatorBuilder: (_, __) {
+                                                      return Divider(
+                                                          color: AppColors
+                                                              .textGrey
+                                                              .withOpacity(.4),
+                                                          height: 2.h);
+                                                    },
+                                                    itemCount:
+                                                        model.creatorsPost!.length,
+                                                    shrinkWrap: true,
+                                                    padding: EdgeInsets.zero,
+                                                    physics:
+                                                        ClampingScrollPhysics(),
+                                                    itemBuilder: (_, index) {
+                                                      PostModel data = model
+                                                          .creatorsPost![index];
+                                                      return item(data, model);
+                                                    }),
+                                              ],
                                             ),
-                                          )
-                                        : Column(
-                                            children: [
-                                              ListView.separated(
-                                                  separatorBuilder: (_, __) {
-                                                    return Divider(
-                                                        color: AppColors
-                                                            .textGrey
-                                                            .withOpacity(.4),
-                                                        height: 2.h);
-                                                  },
-                                                  itemCount:
-                                                      model.allPosts!.length,
-                                                  shrinkWrap: true,
-                                                  padding: EdgeInsets.zero,
-                                                  physics:
-                                                      ClampingScrollPhysics(),
-                                                  itemBuilder: (_, index) {
-                                                    PostModel data =
-                                                        model.allPosts![index];
-                                                    return item(data, model);
-                                                  }),
-                                            ],
-                                          ),
-                          ],
-                        ))
-                  ]),
+                            ],
+                          ))
+                    ]),
+              ),
             ));
   }
 
@@ -203,8 +240,11 @@ class _PostsHistoryState extends State<PostsHistory> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 6.h),
                     child: regularText(
-                      Utils.stringToDate(
-                          data.updatedAt!) /* 'Jun 10, 2021 at 02:12 PM'*/,
+                      (data.updatedAt == data.createdAt
+                              ? 'Created '
+                              : 'Edited ') +
+                          Utils.stringToDate(
+                              data.updatedAt!) /* 'Jun 10, 2021 at 02:12 PM'*/,
                       fontSize: 12.sp,
                       color: AppColors.textGrey,
                     ),
@@ -217,7 +257,7 @@ class _PostsHistoryState extends State<PostsHistory> {
                 onSelected: (int a) async {
                   if (a == 0) {
                     PostModel post = data;
-                    post.userName = (AppCache.getUser()!.firstName ?? "") ;
+                    post.userName = (AppCache.getUser()!.firstName ?? "");
                     post.userImage = (AppCache.getUser()!.picture);
                     push(context, PostDetail(post));
                   }
@@ -230,13 +270,15 @@ class _PostsHistoryState extends State<PostsHistory> {
                     );
 
                     if (res != null) {
-                      PostModel post = vm.allPosts!
+                      PostModel post = vm.creatorsPost!
                           .firstWhere((element) => element.id == res['id']);
-                      vm.allPosts!
+                      vm.creatorsPost!
                           .removeWhere((element) => element.id == res['id']);
                       post.title = res['title'];
                       post.message = res['message'];
-                      vm.allPosts!.add(post);
+                      print(DateTime.now().toIso8601String());
+                      post.updatedAt = DateTime.now().toIso8601String();
+                      vm.creatorsPost!.add(post);
                       setState(() {});
                     }
                   }
@@ -293,7 +335,7 @@ class _PostsHistoryState extends State<PostsHistory> {
                                       fontWeight: FontWeight.w700,
                                       onTap: () async {
                                         Navigator.pop(cContext);
-                                        vm.allPosts!.removeWhere(
+                                        vm.creatorsPost!.removeWhere(
                                             (element) => element.id == data.id);
                                         setState(() {});
 

@@ -57,18 +57,17 @@ class Utils {
     DateTime now = DateTime.now();
     DateTime then = DateTime.parse(a);
 
+    String time = DateFormat('hh:mm a').format(then);
     if (now.year == then.year &&
         now.month == then.month &&
         now.day == then.day) {
-      return 'Today';
+      return 'Today at ' + time;
     } else if (now.year == then.year &&
         now.month == then.month &&
         now.day - 1 == then.day) {
-      return 'Yesterday';
+      return 'Yesterday at ' + time;
     } else {
-      return DateFormat('MMM dd, yyyy').format(DateTime.parse(a)) +
-          ' at ' +
-          DateFormat(' hh:mm a').format(DateTime.parse(a));
+      return DateFormat('MMM dd, yyyy').format(then) + ' at ' + time;
     }
   }
 

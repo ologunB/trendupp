@@ -31,7 +31,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
   List<Widget> views() => [
         CreatorHome(),
         FanHome(),
-        CreatorDetails(isFan: false, userData: AppCache.getUser()!),
+        CreatorDetails(isFan: false, userData: AppCache.getUser()),
         PostsHistory(),
         SupportersHistory(),
         WalletHistory(),

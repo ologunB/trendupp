@@ -34,11 +34,11 @@ class _WalletHistoryState extends State<WalletHistory> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
     return BaseView<StatViewModel>(
-        onModelReady: (m) => m.getCreatorStat(),
+        onModelReady: (m) => m.getCreatorStat(context),
         builder: (_, StatViewModel statModel, __) => BaseView<StatViewModel>(
-            onModelReady: (m) => m.payoutHistory(),
+            onModelReady: (m) => m.getPayoutHistory(context),
             builder: (_, StatViewModel historyModel, __) => Form(
                   key: formKey,
                   autovalidateMode: autoValidate
@@ -162,7 +162,7 @@ class _WalletHistoryState extends State<WalletHistory> {
                                             setState(() {});
                                             showSnackBar(context, 'Success',
                                                 'Your payout will be processed');
-                                            historyModel.payoutHistory();
+                                            historyModel.getPayoutHistory(context);
                                           }
                                         }
                                       } else {
@@ -217,7 +217,7 @@ class _WalletHistoryState extends State<WalletHistory> {
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              historyModel.busy
+                              historyModel.busy &&historyModel.allPayoutHistory == null
                                   ? ListView.builder(
                                       shrinkWrap: true,
                                       physics: ClampingScrollPhysics(),
@@ -245,7 +245,9 @@ class _WalletHistoryState extends State<WalletHistory> {
                                   : historyModel.allPayoutHistory == null
                                       ? ErrorOccurredWidget(
                                           error: historyModel.error,
-                                          onPressed: historyModel.payoutHistory,
+                                          onPressed: (){
+                                            historyModel.getPayoutHistory(context);
+                                          },
                                         )
                                       : historyModel.allPayoutHistory!.isEmpty
                                           ? AppEmptyWidget('Payout is empty')

@@ -23,9 +23,9 @@ class _ExploreCreatorsState extends State<ExploreCreators> {
   TextEditingController search = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
     return BaseView<StatViewModel>(
-        onModelReady: (m) => m.getExploreCreators(),
+        onModelReady: (m) => m.getExploreCreators(context),
         builder: (_, StatViewModel historyModel, __) => GestureDetector(
             onTap: Utils.offKeyboard,
             child: Column(
@@ -66,7 +66,7 @@ class _ExploreCreatorsState extends State<ExploreCreators> {
                         EdgeInsets.symmetric(horizontal: 24.h, vertical: 8.h),
                     shrinkWrap: true,
                     children: [
-                      historyModel.busy
+                      historyModel.busy && historyModel.filteredCreators == null
                           ? GridView.builder(
                               shrinkWrap: true,
                               gridDelegate: Utils.gridDelegate(),
@@ -92,7 +92,7 @@ class _ExploreCreatorsState extends State<ExploreCreators> {
                               ? ErrorOccurredWidget(
                                   error: historyModel.error,
                                   onPressed: () {
-                                    historyModel.getExploreCreators();
+                                    historyModel.getExploreCreators(context);
                                   },
                                 )
                               : historyModel.filteredCreators!.isEmpty

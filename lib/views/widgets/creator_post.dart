@@ -2,9 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/post_model.dart';
-import 'package:mms_app/core/models/user_model.dart';
 import 'package:mms_app/core/routes/router.dart';
-import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/views/fan/post_details.dart';
 import 'package:mms_app/views/fan/support_dialog.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
@@ -15,14 +13,12 @@ Widget creatorPost(BuildContext context, PostModel post) {
     margin: EdgeInsets.only(bottom: 16.h),
     child: InkWell(
       onTap: () {
-        if (post.postType == 'supporters' &&
-            AppCache.getUser()?.userType == 'fan') {
+        if (post.hidden!) {
           showDialog<AlertDialog>(
             context: context,
             barrierDismissible: true,
-            builder: (BuildContext context) => SupportDialog(
-              creator: UserData(),
-            ),
+            builder: (BuildContext context) =>
+                SupportDialog(creator: post.user!),
           );
           return;
         }
@@ -87,8 +83,7 @@ Widget creatorPost(BuildContext context, PostModel post) {
                 )
               ],
             ),
-            post.postType == 'supporters' &&
-                    AppCache.getUser()?.userType == 'fan'
+            post.hidden!
                 ? Container(
                     height: 172.h,
                     padding: EdgeInsets.only(top: 16.h),
@@ -133,7 +128,7 @@ Widget creatorPost(BuildContext context, PostModel post) {
                                       color: AppColors.grey1, size: 20.h),
                                   SizedBox(width: 8.h),
                                   regularText(
-                                    'Support Twyse',
+                                    'Support ${post.userName ?? (post.user?.userName ?? '')}',
                                     fontSize: 12.sp,
                                     color: AppColors.white,
                                     fontWeight: FontWeight.w500,

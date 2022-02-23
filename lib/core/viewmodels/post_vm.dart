@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/api/post_api.dart';
 import 'package:mms_app/core/models/post_model.dart';
+import 'package:mms_app/core/models/user_model.dart';
 import 'package:mms_app/core/utils/custom_exception.dart';
 import 'package:mms_app/views/widgets/snackbar.dart';
 import '../../locator.dart';
 import 'base_vm.dart';
 import 'dart:io';
+import 'package:provider/provider.dart';
 
 class PostViewModel extends BaseModel {
   final PostApi _postApi = locator<PostApi>();
@@ -40,12 +42,13 @@ class PostViewModel extends BaseModel {
     }
   }
 
-  List<PostModel>? allPosts;
-
-  Future<void> getPosts() async {
+  Future<void> getPosts(BuildContext context) async {
     setBusy(true);
+    creatorsPost = context.read<PostViewModel>().creatorsPost;
     try {
-      allPosts = await _postApi.getCreatorsPosts();
+      creatorsPost = await _postApi.getCreatorsPosts();
+      creatorsPost!.sort((a, b) => b.updatedAt!.compareTo(a.updatedAt!));
+      context.read<PostViewModel>().setCreators(creatorsPost);
       setBusy(false);
     } on CustomException catch (e) {
       error = e.message;
@@ -68,12 +71,38 @@ class PostViewModel extends BaseModel {
     }
   }
 
-  List<PostModel>? creatorsPost;
+  int supportersNumber = 0;
 
-  Future<void> postByUsername(String user) async {
+  Future<void> supportersByUsername(String user) async {
     setBusy(true);
     try {
-      creatorsPost = await _postApi.postByUsername(user);
+      supportersNumber = await _postApi.supportersByUsername(user);
+      setBusy(false);
+    } on CustomException catch (e) {
+      error = e.message;
+      setBusy(false);
+      showDialog(e);
+    }
+  }
+
+  List<PostModel>? creatorsPost;
+
+  void setCreators(List<PostModel>? data) {
+    creatorsPost = data;
+    notifyListeners();
+  }
+
+  Future<void> postByUsername(UserData user, BuildContext context) async {
+    setBusy(true);
+    if (context.read<PostViewModel>().creatorsPost != null) {
+      if (context.read<PostViewModel>().creatorsPost!.first.userId == user.id) {
+        creatorsPost = context.read<PostViewModel>().creatorsPost;
+      }
+    }
+    try {
+      creatorsPost = await _postApi.postByUsername(user.userName!);
+      creatorsPost!.sort((a, b) => b.updatedAt!.compareTo(a.updatedAt!));
+      context.read<PostViewModel>().setCreators(creatorsPost);
       setBusy(false);
     } on CustomException catch (e) {
       error = e.message;
