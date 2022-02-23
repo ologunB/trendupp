@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/user_model.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/core/viewmodels/stat_vm.dart';
 import 'package:mms_app/views/widgets/custom_textfield.dart';
 import 'package:mms_app/views/widgets/creator_item.dart';
@@ -9,7 +10,6 @@ import 'package:mms_app/views/widgets/error_widget.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'package:mms_app/views/widgets/utils.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../base_view.dart';
 
 class SupportedCreators extends StatefulWidget {
@@ -25,7 +25,7 @@ class _SupportedCreatorsState extends State<SupportedCreators> {
   @override
   Widget build(BuildContext context) {
     return BaseView<StatViewModel>(
-        onModelReady: (m) => m.getSupportedCreators(),
+        onModelReady: (m) => m.getSupportedCreators(AppCache.getUser()!.email!),
         builder: (_, StatViewModel historyModel, __) => GestureDetector(
             onTap: Utils.offKeyboard,
             child: Column(
@@ -92,11 +92,13 @@ class _SupportedCreatorsState extends State<SupportedCreators> {
                               ? ErrorOccurredWidget(
                                   error: historyModel.error,
                                   onPressed: () {
-                                    historyModel.getSupportedCreators();
+                                    historyModel.getSupportedCreators(
+                                        AppCache.getUser()!.email!);
                                   },
                                 )
                               : historyModel.filteredCreators!.isEmpty
-                                  ? AppEmptyWidget('No creators are available')
+                                  ? AppEmptyWidget(
+                                      'You have not supported any\ncreators')
                                   : GridView.builder(
                                       gridDelegate: Utils.gridDelegate(),
                                       itemCount:

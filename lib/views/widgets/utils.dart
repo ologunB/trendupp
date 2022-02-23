@@ -36,6 +36,8 @@ class Utils {
       return '$type cannot be Empty';
     } else if (value.length < length) {
       return '$type is too short';
+    } else if (value.length > 1999) {
+      return '$type max length is 2000';
     }
     return null;
   }
@@ -64,7 +66,9 @@ class Utils {
         now.day - 1 == then.day) {
       return 'Yesterday';
     } else {
-      return DateFormat('EEEE, MMM dd').format(DateTime.parse(a));
+      return DateFormat('MMM dd, yyyy').format(DateTime.parse(a)) +
+          ' at ' +
+          DateFormat(' hh:mm a').format(DateTime.parse(a));
     }
   }
 

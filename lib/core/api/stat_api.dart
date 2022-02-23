@@ -3,6 +3,7 @@ import 'package:mms_app/app/constants.dart';
 import 'package:mms_app/core/models/creator_stat_model.dart';
 import 'package:mms_app/core/models/fan_payment_history.dart';
 import 'package:mms_app/core/models/payout.dart';
+import 'package:mms_app/core/models/post_model.dart';
 import 'package:mms_app/core/models/user_model.dart';
 import 'package:mms_app/core/utils/custom_exception.dart';
 import 'package:mms_app/core/utils/error_util.dart';
@@ -46,26 +47,6 @@ class StatApi extends BaseAPI {
       throw CustomException(DioErrorUtil.handleError(e));
     }
   }
-/*
-
-  Future<List<int>> paymentHistory(String email) async {
-    String url = 'statistic/payment-history?q=$email';
-    print(url);
-    try {
-      final Response<dynamic> res = await dio().get<dynamic>(url);
-      log(res.data);
-      switch (res.statusCode) {
-        case SERVER_OKAY:
-          return res.data['data']['id'];
-        default:
-          throw res.data['message'];
-      }
-    } catch (e) {
-      log(e);
-      throw CustomException(DioErrorUtil.handleError(e));
-    }
-  }
-*/
 
   Future<String> initPayout(Map<String, dynamic> data) async {
     String url = 'payout';
@@ -159,8 +140,30 @@ class StatApi extends BaseAPI {
     }
   }
 
-  Future<List<UserData>> getSupportedCreators() async {
-    String url = 'user/support-creators';
+  Future<List<PostModel>> getUserPaymentHistory(String email) async {
+    String url = 'statistic/payment-history?email=$email';
+    try {
+      final Response<dynamic> res = await dio().get<dynamic>(url);
+      log(res.data);
+      switch (res.statusCode) {
+        case SERVER_OKAY:
+          List<PostModel> list = [];
+          res.data['data'].forEach((a) {
+            list.add(PostModel.fromJson(a));
+          });
+          return list;
+
+        default:
+          throw res.data['message'];
+      }
+    } catch (e) {
+      log(e);
+      throw CustomException(DioErrorUtil.handleError(e));
+    }
+  }
+
+  Future<List<UserData>> getSupportedCreators(String email) async {
+    String url = 'user/support-creators?email=$email';
     try {
       final Response<dynamic> res = await dio().get<dynamic>(url);
       log(res.data);
@@ -185,7 +188,7 @@ class StatApi extends BaseAPI {
     String url = 'user/creators';
     try {
       final Response<dynamic> res = await dio().get<dynamic>(url);
-      log(res.data);
+      //log(res.data);
       switch (res.statusCode) {
         case SERVER_OKAY:
           List<UserData> list = [];

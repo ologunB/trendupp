@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/views/auth/choose_signup.dart';
+import 'package:mms_app/views/creators/creators_layout.dart';
+import 'package:mms_app/views/fan/fan_layout.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'package:mms_app/core/routes/router.dart';
 import 'buttons.dart';
@@ -67,6 +69,8 @@ class _LogoutDialogState extends State<LogoutDialog> {
                     onTap: () {
                       Navigator.pop(cContext);
                       AppCache.clear();
+                      fIndexNotifier.value = 0;
+                      cIndexNotifier.value = 0;
                       pushAndRemoveUntil(context, ChooseSignup());
                     },
                   ),

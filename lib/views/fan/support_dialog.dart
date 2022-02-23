@@ -14,9 +14,9 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mms_app/views/widgets/utils.dart';
 
 class SupportDialog extends StatefulWidget {
-  const SupportDialog({Key? key, this.creator}) : super(key: key);
+  const SupportDialog({Key? key, required this.creator}) : super(key: key);
 
-  final UserData? creator;
+  final UserData creator;
 
   @override
   _SupportDialogState createState() => _SupportDialogState();
@@ -64,7 +64,7 @@ class _SupportDialogState extends State<SupportDialog> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(27.h),
                     child: CachedNetworkImage(
-                      imageUrl: widget.creator!.picture ?? 'a',
+                      imageUrl: widget.creator.picture ?? 'a',
                       width: 54.h,
                       height: 54.h,
                       fit: BoxFit.cover,
@@ -86,7 +86,7 @@ class _SupportDialogState extends State<SupportDialog> {
                   ),
                   SizedBox(height: 16.h),
                   regularText(
-                    'Support ${widget.creator!.firstName} ${widget.creator!.firstName}',
+                    'Support ${widget.creator.firstName} ${widget.creator.lastName}',
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w700,
                     color: AppColors.black,
@@ -236,7 +236,7 @@ class _SupportDialogState extends State<SupportDialog> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24.h),
                     child: CustomTextField(
-                      title: 'Send ${widget.creator!.firstName} a message',
+                      title: 'Send ${widget.creator.firstName} a message',
                       hintText: 'Say something nice....(optional)',
                       textInputType: TextInputType.text,
                       maxLines: 3,
@@ -255,7 +255,7 @@ class _SupportDialogState extends State<SupportDialog> {
                             "amount": selectedAmount ?? controller.text,
                             "payment_plan":
                                 frequency == 0 ? "One-Time" : "Monthly",
-                            "creatorId": widget.creator!.id.toString(),
+                            "creatorId": widget.creator.id.toString(),
                             "message": message.text
                           };
                           Navigator.pop(cContext);
@@ -263,7 +263,7 @@ class _SupportDialogState extends State<SupportDialog> {
                             context: context,
                             barrierDismissible: true,
                             builder: (BuildContext context) =>
-                                SupportAuth(data, widget.creator!),
+                                SupportAuth(data, widget.creator),
                           );
                         } else {
                           showSnackBar(

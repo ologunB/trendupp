@@ -45,7 +45,7 @@ class PostViewModel extends BaseModel {
   Future<void> getPosts() async {
     setBusy(true);
     try {
-      allPosts = await _postApi.getPosts();
+      allPosts = await _postApi.getCreatorsPosts();
       setBusy(false);
     } on CustomException catch (e) {
       error = e.message;
@@ -65,6 +65,20 @@ class PostViewModel extends BaseModel {
       setBusy(false);
       showDialog(e);
       return false;
+    }
+  }
+
+  List<PostModel>? creatorsPost;
+
+  Future<void> postByUsername(String user) async {
+    setBusy(true);
+    try {
+      creatorsPost = await _postApi.postByUsername(user);
+      setBusy(false);
+    } on CustomException catch (e) {
+      error = e.message;
+      setBusy(false);
+      showDialog(e);
     }
   }
 

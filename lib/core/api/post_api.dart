@@ -78,7 +78,30 @@ class PostApi extends BaseAPI {
     }
   }
 
-  Future<List<PostModel>> getPosts() async {
+  Future<List<PostModel>> getFanPosts(String email) async {
+    String url = 'post/fanpost?email=$email';
+    try {
+      final Response<dynamic> res = await dio().get<dynamic>(url);
+      log(res.data);
+      switch (res.statusCode) {
+        case SERVER_OKAY:
+          List<PostModel> list = [];
+          res.data['data'].forEach((a) {
+            PostModel post = PostModel.fromJson(a);
+            post.userImage = post.user!.picture;
+            list.add(post);
+          });
+          return list;
+        default:
+          throw res.data['message'];
+      }
+    } catch (e) {
+      log(e);
+      throw CustomException(DioErrorUtil.handleError(e));
+    }
+  }
+
+  Future<List<PostModel>> getCreatorsPosts() async {
     String url = 'post/all';
     try {
       final Response<dynamic> res = await dio().get<dynamic>(url);
@@ -90,6 +113,29 @@ class PostApi extends BaseAPI {
             PostModel post = PostModel.fromJson(a);
             post.userImage = AppCache.getUser()!.picture;
             post.userName = AppCache.getUser()!.firstName;
+            list.add(post);
+          });
+          return list;
+        default:
+          throw res.data['message'];
+      }
+    } catch (e) {
+      log(e);
+      throw CustomException(DioErrorUtil.handleError(e));
+    }
+  }
+
+  Future<List<PostModel>> postByUsername(String user) async {
+    String url = 'statistic/$user';
+    try {
+      final Response<dynamic> res = await dio().get<dynamic>(url);
+      log(res.data);
+      switch (res.statusCode) {
+        case SERVER_OKAY:
+          List<PostModel> list = [];
+          res.data['data'].forEach((a) {
+            PostModel post = PostModel.fromJson(a);
+            post.userImage = post.user!.picture;
             list.add(post);
           });
           return list;

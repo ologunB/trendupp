@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:mms_app/app/colors.dart';
-import 'package:mms_app/core/models/fan_payment_history.dart';
+ import 'package:mms_app/core/models/post_model.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/core/viewmodels/stat_vm.dart';
 import 'package:mms_app/views/widgets/empty_widget.dart';
@@ -25,7 +24,7 @@ class _SupportHistoryState extends State<SupportHistory> {
     return Scaffold(
       body: BaseView<StatViewModel>(
           onModelReady: (m) =>
-              m.creatorGetFanSupportHistory(AppCache.getUser()!.email!),
+              m.getUserPaymentHistory(AppCache.getUser()!.email!),
           builder: (_, StatViewModel historyModel, __) => ListView(
                 padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 13.h),
                 children: [
@@ -75,16 +74,15 @@ class _SupportHistoryState extends State<SupportHistory> {
                                         ),
                                       ));
                                 })
-                            : historyModel.fanSupportHistory == null
+                            : historyModel.allFanPayment == null
                                 ? ErrorOccurredWidget(
                                     error: historyModel.error,
                                     onPressed: () {
-                                      historyModel.creatorGetFanSupportHistory(
+                                      historyModel.getUserPaymentHistory(
                                           AppCache.getUser()!.email!);
                                     },
                                   )
-                                : historyModel
-                                        .fanSupportHistory!.history!.isEmpty
+                                : historyModel.allFanPayment!.isEmpty
                                     ? AppEmptyWidget('Support History is empty')
                                     : ListView.separated(
                                         separatorBuilder: (_, __) {
@@ -93,15 +91,14 @@ class _SupportHistoryState extends State<SupportHistory> {
                                                   .withOpacity(.4),
                                               height: 2.h);
                                         },
-                                        itemCount: historyModel
-                                            .fanSupportHistory!.history!.length,
+                                        itemCount:
+                                            historyModel.allFanPayment!.length,
                                         shrinkWrap: true,
                                         padding: EdgeInsets.zero,
                                         physics: ClampingScrollPhysics(),
                                         itemBuilder: (BuildContext ctx, i) {
-                                          FanHistoryModel fanModel =
-                                          historyModel.fanSupportHistory!
-                                              .history![i];
+                                          PostModel fanModel =
+                                              historyModel.allFanPayment![i];
                                           return Padding(
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 16.h,
@@ -111,7 +108,7 @@ class _SupportHistoryState extends State<SupportHistory> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 regularText(
-                                                  fanModel.firstName!,
+                                                  '${fanModel.user!.firstName!} ${fanModel.user!.lastName!}',
                                                   fontSize: 14.sp,
                                                   color: AppColors.black,
                                                   fontWeight: FontWeight.w700,
@@ -120,26 +117,31 @@ class _SupportHistoryState extends State<SupportHistory> {
                                                   padding: EdgeInsets.symmetric(
                                                       vertical: 6.h),
                                                   child: regularText(
-                                                    DateFormat('MMM dd, yyyy')
-                                                        .format(DateTime
-                                                        .parse(fanModel
-                                                        .createdAt!)) +
-                                                        ' at ' +
-                                                        DateFormat(' hh:mm a')
-                                                            .format(DateTime
-                                                            .parse(fanModel
-                                                            .createdAt!)),
+                                                    Utils.stringToDate(fanModel.createdAt!),
                                                     fontSize: 12.sp,
                                                     color: AppColors.textGrey,
                                                   ),
                                                 ),
-                                                regularText(
-                                                  '₦ ${fanModel.amount!.toAmount()}',
-                                                  fontSize: 12.sp,
-                                                  color: AppColors.black,
-                                                  isOther: true,
-                                                  fontWeight: FontWeight.w700,
-                                                ),
+                                                Row(
+                                                  children: [
+                                                    regularText(
+                                                      '₦ ${fanModel.amount!.toAmount()}',
+                                                      fontSize: 12.sp,
+                                                      color: AppColors.black,
+                                                      isOther: true,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                                    regularText(
+                                                      ' ${fanModel.paymentPlan}',
+                                                      fontSize: 12.sp,
+                                                      color: AppColors.textGrey,
+                                                      isOther: true,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                                  ],
+                                                )
                                               ],
                                             ),
                                           );

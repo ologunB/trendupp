@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/creator_stat_model.dart';
 import 'package:mms_app/core/models/fan_payment_history.dart';
@@ -208,15 +207,7 @@ class _FanSupportHistoryState extends State<FanSupportHistory> {
                                                   padding: EdgeInsets.symmetric(
                                                       vertical: 6.h),
                                                   child: regularText(
-                                                    DateFormat('MMM dd, yyyy')
-                                                            .format(DateTime
-                                                                .parse(fanModel
-                                                                    .createdAt!)) +
-                                                        ' at ' +
-                                                        DateFormat(' hh:mm a')
-                                                            .format(DateTime
-                                                                .parse(fanModel
-                                                                    .createdAt!)),
+                                                    Utils.stringToDate(fanModel.updatedAt!),
                                                     fontSize: 12.sp,
                                                     color: AppColors.textGrey,
                                                   ),
@@ -233,7 +224,7 @@ class _FanSupportHistoryState extends State<FanSupportHistory> {
                                                   fontSize: 12.sp,
                                                   color: AppColors.black,
                                                   isOther: true,
-                                                  fontWeight: FontWeight.w700,
+                                                  fontWeight: FontWeight.w500,
                                                 ),
                                               ],
                                             ),

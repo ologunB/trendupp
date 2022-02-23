@@ -33,6 +33,6 @@ class BaseAPI {
 
   log(dynamic data) {
     Logger l = Logger();
-    l.d(data);
+   l.d(data);
   }
 }

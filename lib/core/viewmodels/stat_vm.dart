@@ -145,11 +145,26 @@ class StatViewModel extends BaseModel {
 
   List<UserData>? allCreators, filteredCreators;
 
-  Future<void> getSupportedCreators() async {
+  Future<void> getSupportedCreators(String email) async {
     setBusy(true);
     try {
-      allCreators = await _statApi.getSupportedCreators();
+      allCreators = await _statApi.getSupportedCreators(email);
+      filteredCreators = [];
       filteredCreators!.addAll(allCreators!);
+      setBusy(false);
+    } on CustomException catch (e) {
+      error = e.message;
+      setBusy(false);
+      showDialog(e);
+    }
+  }
+
+  List<PostModel>? allFanPayment;
+
+  Future<void> getUserPaymentHistory(String email) async {
+    setBusy(true);
+    try {
+      allFanPayment = await _statApi.getUserPaymentHistory(email);
       setBusy(false);
     } on CustomException catch (e) {
       error = e.message;
@@ -164,6 +179,20 @@ class StatViewModel extends BaseModel {
       allCreators = await _statApi.getExploredCreators();
       filteredCreators = [];
       filteredCreators!.addAll(allCreators!);
+      setBusy(false);
+    } on CustomException catch (e) {
+      error = e.message;
+      setBusy(false);
+      showDialog(e);
+    }
+  }
+
+  List<PostModel>? allPosts;
+
+  Future<void> getFanPosts(String email) async {
+    setBusy(true);
+    try {
+      allPosts = await _postApi.getFanPosts(email);
       setBusy(false);
     } on CustomException catch (e) {
       error = e.message;
@@ -192,20 +221,6 @@ class StatViewModel extends BaseModel {
       filteredCreators!.addAll(allCreators!);
     }
     setBusy(false);
-  }
-
-  List<PostModel>? allPosts;
-
-  Future<void> getPosts() async {
-    setBusy(true);
-    try {
-      allPosts = await _postApi.getPosts();
-      setBusy(false);
-    } on CustomException catch (e) {
-      error = e.message;
-      setBusy(false);
-      showDialog(e);
-    }
   }
 
   BuildContext c() => navigate.navigationKey.currentContext!;

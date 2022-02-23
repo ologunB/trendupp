@@ -1,29 +1,29 @@
 class PayoutModel {
-  String? id;
-  String? title;
-  String? message;
+  int? id;
+  String? accountBank;
+  String? accountNumber;
   String? picture;
-  String? type;
+  String? status;
   String? amount;
   String? createdAt;
   String? updatedAt;
 
   PayoutModel(
       {this.id,
-      this.title,
-      this.message,
+      this.accountBank,
+      this.accountNumber,
       this.picture,
-      this.type,
+      this.status,
       this.createdAt,this.amount,
       this.updatedAt});
 
   PayoutModel.fromJson(dynamic json) {
     id = json['id'];
-    title = json['brandName'];
-    message = json['websiteUrl'];
+    accountBank = json['account_bank'];
+    accountNumber = json['account_number'];
     picture = json['picture'];
     amount = json['amount'];
-    type = json['about'];
+    status = json['status'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
@@ -31,11 +31,11 @@ class PayoutModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['brandName'] = this.title;
-    data['websiteUrl'] = this.message;
+    data['account_bank'] = this.accountBank;
+    data['account_number'] = this.accountNumber;
     data['amount'] = this.amount;
     data['picture'] = this.picture;
-    data['about'] = this.type;
+    data['status'] = this.status;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     return data;

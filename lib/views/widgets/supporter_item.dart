@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/creator_stat_model.dart';
 import 'package:mms_app/core/routes/router.dart';
@@ -32,11 +31,7 @@ class SupporterItem extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 6.h),
                     child: regularText(
-                      DateFormat('MMM dd, yyyy')
-                              .format(DateTime.parse(support.createdAt!)) +
-                          ' at ' +
-                          DateFormat(' hh:mm a')
-                              .format(DateTime.parse(support.createdAt!)),
+                      Utils.stringToDate(support.createdAt!),
                       fontSize: 12.sp,
                       color: AppColors.textGrey,
                     ),

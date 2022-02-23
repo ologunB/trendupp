@@ -87,7 +87,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                   Icon(Icons.favorite, color: AppColors.lightRed, size: 20.h),
                   SizedBox(width: 8.h),
                   regularText(
-                    'Support ${user.firstName}',
+                    'Support ${user.userName ?? user.firstName}',
                     fontSize: 12.sp,
                     color: AppColors.white,
                     fontWeight: FontWeight.w500,
@@ -186,7 +186,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.h),
                         child: regularText(
-                          '${user.firstName} ${user.lastName}',
+                          '${user.userName ?? user.firstName}',
                           fontSize: 16.sp,
                           color: AppColors.black,
                           fontWeight: FontWeight.w700,
@@ -195,7 +195,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                       ),
                       SizedBox(height: 8.h),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 50.h),
+                        padding: EdgeInsets.symmetric(horizontal: 30.h),
                         child: regularText(
                           '${user.about}',
                           fontSize: 14.sp,
@@ -228,7 +228,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                                   color: AppColors.lightRed, size: 20.h),
                               SizedBox(width: 8.h),
                               regularText(
-                                'Support ${user.firstName}',
+                                'Support ${user.userName ?? user.firstName}',
                                 fontSize: 12.sp,
                                 color: AppColors.white,
                                 fontWeight: FontWeight.w500,
@@ -258,7 +258,9 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                 ],
               )),
           BaseView<PostViewModel>(
-              onModelReady: (m) => m.getPosts(),
+              onModelReady: (m) => widget.isFan
+                  ? m.postByUsername(widget.userData!.userName!)
+                  : m.getPosts(),
               builder: (_, PostViewModel model, __) => model.busy
                   ? ListView.builder(
                       shrinkWrap: true,
@@ -286,7 +288,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                         )
                       : model.allPosts!.isEmpty
                           ? AppEmptyWidget(AppCache.getUser()!.userType == 'fan'
-                              ? '${widget.userData!.firstName} has no post yet'
+                              ? '${user.userName ?? user.firstName} has no post yet'
                               : 'You have not made any post')
                           : ListView.builder(
                               itemCount: model.allPosts!.length,

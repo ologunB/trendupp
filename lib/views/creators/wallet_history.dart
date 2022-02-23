@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
+import 'package:mms_app/core/models/payout.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/core/viewmodels/stat_vm.dart';
 import 'package:mms_app/views/widgets/buttons.dart';
@@ -260,8 +261,10 @@ class _WalletHistoryState extends State<WalletHistory> {
                                               shrinkWrap: true,
                                               padding: EdgeInsets.zero,
                                               physics: ClampingScrollPhysics(),
-                                              itemBuilder:
-                                                  (BuildContext ctx, index) {
+                                              itemBuilder: (ctx, i) {
+                                                PayoutModel payout =
+                                                    historyModel
+                                                        .allPayoutHistory![i];
                                                 return Padding(
                                                     padding:
                                                         EdgeInsets.symmetric(
@@ -273,7 +276,7 @@ class _WalletHistoryState extends State<WalletHistory> {
                                                               .start,
                                                       children: [
                                                         regularText(
-                                                          '₦5,000',
+                                                          '₦ ${payout.amount!.toAmount()}',
                                                           fontSize: 14.sp,
                                                           isOther: true,
                                                           color:
@@ -287,7 +290,9 @@ class _WalletHistoryState extends State<WalletHistory> {
                                                                   vertical:
                                                                       6.h),
                                                           child: regularText(
-                                                            'Jun 10, 2021 at 02:12 PM',
+                                                            Utils.stringToDate(
+                                                                payout
+                                                                    .updatedAt!),
                                                             fontSize: 12.sp,
                                                             color: AppColors
                                                                 .textGrey,
@@ -306,21 +311,26 @@ class _WalletHistoryState extends State<WalletHistory> {
                                                                   BorderRadius
                                                                       .circular(
                                                                           8.h),
-                                                              color: index
-                                                                      .isEven
+                                                              color: payout
+                                                                          .status ==
+                                                                      'approved'
                                                                   ? AppColors
                                                                       .green
                                                                   : Color(
                                                                       0xffF09949)),
                                                           child: regularText(
-                                                            index.isEven
+                                                            payout.status ==
+                                                                    'approved'
                                                                 ? 'Payout Successful'
                                                                 : 'Pending Payout',
                                                             fontSize: 8.sp,
-                                                            color: index.isEven
-                                                                ? AppColors
-                                                                    .white
-                                                                : Colors.black,
+                                                            color:
+                                                                payout.status ==
+                                                                        'approved'
+                                                                    ? AppColors
+                                                                        .white
+                                                                    : Colors
+                                                                        .black,
                                                             fontWeight:
                                                                 FontWeight.w700,
                                                           ),

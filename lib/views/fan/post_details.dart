@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/post_model.dart';
 import 'package:mms_app/core/models/user_model.dart';
@@ -8,6 +7,7 @@ import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/views/fan/support_dialog.dart';
 import 'package:mms_app/views/widgets/cantsupport_dialog.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
+import 'package:mms_app/views/widgets/utils.dart';
 
 class PostDetail extends StatelessWidget {
   const PostDetail(this.post);
@@ -53,7 +53,7 @@ class PostDetail extends StatelessWidget {
                         ),
                         SizedBox(width: 6.h),
                         regularText(
-                          '${post.userName!.toUpperCase()}’S PAGE',
+                          '${(post.userName ?? post.user!.firstName)!.toUpperCase()}’S PAGE',
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w700,
                           color: AppColors.lightBlack,
@@ -84,7 +84,7 @@ class PostDetail extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(40.h),
                         child: CachedNetworkImage(
-                          imageUrl: post.userImage ?? "c",
+                          imageUrl: post.userImage ?? post.user!.picture ?? "c",
                           height: 40.h,
                           width: 40.h,
                           fit: BoxFit.cover,
@@ -110,14 +110,13 @@ class PostDetail extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             regularText(
-                              '${post.userName}',
+                              '${post.userName ?? ((post.user!.firstName ?? '') + ' ' + (post.user!.lastName ?? ''))}',
                               fontSize: 12.sp,
                               color: AppColors.black,
                               fontWeight: FontWeight.w700,
                             ),
                             regularText(
-                              DateFormat('MMMM dd, yyyy')
-                                  .format(DateTime.parse(post.updatedAt!)),
+                              Utils.stringToDate(post.createdAt!),
                               fontSize: 10.sp,
                               color: AppColors.textGrey,
                               fontWeight: FontWeight.w500,
@@ -179,7 +178,7 @@ class PostDetail extends StatelessWidget {
                             barrierDismissible: true,
                             builder: (BuildContext context) =>
                                 AppCache.getUser()!.userType == 'fan'
-                                    ? SupportDialog()
+                                    ? SupportDialog(creator: post.user!)
                                     : CantSupportDialog(
                                         user:
                                             UserData(firstName: post.userName)),
@@ -198,7 +197,7 @@ class PostDetail extends StatelessWidget {
                                   color: AppColors.lightRed, size: 20.h),
                               SizedBox(width: 8.h),
                               regularText(
-                                'Support ${post.userName}',
+                                'Support ${post.userName ?? post.user!.firstName}',
                                 fontSize: 12.sp,
                                 color: AppColors.white,
                                 fontWeight: FontWeight.w500,

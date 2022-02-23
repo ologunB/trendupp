@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
-import 'package:mms_app/core/models/post_model.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/core/viewmodels/stat_vm.dart';
 import 'package:mms_app/views/widgets/creator_item.dart';
 import 'package:mms_app/views/widgets/creator_post.dart';
@@ -22,19 +22,18 @@ class FanHome extends StatefulWidget {
 
 class _FanHomeState extends State<FanHome> {
   bool loadMorePosts = false;
-  bool loadMoreCreators = false;
 
   @override
   Widget build(BuildContext context) {
     return BaseView<StatViewModel>(
-      onModelReady: (m) => m.getPosts(),
+      onModelReady: (m) => m.getFanPosts(AppCache.getUser()!.email!),
       builder: (_, StatViewModel postsModel, __) => BaseView<StatViewModel>(
         onModelReady: (m) => m.getExploreCreators(),
         builder: (_, StatViewModel exploreModel, __) => RefreshIndicator(
           onRefresh: () async {
             await Future.delayed(Duration(milliseconds: 200), () {});
             exploreModel.getExploreCreators();
-            return postsModel.getPosts();
+            return postsModel.getFanPosts(AppCache.getUser()!.email!);
           },
           color: AppColors.red,
           child: ListView(
@@ -60,14 +59,14 @@ class _FanHomeState extends State<FanHome> {
                               ),
                             ));
                       })
-                  : postsModel.allCreators == null
+                  : postsModel.allPosts == null
                       ? ErrorOccurredWidget(
                           error: postsModel.error,
                           onPressed: () {
                             postsModel.getExploreCreators();
                           },
                         )
-                      : postsModel.allCreators!.isEmpty
+                      : postsModel.allPosts!.isEmpty
                           ? Container(
                               padding: EdgeInsets.symmetric(vertical: 28.h),
                               decoration: BoxDecoration(
@@ -109,42 +108,54 @@ class _FanHomeState extends State<FanHome> {
                               physics: ClampingScrollPhysics(),
                               children: [
                                 ListView.builder(
-                                    itemCount:
-                                        postsModel.allCreators!.length,
+                                    itemCount: loadMorePosts
+                                        ? postsModel.allPosts!.length
+                                        : (postsModel.allPosts!.length > 4
+                                            ? 4
+                                            : postsModel.allPosts!.length),
                                     shrinkWrap: true,
                                     padding: EdgeInsets.zero,
                                     physics: ClampingScrollPhysics(),
-                                    itemBuilder: (BuildContext ctx, index) {
-                                      return creatorPost(context, PostModel());
+                                    itemBuilder: (ctx, i) {
+                                      return creatorPost(
+                                          context, postsModel.allPosts![i]);
                                     }),
-                                SizedBox(height: 8.h),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {},
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.add_circle_outline,
-                                            color: AppColors.red,
-                                            size: 14.h,
+                                if (postsModel.allPosts!.length > 4)
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 10.h),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            loadMorePosts = !loadMorePosts;
+                                          },
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(
+                                                Icons.add_circle_outline,
+                                                color: AppColors.red,
+                                                size: 14.h,
+                                              ),
+                                              SizedBox(width: 4.h),
+                                              regularText(
+                                                loadMorePosts
+                                                    ? 'Less Posts'
+                                                    : 'More Posts',
+                                                fontSize: 12.sp,
+                                                color: AppColors.red,
+                                                fontWeight: FontWeight.w500,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
                                           ),
-                                          SizedBox(width: 4.h),
-                                          regularText(
-                                            'More Posts',
-                                            fontSize: 12.sp,
-                                            color: AppColors.red,
-                                            fontWeight: FontWeight.w500,
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: 10.h),
+                                  ),
                               ],
                             ),
               Padding(
@@ -193,22 +204,19 @@ class _FanHomeState extends State<FanHome> {
                               children: [
                                 GridView.builder(
                                     gridDelegate: Utils.gridDelegate(),
-                                    itemCount: exploreModel
-                                                .allCreators!.length >
-                                            6
-                                        ? 6
-                                        : exploreModel
-                                            .allCreators!.length,
+                                    itemCount:
+                                        exploreModel.allCreators!.length > 6
+                                            ? 6
+                                            : exploreModel.allCreators!.length,
                                     shrinkWrap: true,
                                     padding: EdgeInsets.zero,
                                     physics: ClampingScrollPhysics(),
                                     itemBuilder: (ctx, i) {
-                                      return creatorItem(ctx,
-                                          exploreModel.allCreators![i]);
+                                      return creatorItem(
+                                          ctx, exploreModel.allCreators![i]);
                                     }),
                                 SizedBox(height: 24.h),
-                                if (exploreModel.allCreators!.length >
-                                    6)
+                                if (exploreModel.allCreators!.length > 6)
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [

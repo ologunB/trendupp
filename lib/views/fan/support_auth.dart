@@ -88,7 +88,7 @@ class _SupportAuthState extends State<SupportAuth> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(27.h),
                               child: CachedNetworkImage(
-                                imageUrl: widget.creator.picture?? 'a',
+                                imageUrl: widget.creator.picture ?? 'a',
                                 width: 54.h,
                                 height: 54.h,
                                 fit: BoxFit.cover,
@@ -110,7 +110,7 @@ class _SupportAuthState extends State<SupportAuth> {
                             ),
                             SizedBox(height: 16.h),
                             regularText(
-                              'Support ${widget.creator.firstName} ${widget.creator.firstName}',
+                              'Support ${widget.creator.firstName} ${widget.creator.lastName}',
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w700,
                               color: AppColors.black,

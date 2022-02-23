@@ -17,14 +17,16 @@ class SplashView extends StatefulWidget {
 class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
-   // AppCache.clear();
+    // AppCache.clear();
     Future.delayed(Duration(seconds: 2), () {
       if (AppCache.getUser() == null) {
         Navigator.pushReplacement(
-            context,
-            PageRouteBuilder(
-                transitionDuration: Duration(seconds: 1),
-                pageBuilder: (_, __, ___) => ChooseSignup()));
+          context,
+          PageRouteBuilder(
+            transitionDuration: Duration(seconds: 1),
+            pageBuilder: (_, __, ___) => ChooseSignup(),
+          ),
+        );
       } else {
         if (AppCache.getUser()!.userType == null) {
           pushReplacement(context, ChooseType());
@@ -46,16 +48,18 @@ class _SplashViewState extends State<SplashView> {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return ScreenUtilInit(
-        designSize: Size(w, h),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        builder: () => Scaffold(
-              backgroundColor: Color(0xff040039),
-              body: Center(
-                  child: Hero(
-                      tag: 'splash',
-                      child: Image.asset('assets/images/logo2.png',
-                          width: 120.h))),
-            ));
+      designSize: Size(w, h),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: () => Scaffold(
+        backgroundColor: Color(0xff040039),
+        body: Center(
+          child: Hero(
+            tag: 'splash',
+            child: Image.asset('assets/images/logo2.png', width: 120.h),
+          ),
+        ),
+      ),
+    );
   }
 }
