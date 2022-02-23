@@ -1,12 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/creator_stat_model.dart';
-import 'package:mms_app/core/viewmodels/stat_api.dart';
+import 'package:mms_app/core/models/fan_payment_history.dart';
+import 'package:mms_app/core/viewmodels/stat_vm.dart';
 import 'package:mms_app/views/widgets/empty_widget.dart';
 import 'package:mms_app/views/widgets/error_widget.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:mms_app/views/widgets/utils.dart';
 
 import '../base_view.dart';
 
@@ -68,7 +71,9 @@ class _FanSupportHistoryState extends State<FanSupportHistory> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(50.h),
                         child: CachedNetworkImage(
-                          imageUrl: widget.support.lastName!,
+                          imageUrl:
+                              historyModel.fanSupportHistory?.user?.picture ??
+                                  'a',
                           height: 50.h,
                           width: 50.h,
                           fit: BoxFit.cover,
@@ -157,13 +162,17 @@ class _FanSupportHistoryState extends State<FanSupportHistory> {
                                         ),
                                       ));
                                 })
-                            : historyModel.allPayoutHistory == null
+                            : historyModel.fanSupportHistory == null
                                 ? ErrorOccurredWidget(
                                     error: historyModel.error,
-                                    onPressed: historyModel.payoutHistory,
+                                    onPressed: () {
+                                      historyModel.creatorGetFanSupportHistory(
+                                          widget.support.email!);
+                                    },
                                   )
-                                : historyModel.allPayoutHistory!.isEmpty
-                                    ? AppEmptyWidget('Payout is empty')
+                                : historyModel
+                                        .fanSupportHistory!.history!.isEmpty
+                                    ? AppEmptyWidget('Support History is empty')
                                     : ListView.separated(
                                         separatorBuilder: (_, __) {
                                           return Divider(
@@ -171,11 +180,15 @@ class _FanSupportHistoryState extends State<FanSupportHistory> {
                                                   .withOpacity(.4),
                                               height: 2.h);
                                         },
-                                        itemCount: 3,
+                                        itemCount: historyModel
+                                            .fanSupportHistory!.history!.length,
                                         shrinkWrap: true,
                                         padding: EdgeInsets.zero,
                                         physics: ClampingScrollPhysics(),
-                                        itemBuilder: (BuildContext ctx, index) {
+                                        itemBuilder: (BuildContext ctx, i) {
+                                          FanHistoryModel fanModel =
+                                              historyModel.fanSupportHistory!
+                                                  .history![i];
                                           return Padding(
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 16.h,
@@ -185,22 +198,38 @@ class _FanSupportHistoryState extends State<FanSupportHistory> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 regularText(
-                                                  'Tomiwa Odufuwa',
+                                                  '₦ ${fanModel.amount!.toAmount()}',
                                                   fontSize: 14.sp,
                                                   color: AppColors.black,
+                                                  isOther: true,
                                                   fontWeight: FontWeight.w700,
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.symmetric(
                                                       vertical: 6.h),
                                                   child: regularText(
-                                                    'Jun 10, 2021 at 02:12 PM',
+                                                    DateFormat('MMM dd, yyyy')
+                                                            .format(DateTime
+                                                                .parse(fanModel
+                                                                    .createdAt!)) +
+                                                        ' at ' +
+                                                        DateFormat(' hh:mm a')
+                                                            .format(DateTime
+                                                                .parse(fanModel
+                                                                    .createdAt!)),
                                                     fontSize: 12.sp,
                                                     color: AppColors.textGrey,
                                                   ),
                                                 ),
                                                 regularText(
-                                                  '₦ 5,000',
+                                                  '${fanModel.paymentPlan}',
+                                                  fontSize: 11.sp,
+                                                  color: AppColors.textGrey,
+                                                  isOther: true,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                regularText(
+                                                  '${fanModel.message}',
                                                   fontSize: 12.sp,
                                                   color: AppColors.black,
                                                   isOther: true,

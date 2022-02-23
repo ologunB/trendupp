@@ -10,7 +10,7 @@ import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/user_model.dart';
 import 'package:mms_app/core/routes/router.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
-import 'package:mms_app/core/viewmodels/stat_api.dart';
+import 'package:mms_app/core/viewmodels/stat_vm.dart';
 import 'package:mms_app/views/fan/support_done.dart';
 import 'package:mms_app/views/widgets/buttons.dart';
 import 'package:mms_app/views/widgets/custom_textfield.dart';
@@ -88,7 +88,7 @@ class _SupportAuthState extends State<SupportAuth> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(27.h),
                               child: CachedNetworkImage(
-                                imageUrl: widget.creator.picture!,
+                                imageUrl: widget.creator.picture?? 'a',
                                 width: 54.h,
                                 height: 54.h,
                                 fit: BoxFit.cover,

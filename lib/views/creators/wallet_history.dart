@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
-import 'package:mms_app/core/viewmodels/stat_api.dart';
+import 'package:mms_app/core/viewmodels/stat_vm.dart';
 import 'package:mms_app/views/widgets/buttons.dart';
 import 'package:mms_app/views/widgets/card_item.dart';
 import 'package:mms_app/views/widgets/custom_textfield.dart';

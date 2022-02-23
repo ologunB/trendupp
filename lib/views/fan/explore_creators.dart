@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
-import 'package:mms_app/core/viewmodels/stat_api.dart';
+import 'package:mms_app/core/models/user_model.dart';
+import 'package:mms_app/core/viewmodels/stat_vm.dart';
 import 'package:mms_app/views/widgets/custom_textfield.dart';
 import 'package:mms_app/views/widgets/creator_item.dart';
 import 'package:mms_app/views/widgets/empty_widget.dart';
@@ -20,12 +21,11 @@ class ExploreCreators extends StatefulWidget {
 
 class _ExploreCreatorsState extends State<ExploreCreators> {
   TextEditingController search = TextEditingController();
-  bool isLoadingMore = false;
 
   @override
   Widget build(BuildContext context) {
     return BaseView<StatViewModel>(
-        onModelReady: (m) => m.getExploreCreators(''),
+        onModelReady: (m) => m.getExploreCreators(),
         builder: (_, StatViewModel historyModel, __) => GestureDetector(
             onTap: Utils.offKeyboard,
             child: Column(
@@ -48,6 +48,7 @@ class _ExploreCreatorsState extends State<ExploreCreators> {
                     controller: search,
                     textInputType: TextInputType.text,
                     textInputAction: TextInputAction.next,
+                    onChanged: historyModel.filterCreators,
                     suffixIcon: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -59,6 +60,8 @@ class _ExploreCreatorsState extends State<ExploreCreators> {
                 SizedBox(height: 8.h),
                 Expanded(
                   child: ListView(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
                     padding:
                         EdgeInsets.symmetric(horizontal: 24.h, vertical: 8.h),
                     shrinkWrap: true,
@@ -85,28 +88,28 @@ class _ExploreCreatorsState extends State<ExploreCreators> {
                                       ),
                                     ));
                               })
-                          : historyModel.allExploredCreators == null
+                          : historyModel.filteredCreators == null
                               ? ErrorOccurredWidget(
                                   error: historyModel.error,
                                   onPressed: () {
-                                    historyModel.getExploreCreators('email');
+                                    historyModel.getExploreCreators();
                                   },
                                 )
-                              : historyModel.allExploredCreators!.isEmpty
+                              : historyModel.filteredCreators!.isEmpty
                                   ? AppEmptyWidget('No creators are available')
                                   : GridView.builder(
                                       gridDelegate: Utils.gridDelegate(),
-                                      itemCount: historyModel
-                                          .allExploredCreators!.length,
+                                      itemCount:
+                                          historyModel.filteredCreators!.length,
                                       shrinkWrap: true,
                                       padding: EdgeInsets.zero,
                                       physics: ClampingScrollPhysics(),
                                       itemBuilder: (ctx, i) {
-                                        dynamic c = historyModel
-                                            .allExploredCreators![i];
+                                        UserData c =
+                                            historyModel.filteredCreators![i];
                                         return creatorItem(ctx, c);
                                       }),
-                      SizedBox(height: 24.h),
+                      /*    SizedBox(height: 24.h),
                       if (historyModel.allExploredCreators != null)
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -143,7 +146,7 @@ class _ExploreCreatorsState extends State<ExploreCreators> {
                                     ),
                                   ),
                           ],
-                        ),
+                        ),*/
                       SizedBox(height: 24.h),
                     ],
                   ),

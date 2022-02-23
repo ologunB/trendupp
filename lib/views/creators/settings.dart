@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/routes/router.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/views/fan/change_password.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'creator_bio.dart';
@@ -46,13 +47,16 @@ class _CreatorSettingsState extends State<CreatorSettings> {
               ListView.separated(
                   separatorBuilder: (_, __) {
                     return Divider(
-                        color: AppColors.textGrey.withOpacity(.4), height: 2.h);
+                        color: AppColors.textGrey.withOpacity(.4), height: 0);
                   },
                   itemCount: 4,
                   shrinkWrap: true,
                   padding: EdgeInsets.zero,
                   physics: ClampingScrollPhysics(),
                   itemBuilder: (BuildContext ctx, index) {
+                    if (AppCache.getUser()!.verified == null && index == 1) {
+                      return SizedBox();
+                    }
                     return InkWell(
                       onTap: () async {
                         if (index == 0) {

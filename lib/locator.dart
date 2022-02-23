@@ -2,7 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mms_app/core/api/auth_api.dart';
 import 'package:mms_app/core/api/post_api.dart';
 import 'package:mms_app/core/api/stat_api.dart';
-import 'package:mms_app/core/viewmodels/stat_api.dart';
+import 'package:mms_app/core/viewmodels/stat_vm.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'core/utils/navigator.dart';

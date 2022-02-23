@@ -47,11 +47,14 @@ class _FanSettingsState extends State<FanSettings> {
                     return Divider(
                         color: AppColors.textGrey.withOpacity(.4), height: 2.h);
                   },
-                  itemCount: AppCache.getUser()!.verified == null ? 1 : 2,
+                  itemCount: 2,
                   shrinkWrap: true,
                   padding: EdgeInsets.zero,
                   physics: ClampingScrollPhysics(),
                   itemBuilder: (BuildContext ctx, index) {
+                    if (AppCache.getUser()!.verified == null && index == 1) {
+                      return SizedBox();
+                    }
                     return InkWell(
                       onTap: () async {
                         if (index == 0) {

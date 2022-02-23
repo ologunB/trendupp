@@ -46,6 +46,7 @@ class AuthViewModel extends BaseModel {
       AppCache.setToken(user.token!);
       AppCache.setUser(user);
       await getAccount();
+      user = AppCache.getUser()!;
       if (!user.verified!) {
         isVerified = true;
       } else if (user.userType == null) {
@@ -178,6 +179,7 @@ class AuthViewModel extends BaseModel {
       UserData user = await _authApi.socialSignup(a);
       AppCache.setToken(user.token!);
       AppCache.setUser(user);
+      await getAccount();
       pushAndRemoveUntil(c(), ChooseType());
       setBusy(false);
     } on CustomException catch (e) {
@@ -194,6 +196,7 @@ class AuthViewModel extends BaseModel {
       AppCache.setToken(user.token!);
       AppCache.setUser(user);
       await getAccount();
+      user = AppCache.getUser()!;
       if (user.userType == null) {
         pushAndRemoveUntil(c(), ChooseType());
       } else if (user.userType == 'fan') {
@@ -308,6 +311,20 @@ class AuthViewModel extends BaseModel {
     try {
       await _authApi.changePassword(a);
       showSnackBar(c(), 'Success', 'Password has been changed successfully');
+      setBusy(false);
+      return true;
+    } on CustomException catch (e) {
+      error = e.message;
+      setBusy(false);
+      showDialog(e);
+      return false;
+    }
+  }
+
+  Future<bool> forgotPassword(Map<String, dynamic> a) async {
+    setBusy(true);
+    try {
+      await _authApi.forgotPassword(a);
       setBusy(false);
       return true;
     } on CustomException catch (e) {

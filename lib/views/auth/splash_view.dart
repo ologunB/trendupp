@@ -17,6 +17,7 @@ class SplashView extends StatefulWidget {
 class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
+   // AppCache.clear();
     Future.delayed(Duration(seconds: 2), () {
       if (AppCache.getUser() == null) {
         Navigator.pushReplacement(

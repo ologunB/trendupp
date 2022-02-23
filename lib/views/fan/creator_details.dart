@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/post_model.dart';
 import 'package:mms_app/core/models/user_model.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/core/viewmodels/post_vm.dart';
 import 'package:mms_app/views/fan/support_dialog.dart';
 import 'package:mms_app/views/widgets/cantsupport_dialog.dart';
@@ -103,6 +104,34 @@ class _CreatorDetailsState extends State<CreatorDetails> {
         padding: EdgeInsets.symmetric(horizontal: 24.h),
         physics: ClampingScrollPhysics(),
         children: [
+          if (widget.isFan)
+            Padding(
+              padding: EdgeInsets.only(top: 8.h),
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: () => Navigator.pop(context),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppColors.lightBlack,
+                          size: 16.h,
+                        ),
+                        SizedBox(width: 6.h),
+                        regularText(
+                          'BACK',
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.lightBlack,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           SizedBox(height: 55.h),
           Container(
               margin: EdgeInsets.only(bottom: 16.h),
@@ -128,7 +157,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(50.h),
                             child: CachedNetworkImage(
-                              imageUrl: user.picture!,
+                              imageUrl: user.picture ?? 'a',
                               height: 100.h,
                               width: 100.h,
                               fit: BoxFit.cover,
@@ -228,53 +257,46 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                   ),
                 ],
               )),
-          widget.isFan
-              ? ListView.builder(
-                  itemCount: 3,
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  physics: ClampingScrollPhysics(),
-                  itemBuilder: (BuildContext ctx, index) {
-                    return creatorPost(context, PostModel());
-                  })
-              : BaseView<PostViewModel>(
-                  onModelReady: (m) => m.getPosts(),
-                  builder: (_, PostViewModel model, __) => model.busy
-                      ? ListView.builder(
-                          shrinkWrap: true,
-                          physics: ClampingScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          itemCount: 3,
-                          itemBuilder: (context, index) {
-                            return Shimmer.fromColors(
-                                baseColor: Colors.grey.withOpacity(.1),
-                                highlightColor: Colors.white60,
-                                child: Container(
-                                  height: 120.h,
-                                  margin: EdgeInsets.only(top: 16.h),
-                                  width: ScreenUtil.defaultSize.width,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(.7),
-                                    borderRadius: BorderRadius.circular(5.h),
-                                  ),
-                                ));
-                          })
-                      : model.allPosts == null
-                          ? ErrorOccurredWidget(
-                              error: model.error!,
-                              onPressed: model.getPosts,
-                            )
-                          : model.allPosts!.isEmpty
-                              ? AppEmptyWidget('You have not made any post')
-                              : ListView.builder(
-                                  itemCount: model.allPosts!.length,
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.zero,
-                                  physics: ClampingScrollPhysics(),
-                                  itemBuilder: (BuildContext ctx, i) {
-                                    PostModel post = model.allPosts![i];
-                                    return creatorPost(context, post);
-                                  })),
+          BaseView<PostViewModel>(
+              onModelReady: (m) => m.getPosts(),
+              builder: (_, PostViewModel model, __) => model.busy
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                      itemCount: 3,
+                      itemBuilder: (context, index) {
+                        return Shimmer.fromColors(
+                            baseColor: Colors.grey.withOpacity(.1),
+                            highlightColor: Colors.white60,
+                            child: Container(
+                              height: 120.h,
+                              margin: EdgeInsets.only(top: 16.h),
+                              width: ScreenUtil.defaultSize.width,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(.7),
+                                borderRadius: BorderRadius.circular(5.h),
+                              ),
+                            ));
+                      })
+                  : model.allPosts == null
+                      ? ErrorOccurredWidget(
+                          error: model.error!,
+                          onPressed: model.getPosts,
+                        )
+                      : model.allPosts!.isEmpty
+                          ? AppEmptyWidget(AppCache.getUser()!.userType == 'fan'
+                              ? '${widget.userData!.firstName} has no post yet'
+                              : 'You have not made any post')
+                          : ListView.builder(
+                              itemCount: model.allPosts!.length,
+                              shrinkWrap: true,
+                              padding: EdgeInsets.zero,
+                              physics: ClampingScrollPhysics(),
+                              itemBuilder: (BuildContext ctx, i) {
+                                PostModel post = model.allPosts![i];
+                                return creatorPost(context, post);
+                              })),
           SizedBox(height: 10.h),
         ],
       ),

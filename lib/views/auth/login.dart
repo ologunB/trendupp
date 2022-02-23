@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
+import 'package:mms_app/core/routes/router.dart';
 import 'package:mms_app/core/viewmodels/auth_vm.dart';
 import 'package:mms_app/views/widgets/buttons.dart';
 import 'package:mms_app/views/widgets/custom_textfield.dart';
@@ -8,6 +9,7 @@ import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'package:mms_app/views/widgets/utils.dart';
 
 import '../base_view.dart';
+import 'forgot_password.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key, this.isVerify = false}) : super(key: key);
@@ -109,54 +111,73 @@ class _LoginState extends State<Login> {
                       ],
                     ),
                   ),
-                if (model.isVerified)
-                  CustomTextField(
-                    hintText: 'Paste Verification Code',
-                    controller: code,
-                    textInputType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
-                    isCode: true,
-                    maxLength: 6,
-                    suffixIcon: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        BaseView<AuthViewModel>(
-                            onModelReady: (m) => null,
-                            builder: (_, AuthViewModel resendModel, __) =>
-                                resendModel.busy
-                                    ? Padding(
-                                        padding: EdgeInsets.only(right: 30.h),
-                                        child: SizedBox(
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 3,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                    Colors.black),
-                                          ),
-                                          height: 10.h,
-                                          width: 10.h,
-                                        ),
-                                      )
-                                    : InkWell(
-                                        onTap: () {
-                                          resendModel.resendOtp({
-                                            'email': email.text,
-                                            'password': password.text,
-                                          });
-                                        },
-                                        child: Padding(
-                                          padding: EdgeInsets.only(right: 30.h),
-                                          child: regularText(
-                                            'Resend',
-                                            fontSize: 12.sp,
-                                            fontWeight: FontWeight.w700,
-                                            color: AppColors.black,
-                                          ),
-                                        ),
-                                      )),
-                      ],
-                    ),
-                  ),
+                !model.isVerified
+                    ? Padding(
+                        padding: EdgeInsets.all(8.h),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            InkWell(
+                              onTap: () => push(context, ForgotPassword()),
+                              child: regularText(
+                                'Forgot Password',
+                                fontSize: 14.sp,
+                                color: AppColors.black,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : CustomTextField(
+                        hintText: 'Paste Verification Code',
+                        controller: code,
+                        textInputType: TextInputType.text,
+                        textInputAction: TextInputAction.done,
+                        isCode: true,
+                        maxLength: 6,
+                        suffixIcon: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            BaseView<AuthViewModel>(
+                                onModelReady: (m) => null,
+                                builder: (_, AuthViewModel resendModel, __) =>
+                                    resendModel.busy
+                                        ? Padding(
+                                            padding:
+                                                EdgeInsets.only(right: 30.h),
+                                            child: SizedBox(
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 3,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(Colors.black),
+                                              ),
+                                              height: 10.h,
+                                              width: 10.h,
+                                            ),
+                                          )
+                                        : InkWell(
+                                            onTap: () {
+                                              resendModel.resendOtp({
+                                                'email': email.text,
+                                                'password': password.text,
+                                              });
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 30.h),
+                                              child: regularText(
+                                                'Resend',
+                                                fontSize: 12.sp,
+                                                fontWeight: FontWeight.w700,
+                                                color: AppColors.black,
+                                              ),
+                                            ),
+                                          )),
+                          ],
+                        ),
+                      ),
                 SizedBox(height: 36.h),
                 buttonWithBorder(model.isVerified ? 'Verify Account' : 'Login',
                     buttonColor: AppColors.red,

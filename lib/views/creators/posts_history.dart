@@ -235,7 +235,7 @@ class _PostsHistoryState extends State<PostsHistory> {
                       vm.allPosts!
                           .removeWhere((element) => element.id == res['id']);
                       post.title = res['title'];
-                      post.message = res['description'];
+                      post.message = res['message'];
                       vm.allPosts!.add(post);
                       setState(() {});
                     }

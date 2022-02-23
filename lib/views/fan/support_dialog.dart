@@ -64,7 +64,7 @@ class _SupportDialogState extends State<SupportDialog> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(27.h),
                     child: CachedNetworkImage(
-                      imageUrl: widget.creator!.picture!,
+                      imageUrl: widget.creator!.picture ?? 'a',
                       width: 54.h,
                       height: 54.h,
                       fit: BoxFit.cover,

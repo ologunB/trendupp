@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/api/auth_api.dart';
+import 'package:mms_app/core/api/post_api.dart';
 import 'package:mms_app/core/api/stat_api.dart';
 import 'package:mms_app/core/models/creator_stat_model.dart';
+import 'package:mms_app/core/models/fan_payment_history.dart';
 import 'package:mms_app/core/models/payout.dart';
+import 'package:mms_app/core/models/post_model.dart';
+import 'package:mms_app/core/models/user_model.dart';
 import 'package:mms_app/core/utils/custom_exception.dart';
 import 'package:mms_app/views/widgets/snackbar.dart';
 import '../../locator.dart';
@@ -12,6 +16,7 @@ import 'base_vm.dart';
 class StatViewModel extends BaseModel {
   final StatApi _statApi = locator<StatApi>();
   final AuthApi _authApi = locator<AuthApi>();
+  final PostApi _postApi = locator<PostApi>();
   String? error;
 
   CreatorStat? creatorStat;
@@ -36,20 +41,6 @@ class StatViewModel extends BaseModel {
     setBusy(true);
     try {
       allSupporters = await _statApi.getSupporters();
-      setBusy(false);
-    } on CustomException catch (e) {
-      error = e.message;
-      setBusy(false);
-      showDialog(e);
-    }
-  }
-
-  List<int>? allPaymentHistory;
-
-  Future<void> paymentHistory(String e) async {
-    setBusy(true);
-    try {
-      allPaymentHistory = await _statApi.paymentHistory(e);
       setBusy(false);
     } on CustomException catch (e) {
       error = e.message;
@@ -91,7 +82,7 @@ class StatViewModel extends BaseModel {
     }
   }
 
-  List<int>? fanSupportHistory;
+  FanPaymentHistoryModel? fanSupportHistory;
 
   Future<void> creatorGetFanSupportHistory(String email) async {
     setBusy(true);
@@ -152,12 +143,13 @@ class StatViewModel extends BaseModel {
     }
   }
 
-  List<int>? allSupportedCreators;
+  List<UserData>? allCreators, filteredCreators;
 
-  Future<void> getSupportedCreators(String email) async {
+  Future<void> getSupportedCreators() async {
     setBusy(true);
     try {
-      allSupportedCreators = await _statApi.getSupportedCreators(email);
+      allCreators = await _statApi.getSupportedCreators();
+      filteredCreators!.addAll(allCreators!);
       setBusy(false);
     } on CustomException catch (e) {
       error = e.message;
@@ -166,12 +158,12 @@ class StatViewModel extends BaseModel {
     }
   }
 
-  List<int>? allExploredCreators;
-
-  Future<void> getExploreCreators(String email) async {
+  Future<void> getExploreCreators() async {
     setBusy(true);
     try {
-      fanSupportHistory = await _statApi.getExploredCreators(email);
+      allCreators = await _statApi.getExploredCreators();
+      filteredCreators = [];
+      filteredCreators!.addAll(allCreators!);
       setBusy(false);
     } on CustomException catch (e) {
       error = e.message;
@@ -180,16 +172,39 @@ class StatViewModel extends BaseModel {
     }
   }
 
-  List<int>? allUsersPosts;
+  filterCreators(String? a) {
+    a = a!.trim();
+    if (a.length > 0) {
+      a = a.toUpperCase();
+      filteredCreators!.clear();
+      for (UserData item in allCreators!) {
+        if ((item.firstName?.toUpperCase().contains(a) ?? true) ||
+            (item.lastName?.toUpperCase().contains(a) ?? true) ||
+            (item.email?.toUpperCase().contains(a) ?? true) ||
+            (item.about?.toUpperCase().contains(a) ?? true) ||
+            (item.brandName?.toUpperCase().contains(a) ?? true) ||
+            (item.creating?.toUpperCase().contains(a) ?? true)) {
+          filteredCreators!.add(item);
+        }
+      }
+    } else {
+      filteredCreators!.clear();
+      filteredCreators!.addAll(allCreators!);
+    }
+    setBusy(false);
+  }
 
-  Future<void> getUsersPosts(String email) async {
+  List<PostModel>? allPosts;
+
+  Future<void> getPosts() async {
     setBusy(true);
     try {
-      fanSupportHistory = await _statApi.getUsersPosts(email);
+      allPosts = await _postApi.getPosts();
       setBusy(false);
     } on CustomException catch (e) {
       error = e.message;
       setBusy(false);
+      showDialog(e);
     }
   }
 

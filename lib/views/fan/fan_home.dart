@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/post_model.dart';
-import 'package:mms_app/core/viewmodels/stat_api.dart';
+import 'package:mms_app/core/viewmodels/stat_vm.dart';
 import 'package:mms_app/views/widgets/creator_item.dart';
 import 'package:mms_app/views/widgets/creator_post.dart';
 import 'package:mms_app/views/widgets/empty_widget.dart';
@@ -27,14 +27,14 @@ class _FanHomeState extends State<FanHome> {
   @override
   Widget build(BuildContext context) {
     return BaseView<StatViewModel>(
-      onModelReady: (m) => m.getUsersPosts(''),
+      onModelReady: (m) => m.getPosts(),
       builder: (_, StatViewModel postsModel, __) => BaseView<StatViewModel>(
-        onModelReady: (m) => m.getExploreCreators(''),
+        onModelReady: (m) => m.getExploreCreators(),
         builder: (_, StatViewModel exploreModel, __) => RefreshIndicator(
           onRefresh: () async {
             await Future.delayed(Duration(milliseconds: 200), () {});
-            exploreModel.getExploreCreators('');
-            return postsModel.getUsersPosts('');
+            exploreModel.getExploreCreators();
+            return postsModel.getPosts();
           },
           color: AppColors.red,
           child: ListView(
@@ -60,14 +60,14 @@ class _FanHomeState extends State<FanHome> {
                               ),
                             ));
                       })
-                  : postsModel.allExploredCreators == null
+                  : postsModel.allCreators == null
                       ? ErrorOccurredWidget(
                           error: postsModel.error,
                           onPressed: () {
-                            postsModel.getExploreCreators('email');
+                            postsModel.getExploreCreators();
                           },
                         )
-                      : postsModel.allExploredCreators!.isEmpty
+                      : postsModel.allCreators!.isEmpty
                           ? Container(
                               padding: EdgeInsets.symmetric(vertical: 28.h),
                               decoration: BoxDecoration(
@@ -110,7 +110,7 @@ class _FanHomeState extends State<FanHome> {
                               children: [
                                 ListView.builder(
                                     itemCount:
-                                        postsModel.allExploredCreators!.length,
+                                        postsModel.allCreators!.length,
                                     shrinkWrap: true,
                                     padding: EdgeInsets.zero,
                                     physics: ClampingScrollPhysics(),
@@ -177,14 +177,14 @@ class _FanHomeState extends State<FanHome> {
                               ),
                             ));
                       })
-                  : exploreModel.allExploredCreators == null
+                  : exploreModel.allCreators == null
                       ? ErrorOccurredWidget(
                           error: exploreModel.error,
                           onPressed: () {
-                            exploreModel.getExploreCreators('email');
+                            exploreModel.getExploreCreators();
                           },
                         )
-                      : exploreModel.allExploredCreators!.isEmpty
+                      : exploreModel.allCreators!.isEmpty
                           ? AppEmptyWidget('No creators are available')
                           : ListView(
                               physics: ClampingScrollPhysics(),
@@ -193,40 +193,48 @@ class _FanHomeState extends State<FanHome> {
                               children: [
                                 GridView.builder(
                                     gridDelegate: Utils.gridDelegate(),
-                                    itemCount: 10,
+                                    itemCount: exploreModel
+                                                .allCreators!.length >
+                                            6
+                                        ? 6
+                                        : exploreModel
+                                            .allCreators!.length,
                                     shrinkWrap: true,
                                     padding: EdgeInsets.zero,
                                     physics: ClampingScrollPhysics(),
-                                    itemBuilder: (BuildContext ctx, index) {
-                                      return creatorItem(ctx, 1);
+                                    itemBuilder: (ctx, i) {
+                                      return creatorItem(ctx,
+                                          exploreModel.allCreators![i]);
                                     }),
                                 SizedBox(height: 24.h),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    InkWell(
-                                      onTap: () => fIndexNotifier.value = 1,
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.add_circle_outline,
-                                            color: AppColors.red,
-                                            size: 14.h,
-                                          ),
-                                          SizedBox(width: 4.h),
-                                          regularText(
-                                            'View all creators',
-                                            fontSize: 12.sp,
-                                            color: AppColors.red,
-                                            fontWeight: FontWeight.w500,
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ],
+                                if (exploreModel.allCreators!.length >
+                                    6)
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      InkWell(
+                                        onTap: () => fIndexNotifier.value = 1,
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.add_circle_outline,
+                                              color: AppColors.red,
+                                              size: 14.h,
+                                            ),
+                                            SizedBox(width: 4.h),
+                                            regularText(
+                                              'View all creators',
+                                              fontSize: 12.sp,
+                                              color: AppColors.red,
+                                              fontWeight: FontWeight.w500,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
+                                    ],
+                                  ),
                                 SizedBox(height: 24.h),
                               ],
                             )

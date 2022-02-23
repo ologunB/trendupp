@@ -12,7 +12,8 @@ import 'package:mms_app/views/widgets/text_widgets.dart';
 Widget creatorPost(BuildContext context, PostModel post) {
   return InkWell(
     onTap: () {
-      if (post.postType == 'supporters'&& AppCache.getUser()?.userType == 'fan') {
+      if (post.postType == 'supporters' &&
+          AppCache.getUser()?.userType == 'fan') {
         showDialog<AlertDialog>(
           context: context,
           barrierDismissible: true,
@@ -86,9 +87,8 @@ Widget creatorPost(BuildContext context, PostModel post) {
           post.postType == 'supporters' && AppCache.getUser()?.userType == 'fan'
               ? Container(
                   height: 172.h,
-            padding: EdgeInsets.only(top: 16.h),
-
-            child: Stack(
+                  padding: EdgeInsets.only(top: 16.h),
+                  child: Stack(
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12.h),

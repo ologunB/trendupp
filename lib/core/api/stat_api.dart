@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:mms_app/app/constants.dart';
 import 'package:mms_app/core/models/creator_stat_model.dart';
+import 'package:mms_app/core/models/fan_payment_history.dart';
 import 'package:mms_app/core/models/payout.dart';
+import 'package:mms_app/core/models/user_model.dart';
 import 'package:mms_app/core/utils/custom_exception.dart';
 import 'package:mms_app/core/utils/error_util.dart';
 import 'base_api.dart';
@@ -44,6 +46,7 @@ class StatApi extends BaseAPI {
       throw CustomException(DioErrorUtil.handleError(e));
     }
   }
+/*
 
   Future<List<int>> paymentHistory(String email) async {
     String url = 'statistic/payment-history?q=$email';
@@ -62,6 +65,7 @@ class StatApi extends BaseAPI {
       throw CustomException(DioErrorUtil.handleError(e));
     }
   }
+*/
 
   Future<String> initPayout(Map<String, dynamic> data) async {
     String url = 'payout';
@@ -102,14 +106,14 @@ class StatApi extends BaseAPI {
     }
   }
 
-  Future<List<int>> creatorGetFanSupportHistory(String email) async {
-    String url = 'statistic/history?q=$email';
+  Future<FanPaymentHistoryModel> creatorGetFanSupportHistory(email) async {
+    String url = 'statistic/history?email=$email';
     try {
       final Response<dynamic> res = await dio().get<dynamic>(url);
       log(res.data);
       switch (res.statusCode) {
         case SERVER_OKAY:
-          return res.data['data']['id'];
+          return FanPaymentHistoryModel.fromJson(res.data['data']);
         default:
           throw res.data['message'];
       }
@@ -155,31 +159,19 @@ class StatApi extends BaseAPI {
     }
   }
 
-  Future<List<int>> getUsersPosts(String email) async {
-    String url = 'statistic/history?q=$email';
+  Future<List<UserData>> getSupportedCreators() async {
+    String url = 'user/support-creators';
     try {
       final Response<dynamic> res = await dio().get<dynamic>(url);
       log(res.data);
       switch (res.statusCode) {
         case SERVER_OKAY:
-          return res.data['data']['id'];
-        default:
-          throw res.data['message'];
-      }
-    } catch (e) {
-      log(e);
-      throw CustomException(DioErrorUtil.handleError(e));
-    }
-  }
-  
-  Future<List<int>> getSupportedCreators(String email) async {
-    String url = 'statistic/history?q=$email';
-    try {
-      final Response<dynamic> res = await dio().get<dynamic>(url);
-      log(res.data);
-      switch (res.statusCode) {
-        case SERVER_OKAY:
-          return res.data['data']['id'];
+          List<UserData> list = [];
+          res.data['data'].forEach((a) {
+            list.add(UserData.fromJson(a));
+          });
+          return list;
+
         default:
           throw res.data['message'];
       }
@@ -189,14 +181,18 @@ class StatApi extends BaseAPI {
     }
   }
 
-  Future<List<int>> getExploredCreators(String email) async {
-    String url = 'statistic/history?q=$email';
+  Future<List<UserData>> getExploredCreators() async {
+    String url = 'user/creators';
     try {
       final Response<dynamic> res = await dio().get<dynamic>(url);
       log(res.data);
       switch (res.statusCode) {
         case SERVER_OKAY:
-          return res.data['data']['id'];
+          List<UserData> list = [];
+          res.data['data'].forEach((a) {
+            list.add(UserData.fromJson(a));
+          });
+          return list;
         default:
           throw res.data['message'];
       }

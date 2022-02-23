@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mms_app/app/colors.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
+import 'package:mms_app/core/utils/navigator.dart';
 import 'package:mms_app/core/viewmodels/auth_vm.dart';
 import 'package:mms_app/views/creators/creators_layout.dart';
 import 'package:mms_app/views/widgets/buttons.dart';
@@ -9,7 +11,10 @@ import 'package:mms_app/views/widgets/custom_textfield.dart';
 import 'package:mms_app/views/widgets/snackbar.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'package:mms_app/views/widgets/utils.dart';
+import 'package:share/share.dart';
+import 'package:social_share/social_share.dart';
 
+import '../../locator.dart';
 import '../base_view.dart';
 
 class VerifyBank extends StatefulWidget {
@@ -275,8 +280,13 @@ class _VerifyBankState extends State<VerifyBank> {
                         onTap: () {
                           Clipboard.setData(
                               ClipboardData(text: 'trendupp.com/$a'));
-                          showSnackBar(context, 'Copied',
-                              'Link has been copied to clipboard', );
+                          showSnackBar(
+                            locator<NavigationService>()
+                                .navigationKey
+                                .currentContext!,
+                            'Copied',
+                            'Link has been copied to clipboard',
+                          );
                         },
                         child:
                             Image.asset('assets/images/tap.png', height: 24.h))
@@ -290,16 +300,7 @@ class _VerifyBankState extends State<VerifyBank> {
               color: AppColors.black,
             ),
             SizedBox(height: 8.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('assets/images/tw.png', width: 28.h),
-                SizedBox(width: 30.h),
-                Image.asset('assets/images/fb.png', width: 28.h),
-                SizedBox(width: 30.h),
-                Image.asset('assets/images/ws.png', width: 28.h),
-              ],
-            ),
+            linksWidget(),
             SizedBox(height: 24.h),
             InkWell(
               onTap: () {
@@ -332,6 +333,37 @@ class _VerifyBankState extends State<VerifyBank> {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.h)),
       ),
+    );
+  }
+
+  Widget linksWidget() {
+    String link = 'https://trendupp.com/' + AppCache.getUser()!.userName!;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        InkWell(
+          onTap: () {
+            SocialShare.shareTwitter("Support me on Trendupp ",
+                hashtags: ["trendupp", "support"], url: link);
+          },
+          child: Image.asset('assets/images/tw.png', width: 28.h),
+        ),
+        SizedBox(width: 30.h),
+        InkWell(
+          onTap: () {
+            Share.share("Support me on Trendupp on $link",
+                subject: 'Share Link');
+          },
+          child: Image.asset('assets/images/fb.png', width: 28.h),
+        ),
+        SizedBox(width: 30.h),
+        InkWell(
+          onTap: () {
+            SocialShare.shareWhatsapp("Support me on Trendupp on $link");
+          },
+          child: Image.asset('assets/images/ws.png', width: 28.h),
+        ),
+      ],
     );
   }
 }

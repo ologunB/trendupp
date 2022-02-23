@@ -307,7 +307,7 @@ class _AddPostState extends State<AddPost> {
                                     Map<String, dynamic> data = {
                                       'id': widget.model.id,
                                       'title': title.text,
-                                      'description': message.text,
+                                      'message': message.text,
                                     };
                                     bool res = await model.updatePost(data);
                                     if (res) {

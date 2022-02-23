@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mms_app/app/colors.dart';
+ import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/post_model.dart';
 import 'package:mms_app/core/routes/router.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
@@ -42,7 +42,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
 
   @override
   Widget build(bContext) {
-    return ValueListenableBuilder<int>(
+     return ValueListenableBuilder<int>(
         valueListenable: cIndexNotifier,
         builder: (_, a, __) {
           return Scaffold(

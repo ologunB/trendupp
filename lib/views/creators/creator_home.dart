@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/creator_stat_model.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
-import 'package:mms_app/core/viewmodels/stat_api.dart';
+import 'package:mms_app/core/viewmodels/stat_vm.dart';
 import 'package:mms_app/views/widgets/card_item.dart';
 import 'package:mms_app/views/widgets/snackbar.dart';
 import 'package:mms_app/views/widgets/supporter_item.dart';
