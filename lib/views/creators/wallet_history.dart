@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
-import 'package:mms_app/core/models/payout.dart';
+import 'package:mms_app/core/models/payout_model.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/core/viewmodels/stat_vm.dart';
 import 'package:mms_app/views/widgets/buttons.dart';
@@ -278,7 +278,7 @@ class _WalletHistoryState extends State<WalletHistory> {
                                                               .start,
                                                       children: [
                                                         regularText(
-                                                          '₦ ${payout.amount!.toAmount()}',
+                                                          '₦ ${payout.amount!.toString().toAmount()}',
                                                           fontSize: 14.sp,
                                                           isOther: true,
                                                           color:
@@ -314,20 +314,20 @@ class _WalletHistoryState extends State<WalletHistory> {
                                                                       .circular(
                                                                           8.h),
                                                               color: payout
-                                                                          .status ==
+                                                                          .narration ==
                                                                       'approved'
                                                                   ? AppColors
                                                                       .green
                                                                   : Color(
                                                                       0xffF09949)),
                                                           child: regularText(
-                                                            payout.status ==
+                                                            payout.narration ==
                                                                     'approved'
                                                                 ? 'Payout Successful'
                                                                 : 'Pending Payout',
                                                             fontSize: 8.sp,
                                                             color:
-                                                                payout.status ==
+                                                                payout.narration ==
                                                                         'approved'
                                                                     ? AppColors
                                                                         .white

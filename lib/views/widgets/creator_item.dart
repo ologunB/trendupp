@@ -32,8 +32,7 @@ Widget creatorItem(BuildContext context, UserData data) {
               width: 40.h,
               fit: BoxFit.cover,
             ),
-            errorWidget: (BuildContext context, String url, dynamic error) =>
-                Image.asset(
+            errorWidget: (_, __, ___) => Image.asset(
               'assets/images/person.png',
               height: 40.h,
               width: 40.h,

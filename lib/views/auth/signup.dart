@@ -63,6 +63,10 @@ class _SignupState extends State<Signup> {
                   textInputType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   validator: Utils.validateEmail,
+                  onChanged: (a) {
+                    model.isVerified = false;
+                    setState(() {});
+                  },
                   prefixIcon: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -80,6 +84,10 @@ class _SignupState extends State<Signup> {
                   obscureText: obscureText,
                   textInputType: TextInputType.text,
                   textInputAction: TextInputAction.done,
+                  onChanged: (a) {
+                    model.isVerified = false;
+                    setState(() {});
+                  },
                   validator: Utils.isValidPassword,
                   prefixIcon: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

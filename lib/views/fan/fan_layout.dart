@@ -98,7 +98,7 @@ class _FanLayoutState extends State<FanLayout> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(50.h),
                             child: CachedNetworkImage(
-                              imageUrl: AppCache.getUser()!.picture ?? 'a',
+                              imageUrl: AppCache.getUser()?.picture ?? 'a',
                               height: 60.h,
                               width: 60.h,
                               fit: BoxFit.cover,
@@ -108,8 +108,7 @@ class _FanLayoutState extends State<FanLayout> {
                                 width: 60.h,
                                 fit: BoxFit.cover,
                               ),
-                              errorWidget: (BuildContext context, String url,
-                                      dynamic error) =>
+                              errorWidget: (_, __, ___) =>
                                   Image.asset(
                                 'assets/images/person.png',
                                 height: 60.h,

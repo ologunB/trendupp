@@ -106,7 +106,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(50.h),
                             child: CachedNetworkImage(
-                              imageUrl: AppCache.getUser()!.picture ?? 'a',
+                              imageUrl: AppCache.getUser()?.picture ?? 'a',
                               height: 60.h,
                               width: 60.h,
                               fit: BoxFit.cover,
@@ -130,7 +130,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                       ),
                       SizedBox(height: 10.h),
                       regularText(
-                        '${AppCache.getUser()!.firstName} ${AppCache.getUser()!.lastName}',
+                        '${AppCache.getUser()?.firstName} ${AppCache.getUser()?.lastName}',
                         fontSize: 16.sp,
                         color: AppColors.black,
                         fontWeight: FontWeight.w700,
@@ -277,7 +277,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                                 ),
                                 regularText(
                                   'Post to general viewers of Trendupp',
-                                  fontSize: 8.sp,
+                                  fontSize: 10.sp,
                                   color: AppColors.white,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -315,7 +315,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                                 ),
                                 regularText(
                                   'Post to your supporters of your page',
-                                  fontSize: 8.sp,
+                                  fontSize: 10.sp,
                                   color: AppColors.white,
                                   fontWeight: FontWeight.w700,
                                 ),

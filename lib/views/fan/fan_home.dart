@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
+import 'package:mms_app/core/models/user_model.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/core/viewmodels/stat_vm.dart';
-import 'package:mms_app/views/widgets/creator_item.dart';
 import 'package:mms_app/views/widgets/creator_post.dart';
 import 'package:mms_app/views/widgets/empty_widget.dart';
 import 'package:mms_app/views/widgets/error_widget.dart';
@@ -11,6 +13,7 @@ import 'package:mms_app/views/widgets/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../base_view.dart';
+import 'creator_details.dart';
 import 'fan_layout.dart';
 
 class FanHome extends StatefulWidget {
@@ -39,7 +42,7 @@ class _FanHomeState extends State<FanHome> {
           child: ListView(
             padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 13.h),
             children: [
-              (postsModel.busy && postsModel.allPosts == null)
+              postsModel.busy && postsModel.allPosts == null
                   ? ListView.builder(
                       shrinkWrap: true,
                       physics: ClampingScrollPhysics(),
@@ -63,7 +66,8 @@ class _FanHomeState extends State<FanHome> {
                       ? ErrorOccurredWidget(
                           error: postsModel.error,
                           onPressed: () {
-                            postsModel.getFanPosts(AppCache.getUser()!.email!, context);
+                            postsModel.getFanPosts(
+                                AppCache.getUser()!.email!, context);
                           },
                         )
                       : postsModel.allPosts!.isEmpty
@@ -167,7 +171,7 @@ class _FanHomeState extends State<FanHome> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              exploreModel.busy &&exploreModel.allCreators == null
+              exploreModel.busy && exploreModel.allCreators == null
                   ? GridView.builder(
                       shrinkWrap: true,
                       gridDelegate: Utils.gridDelegate(),
@@ -212,8 +216,104 @@ class _FanHomeState extends State<FanHome> {
                                     padding: EdgeInsets.zero,
                                     physics: ClampingScrollPhysics(),
                                     itemBuilder: (ctx, i) {
-                                      return creatorItem(
-                                          ctx, exploreModel.allCreators![i]);
+                                      UserData data =
+                                          exploreModel.allCreators![i];
+                                      return Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 16.h, horizontal: 22.h),
+                                        margin: EdgeInsets.all(2),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: AppColors.grey,
+                                                blurRadius: 4,
+                                                spreadRadius: 2)
+                                          ],
+                                          borderRadius:
+                                              BorderRadius.circular(8.h),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(40.h),
+                                              child: CachedNetworkImage(
+                                                imageUrl: data.picture ?? "c",
+                                                height: 40.h,
+                                                width: 40.h,
+                                                fit: BoxFit.cover,
+                                                placeholder: (_, __) =>
+                                                    Image.asset(
+                                                  'assets/images/person.png',
+                                                  height: 40.h,
+                                                  width: 40.h,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                                errorWidget: (_, __, ___) =>
+                                                    Image.asset(
+                                                  'assets/images/person.png',
+                                                  height: 40.h,
+                                                  width: 40.h,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 6.h),
+                                            regularText(
+                                              '${data.firstName} ${data.lastName}',
+                                              fontSize: 12.sp,
+                                              color: AppColors.black,
+                                              fontWeight: FontWeight.w700,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            SizedBox(height: 4.h),
+                                            Expanded(
+                                              child: regularText(
+                                                data.about ?? '',
+                                                fontSize: 8.sp,
+                                                height: 1.8,
+                                                color: AppColors.textGrey,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                            SizedBox(height: 10.h),
+                                            InkWell(
+                                              onTap: () async {
+                                                await Navigator.push(
+                                                  context,
+                                                  CupertinoPageRoute<dynamic>(
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          CreatorDetails(
+                                                              userData: data)),
+                                                );
+                                                postsModel.getFanPosts(
+                                                    AppCache.getUser()!.email!,
+                                                    context);
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 8.h,
+                                                    horizontal: 16.h),
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.lightRed,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.h),
+                                                ),
+                                                child: regularText(
+                                                  'VIEW CREATOR',
+                                                  fontSize: 10.sp,
+                                                  color: AppColors.red,
+                                                  fontWeight: FontWeight.w700,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
                                     }),
                                 SizedBox(height: 24.h),
                                 if (exploreModel.allCreators!.length > 6)

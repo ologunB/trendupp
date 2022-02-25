@@ -5,7 +5,7 @@ import 'package:mms_app/core/api/post_api.dart';
 import 'package:mms_app/core/api/stat_api.dart';
 import 'package:mms_app/core/models/creator_stat_model.dart';
 import 'package:mms_app/core/models/fan_payment_history.dart';
-import 'package:mms_app/core/models/payout.dart';
+import 'package:mms_app/core/models/payout_model.dart';
 import 'package:mms_app/core/models/post_model.dart';
 import 'package:mms_app/core/models/user_model.dart';
 import 'package:mms_app/core/utils/custom_exception.dart';
@@ -79,7 +79,7 @@ class StatViewModel extends BaseModel {
       String email, BuildContext context) async {
     setBusy(true);
     if (context.read<StatViewModel>().fanSupportHistory != null) {
-      if (context.read<StatViewModel>().fanSupportHistory!.user!.email ==
+      if (context.read<StatViewModel>().fanSupportHistory!.user?.email ==
           email) {
         fanSupportHistory = context.read<StatViewModel>().fanSupportHistory;
       }
@@ -127,7 +127,7 @@ class StatViewModel extends BaseModel {
     try {
       allPayoutHistory = await _statApi.payoutHistory();
       allPayoutHistory!.forEach((element) {
-        totalEarning = totalEarning + double.parse(element.amount!);
+        totalEarning = totalEarning + element.amount!;
       });
       allPayoutHistory!.sort((a, b) => b.updatedAt!.compareTo(a.updatedAt!));
       context.read<StatViewModel>().setPayoutHistory(allPayoutHistory);

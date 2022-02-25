@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>trendupp</string>
+	<string>Trendupp</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -47,6 +47,18 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.568741488955-6rjkk8t9bgtb5l8othcfcj6j3k6p2u8t</string>
+				<string>fb481033083584762</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>instagram-stories</string>
@@ -59,5 +71,7 @@
 	</array>
 	<key>FacebookAppID</key>
 	<string>481033083584762</string>
+	<key>FacebookDisplayName</key>
+	<string>Trendupp</string>
 </dict>
 </plist>

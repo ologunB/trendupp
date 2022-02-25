@@ -8,7 +8,6 @@ import 'package:mms_app/views/widgets/card_item.dart';
 import 'package:mms_app/views/widgets/snackbar.dart';
 import 'package:mms_app/views/widgets/supporter_item.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
-import 'package:share/share.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:mms_app/views/widgets/utils.dart';
 import 'package:social_share/social_share.dart';
@@ -220,7 +219,7 @@ class _CreatorHomeState extends State<CreatorHome> {
                                     ),
                                     SizedBox(width: 12.h),
                                     regularText(
-                                      'trendupp.com/${AppCache.getUser()!.userName}',
+                                      'trendupp.com/${AppCache.getUser()?.userName}',
                                       fontSize: 12.sp,
                                       textAlign: TextAlign.center,
                                       fontWeight: FontWeight.w700,
@@ -232,7 +231,7 @@ class _CreatorHomeState extends State<CreatorHome> {
                                     onTap: () {
                                       Clipboard.setData(ClipboardData(
                                           text:
-                                              'trendupp.com/${AppCache.getUser()!.userName}'));
+                                              'trendupp.com/${AppCache.getUser()?.userName}'));
                                       showSnackBar(
                                         context,
                                         'Copied',
@@ -257,102 +256,108 @@ class _CreatorHomeState extends State<CreatorHome> {
                     ),
                   ),
                   SizedBox(height: 16.h),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 28.h),
-                    decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(8.h),
-                        boxShadow: [
-                          BoxShadow(
-                              color: AppColors.grey,
-                              blurRadius: 6,
-                              spreadRadius: 2)
-                        ]),
-                    child: ListView(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      physics: ClampingScrollPhysics(),
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 24.h),
-                          child: regularText(
-                            'QUICK TIPS',
-                            fontSize: 14.sp,
-                            color: AppColors.lightBlack,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        ListView.separated(
-                            separatorBuilder: (_, __) {
-                              return Divider(
-                                  color: AppColors.textGrey.withOpacity(.4),
-                                  height: 2.h);
-                            },
-                            itemCount: 2,
-                            shrinkWrap: true,
-                            padding: EdgeInsets.zero,
-                            physics: ClampingScrollPhysics(),
-                            itemBuilder: (BuildContext ctx, index) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 12.h, horizontal: 24.h),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/tip$index.png',
-                                      height: 30.h,
-                                    ),
-                                    SizedBox(width: 16.h),
-                                    Expanded(
-                                        child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        regularText(
-                                            'TIP' + (index + 1).toString(),
-                                            fontSize: 14.sp,
-                                            color: AppColors.black,
-                                            fontWeight: FontWeight.w700),
-                                        regularText(
-                                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae pellentesque tellus convallis. Eu',
-                                          fontSize: 12.sp,
-                                          height: 1.7,
-                                          color: AppColors.textGrey,
-                                        ),
-                                      ],
-                                    )),
-                                  ],
-                                ),
-                              );
-                            }),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 30.h),
                 ],
               ),
             ));
   }
 
+  Widget tipsWidget() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 16.h),
+      padding: EdgeInsets.symmetric(vertical: 28.h),
+      decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(8.h),
+          boxShadow: [
+            BoxShadow(color: AppColors.grey, blurRadius: 6, spreadRadius: 2)
+          ]),
+      child: ListView(
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
+        physics: ClampingScrollPhysics(),
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.h),
+            child: regularText(
+              'QUICK TIPS',
+              fontSize: 14.sp,
+              color: AppColors.lightBlack,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          SizedBox(height: 8.h),
+          ListView.separated(
+              separatorBuilder: (_, __) {
+                return Divider(
+                    color: AppColors.textGrey.withOpacity(.4), height: 2.h);
+              },
+              itemCount: 2,
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              physics: ClampingScrollPhysics(),
+              itemBuilder: (BuildContext ctx, index) {
+                return Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 12.h, horizontal: 24.h),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Image.asset(
+                        'assets/images/tip$index.png',
+                        height: 30.h,
+                      ),
+                      SizedBox(width: 16.h),
+                      Expanded(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          regularText('TIP' + (index + 1).toString(),
+                              fontSize: 14.sp,
+                              color: AppColors.black,
+                              fontWeight: FontWeight.w700),
+                          regularText(
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae pellentesque tellus convallis. Eu',
+                            fontSize: 12.sp,
+                            height: 1.7,
+                            color: AppColors.textGrey,
+                          ),
+                        ],
+                      )),
+                    ],
+                  ),
+                );
+              }),
+        ],
+      ),
+    );
+  }
+
   Widget linksWidget() {
-    String link = 'https://trendupp.com/' + AppCache.getUser()!.userName!;
+    String link =
+        'https://trendupp.com/' + (AppCache.getUser()?.userName ?? '');
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         InkWell(
-          onTap: () {
-            SocialShare.shareTwitter("Support me on Trendupp ",
-                hashtags: ["trendupp", "support"], url: link);
+          onTap: () async {
+            dynamic d = await SocialShare.shareOptions('contentText');
+            print(d);
+            try {
+              await SocialShare.shareTwitter(
+                "Support me on Trendupp ",
+                hashtags: ["trendupp", "support"],
+                url: link,
+              );
+            } catch (e) {
+              print(e);
+            }
           },
           child: Image.asset('assets/images/tw.png', width: 28.h),
         ),
         SizedBox(width: 30.h),
         InkWell(
           onTap: () {
-            Share.share("Support me on Trendupp on $link",
-                subject: 'Share Link');
+            SocialShare.shareOptions("Support me on Trendupp on $link");
           },
           child: Image.asset('assets/images/fb.png', width: 28.h),
         ),

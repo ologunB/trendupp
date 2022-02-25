@@ -12,8 +12,8 @@ import 'package:mms_app/views/widgets/creator_post.dart';
 import 'package:mms_app/views/widgets/empty_widget.dart';
 import 'package:mms_app/views/widgets/error_widget.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
+import 'package:mms_app/views/widgets/utils.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share/share.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:social_share/social_share.dart';
 import 'dart:io';
@@ -194,7 +194,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                       SizedBox(height: 4.h),
                       BaseView<PostViewModel>(
                           onModelReady: (m) => m
-                              .supportersByUsername(widget.userData!.userName!),
+                              .supportersByUsername(widget.userData!, context),
                           builder: (_, PostViewModel sModel, __) => Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 16.h),
                                 child: regularText(
@@ -341,23 +341,23 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                           '${(await getTemporaryDirectory()).path}/bg.png';
                       await getImageFileFromAssets(path);
 
-                      print(path);
+                      // print(path);
                       if (e == 'sh0') {
                         SocialShare.shareTwitter("Support me on Trendupp ",
                             hashtags: ["trendupp", "support"], url: link);
                       } else if (e == 'sh1') {
-                        Share.share("Support me on Trendupp on $link",
-                            subject: 'Share Support');
+                        SocialShare.shareOptions(
+                            "Support me on Trendupp on $link");
                       } else if (e == 'sh2') {
-                        Share.share("Support me on Trendupp on $link",
-                            subject: 'Share Support');
+                        SocialShare.shareOptions(
+                            "Support me on Trendupp on $link");
                       } else if (e == 'sh3') {
                         SocialShare.shareFacebookStory(
                             path, "#ffffff", "#000000", link,
-                            appId: '481033083584762');
+                            appId: Utils.facebookKey);
                       } else if (e == 'sh4') {
-                        Share.share("Support me on Trendupp on $link",
-                            subject: 'Share Support');
+                        SocialShare.shareOptions(
+                            "Support me on Trendupp on $link");
                       }
                     } catch (e) {
                       print(e);

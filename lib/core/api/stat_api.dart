@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:mms_app/app/constants.dart';
 import 'package:mms_app/core/models/creator_stat_model.dart';
 import 'package:mms_app/core/models/fan_payment_history.dart';
-import 'package:mms_app/core/models/payout.dart';
+import 'package:mms_app/core/models/payout_model.dart';
 import 'package:mms_app/core/models/post_model.dart';
 import 'package:mms_app/core/models/user_model.dart';
 import 'package:mms_app/core/utils/custom_exception.dart';

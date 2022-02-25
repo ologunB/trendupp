@@ -43,13 +43,15 @@ class AuthViewModel extends BaseModel {
     setBusy(true);
     try {
       UserData user = await _authApi.login(a);
-      AppCache.setToken(user.token!);
+      if (!user.verified!) {
+        isVerified = true;
+        setBusy(false);
+        return;
+      }
       AppCache.setUser(user);
       await getAccount();
       user = AppCache.getUser()!;
-      if (!user.verified!) {
-        isVerified = true;
-      } else if (user.userType == null) {
+      if (user.userType == null) {
         pushAndRemoveUntil(c(), ChooseType());
       } else if (user.userType == 'fan') {
         pushAndRemoveUntil(c(), FanLayout());
@@ -86,6 +88,7 @@ class AuthViewModel extends BaseModel {
       AppCache.setToken(token);
       UserData user = UserData(token: token, verified: true, email: a['email']);
       AppCache.setUser(user);
+      await getAccount();
       pushReplacement(c(), ChooseType());
     } on CustomException catch (e) {
       error = e.message;

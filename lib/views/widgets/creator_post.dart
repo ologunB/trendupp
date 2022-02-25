@@ -5,6 +5,7 @@ import 'package:mms_app/core/models/post_model.dart';
 import 'package:mms_app/core/routes/router.dart';
 import 'package:mms_app/views/fan/post_details.dart';
 import 'package:mms_app/views/fan/support_dialog.dart';
+import 'package:mms_app/views/widgets/snackbar.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'package:mms_app/views/widgets/utils.dart';
 
@@ -21,6 +22,9 @@ Widget creatorPost(BuildContext context, PostModel post) {
                 SupportDialog(creator: post.user!),
           );
           return;
+        }
+        if (post.user == null) {
+          return showSnackBar(context, 'Info', 'No user was found');
         }
         push(context, PostDetail(post));
       },

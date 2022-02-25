@@ -67,6 +67,10 @@ class _LoginState extends State<Login> {
                     textInputType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     validator: Utils.validateEmail,
+                    onChanged: (a) {
+                      model.isVerified = false;
+                      setState(() {});
+                    },
                     prefixIcon: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -86,6 +90,10 @@ class _LoginState extends State<Login> {
                     textInputType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     validator: Utils.isValidPassword,
+                    onChanged: (a) {
+                      model.isVerified = false;
+                      setState(() {});
+                    },
                     prefixIcon: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

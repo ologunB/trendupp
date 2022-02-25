@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:mms_app/app/constants.dart';
 import 'package:mms_app/core/models/post_model.dart';
+import 'package:mms_app/core/models/user_model.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/core/utils/custom_exception.dart';
 import 'package:mms_app/core/utils/error_util.dart';
@@ -88,7 +89,7 @@ class PostApi extends BaseAPI {
           List<PostModel> list = [];
           res.data['data'].forEach((a) {
             PostModel post = PostModel.fromJson(a);
-            post.userImage = post.user!.picture;
+            post.userImage = post.user?.picture;
             post.hidden = false;
             list.add(post);
           });
@@ -127,16 +128,18 @@ class PostApi extends BaseAPI {
     }
   }
 
-  Future<bool> userSupportsCreator(String user) async {
-    String url = 'statistic/$user';
-
-    return false;
+  Future<bool> userSupportsCreator(UserData user) async {
+    String url = 'user/check-is-fan';
+    Map<String, String> data = {
+      "fanEmail": AppCache.getUser()!.email!,
+      "creatorEmail": user.email!
+    };
     try {
-      final Response<dynamic> res = await dio().get<dynamic>(url);
+      final Response<dynamic> res = await dio().post<dynamic>(url, data: data);
       log(res.data);
       switch (res.statusCode) {
         case SERVER_OKAY:
-          return res.data['data']['isFan'] ?? true;
+          return res.data['data']['status'];
         default:
           throw res.data['message'];
       }
@@ -146,8 +149,8 @@ class PostApi extends BaseAPI {
     }
   }
 
-  Future<List<PostModel>> postByUsername(String user) async {
-    String url = 'post?username=$user';
+  Future<List<PostModel>> postByUsername(UserData user) async {
+    String url = 'post?username=${user.userName}';
     try {
       final Response<dynamic> res = await dio().get<dynamic>(url);
       log(res.data);
@@ -157,11 +160,7 @@ class PostApi extends BaseAPI {
           List<PostModel> list = [];
           res.data['data'].forEach((a) {
             PostModel post = PostModel.fromJson(a);
-            post.hidden = post.postType == 'public'
-                ? false
-                : isFan
-                    ? false
-                    : true;
+            post.hidden = post.postType == 'public' ? false : !isFan;
             list.add(post);
           });
           return list;

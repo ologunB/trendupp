@@ -73,10 +73,17 @@ class PostViewModel extends BaseModel {
 
   int supportersNumber = 0;
 
-  Future<void> supportersByUsername(String user) async {
+  void setSupportersNumber(int data) {
+    supportersNumber = data;
+    notifyListeners();
+  }
+
+  Future<void> supportersByUsername(UserData user, BuildContext context) async {
     setBusy(true);
     try {
-      supportersNumber = await _postApi.supportersByUsername(user);
+      supportersNumber = await _postApi.supportersByUsername(user.userName!);
+      context.read<PostViewModel>().setSupportersNumber(supportersNumber);
+
       setBusy(false);
     } on CustomException catch (e) {
       error = e.message;
@@ -93,14 +100,15 @@ class PostViewModel extends BaseModel {
   }
 
   Future<void> postByUsername(UserData user, BuildContext context) async {
+    print(context.read<PostViewModel>().creatorsPost?.length);
     setBusy(true);
-    if (context.read<PostViewModel>().creatorsPost != null) {
-      if (context.read<PostViewModel>().creatorsPost!.first.userId == user.id) {
+    if (context.read<PostViewModel>().creatorsPost?.isNotEmpty ?? false) {
+      if (context.read<PostViewModel>().creatorsPost?.first.userId == user.id) {
         creatorsPost = context.read<PostViewModel>().creatorsPost;
       }
     }
     try {
-      creatorsPost = await _postApi.postByUsername(user.userName!);
+      creatorsPost = await _postApi.postByUsername(user);
       creatorsPost!.sort((a, b) => b.updatedAt!.compareTo(a.updatedAt!));
       context.read<PostViewModel>().setCreators(creatorsPost);
       setBusy(false);

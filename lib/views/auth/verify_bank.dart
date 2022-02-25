@@ -11,7 +11,6 @@ import 'package:mms_app/views/widgets/custom_textfield.dart';
 import 'package:mms_app/views/widgets/snackbar.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'package:mms_app/views/widgets/utils.dart';
-import 'package:share/share.dart';
 import 'package:social_share/social_share.dart';
 
 import '../../locator.dart';
@@ -351,8 +350,7 @@ class _VerifyBankState extends State<VerifyBank> {
         SizedBox(width: 30.h),
         InkWell(
           onTap: () {
-            Share.share("Support me on Trendupp on $link",
-                subject: 'Share Link');
+            SocialShare.shareOptions("Support me on Trendupp on $link");
           },
           child: Image.asset('assets/images/fb.png', width: 28.h),
         ),

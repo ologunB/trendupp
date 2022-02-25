@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
+  static String facebookKey = '481033083584762';
   static String raveEncryptionKey = 'FLWSECK_TEST079f656d190b';
   static String ravePublicKey =
       'FLWPUBK_TEST-4775239fc89f256ef2f24cddcebc17e1-X';
