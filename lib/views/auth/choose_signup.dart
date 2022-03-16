@@ -64,7 +64,7 @@ class _ChooseSignupState extends State<ChooseSignup>
                     Hero(
                       tag: 'splash',
                       child:
-                          Image.asset('assets/images/logo2.png', height: 100.h),
+                          Image.asset('assets/images/logo3.png', height: 130.h),
                     ),
                     SizedBox(height: 150.h),
                     SlideTransition(

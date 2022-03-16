@@ -17,7 +17,6 @@ class SplashView extends StatefulWidget {
 class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
-   // AppCache.clear();
     Future.delayed(Duration(seconds: 2), () {
       if (AppCache.getUser() == null) {
         Navigator.pushReplacement(
@@ -45,10 +44,8 @@ class _SplashViewState extends State<SplashView> {
   @override
   Widget build(BuildContext context) {
     Utils.offKeyboard();
-    double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height;
     return ScreenUtilInit(
-      designSize: Size(w, h),
+      designSize: Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: () => Scaffold(
@@ -56,7 +53,7 @@ class _SplashViewState extends State<SplashView> {
         body: Center(
           child: Hero(
             tag: 'splash',
-            child: Image.asset('assets/images/logo2.png', width: 120.h),
+            child: Image.asset('assets/images/logo3.png', width: 120.h),
           ),
         ),
       ),

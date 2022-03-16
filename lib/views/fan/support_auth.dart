@@ -1,11 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterwave/core/flutterwave.dart';
-import 'package:flutterwave/models/responses/charge_response.dart';
-import 'package:flutterwave/utils/flutterwave_constants.dart';
-import 'package:flutterwave/utils/flutterwave_currency.dart';
+import 'package:logger/logger.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/user_model.dart';
 import 'package:mms_app/core/routes/router.dart';
@@ -17,7 +17,8 @@ import 'package:mms_app/views/widgets/custom_textfield.dart';
 import 'package:mms_app/views/widgets/snackbar.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 import 'package:mms_app/views/widgets/utils.dart';
-
+import 'package:http/http.dart';
+import 'package:mms_app/views/widgets/webview_screen.dart';
 import '../base_view.dart';
 
 class SupportAuth extends StatefulWidget {
@@ -31,12 +32,6 @@ class SupportAuth extends StatefulWidget {
 }
 
 class _SupportAuthState extends State<SupportAuth> {
-  TextEditingController first = TextEditingController();
-  TextEditingController last = TextEditingController();
-  TextEditingController email = TextEditingController();
-  bool autoValidate = false;
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
   @override
   void initState() {
     first = TextEditingController(text: AppCache.getUser()?.firstName);
@@ -44,6 +39,12 @@ class _SupportAuthState extends State<SupportAuth> {
     email = TextEditingController(text: AppCache.getUser()?.email);
     super.initState();
   }
+
+  TextEditingController first = TextEditingController();
+  TextEditingController last = TextEditingController();
+  TextEditingController email = TextEditingController();
+  bool autoValidate = false;
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext cContext) {
@@ -228,37 +229,53 @@ class _SupportAuthState extends State<SupportAuth> {
       data1.addAll(widget.data);
       String? reference = await model.initPayment(data1);
       if (reference != null) {
-        // pay now
-        final Flutterwave flutterwave = Flutterwave.forUIPayment(
-          context: context,
-          encryptionKey: Utils.raveEncryptionKey,
-          publicKey: Utils.ravePublicKey,
-          currency: FlutterwaveCurrency.NGN,
-          amount: data1['amount']!,
-          email: email.text,
-          fullName: first.text + ' ' + last.text,
-          txRef: reference,
-          isDebugMode: false,
-          phoneNumber: "0123456789",
-          acceptCardPayment: true,
-          acceptUSSDPayment: true,
-          acceptAccountPayment: true,
-          acceptFrancophoneMobileMoney: false,
-          acceptGhanaPayment: false,
-          acceptMpesaPayment: false,
-          acceptRwandaMoneyPayment: true,
-          acceptUgandaPayment: false,
-          acceptZambiaPayment: false,
-        );
-
+        final url = Utils.getBaseUrl(true) + 'payments';
+        final uri = Uri.parse(url);
         try {
-          final ChargeResponse? response =
-              await flutterwave.initializeForUiPayments();
-          if (response == null) {
-            showSnackBar(
-                context, 'Error', 'User didn\'t complete the transaction');
-          } else {
-            if (response.status == FlutterwaveConstants.SUCCESSFUL) {
+          model.setBusy(true);
+          final response = await Client().post(uri,
+              headers: {
+                HttpHeaders.authorizationHeader: Utils.ravePublicKey,
+                HttpHeaders.contentTypeHeader: 'application/json'
+              },
+              body: jsonEncode({
+                "tx_ref": reference,
+                "publicKey": Utils.ravePublicKey,
+                "amount": data1['amount']!,
+                "currency": 'NGN',
+                "payment_options": "ussd, card, barter, payattitude",
+                "redirect_url": Utils.DEFAULT_URL,
+                "customer": {
+                  "email": email.text,
+                  "phonenumber": '01838838343',
+                  "name": first.text + ' ' + last.text,
+                },
+                "customizations": {
+                  "title": "TrendUpp",
+                  "description": "Support Creator",
+                  "logo":
+                      "https://firebasestorage.googleapis.com/v0/b/triviablog-78fd9.appspot.com/o/logo2.png?alt=media&token=c6d8a9f0-abef-47b7-80be-aafaf5a25f4e"
+                }
+              }));
+          final responseBody = json.decode(response.body);
+          Logger().d(responseBody);
+          model.setBusy(false);
+
+          if (responseBody["status"] == "error") {
+            throw responseBody["message"] ??
+                "An unexpected error occurred. Please try again.";
+          }
+          dynamic msg = await Navigator.push(
+            this.context,
+            CupertinoPageRoute<dynamic>(
+              builder: (BuildContext context) => WebviewScreen(
+                url: responseBody['data']['link'],
+                title: 'Support Creator',
+              ),
+            ),
+          );
+          if (msg != null) {
+            if (msg[0]) {
               Map<String, String> data2 = {
                 "status": "approved",
                 "reference": reference,
@@ -271,19 +288,12 @@ class _SupportAuthState extends State<SupportAuth> {
                 push(context, SupportDone(widget.creator, hasAccount));
               }
             } else {
-              // check message
-              print(response.message);
-
-              // check status
-              print(response.status);
-
-              // check processor error
-              print(response.data!.processorResponse);
-              showSnackBar(context, 'Error', response.message!);
+              throw msg[1];
             }
           }
         } catch (error) {
-          print(error);
+          model.setBusy(false);
+          showSnackBar(context, 'Error', error.toString());
         }
       }
     }

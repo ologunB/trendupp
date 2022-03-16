@@ -108,7 +108,7 @@ class _SupportHistoryState extends State<SupportHistory> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 regularText(
-                                                  '${fanModel.user!.firstName!} ${fanModel.user!.lastName!}',
+                                                  '${fanModel.user?.firstName ?? ''} ${fanModel.user?.lastName?? ''}',
                                                   fontSize: 14.sp,
                                                   color: AppColors.black,
                                                   fontWeight: FontWeight.w700,

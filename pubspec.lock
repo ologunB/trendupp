@@ -105,7 +105,7 @@ packages:
       name: dotted_border
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0+1"
+    version: "2.0.0+2"
   fake_async:
     dependency: transitive
     description:
@@ -212,13 +212,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutterwave:
-    dependency: "direct main"
-    description:
-      name: flutterwave
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   get_it:
     dependency: "direct main"
     description:
@@ -281,7 +274,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.3"
+    version: "0.13.4"
   http_parser:
     dependency: transitive
     description:
@@ -358,14 +351,14 @@ packages:
       name: path_drawing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.1+1"
+    version: "1.0.0"
   path_parsing:
     dependency: transitive
     description:
       name: path_parsing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.1"
+    version: "1.0.0"
   path_provider:
     dependency: "direct main"
     description:
@@ -553,13 +546,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.2"
-  tripledes_nullsafety:
-    dependency: transitive
-    description:
-      name: tripledes_nullsafety
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.2"
   typed_data:
     dependency: transitive
     description:
@@ -589,12 +575,12 @@ packages:
     source: hosted
     version: "2.1.0"
   webview_flutter:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: webview_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.8.0"
+    version: "3.0.1"
   webview_flutter_android:
     dependency: transitive
     description:

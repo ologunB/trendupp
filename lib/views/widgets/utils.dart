@@ -5,6 +5,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
+  static const DEFAULT_URL = "https://www.google.com";
+
+  static String getBaseUrl(final bool isTestMode) {
+    return isTestMode
+        ? "https://ravesandboxapi.flutterwave.com/v3/sdkcheckout/"
+        : "https://api.ravepay.co/v3/sdkcheckout/";
+  }
+
   static String facebookKey = '481033083584762';
   static String raveEncryptionKey = 'FLWSECK_TEST079f656d190b';
   static String ravePublicKey =
