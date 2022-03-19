@@ -49,7 +49,7 @@ class _SupportedCreatorsState extends State<SupportedCreators> {
                     controller: search,
                     textInputType: TextInputType.text,
                     textInputAction: TextInputAction.next,
-                    onChanged: historyModel.filterCreators,
+                    onChanged: historyModel.filterSupportedCreators,
                     suffixIcon: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

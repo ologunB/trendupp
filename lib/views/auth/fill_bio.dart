@@ -150,12 +150,12 @@ class _FillBioState extends State<FillBio> {
                         SizedBox(height: 32.h),
                         CustomTextField(
                           title: 'Basic Information',
-                          hintText: 'Brand Name',
+                          hintText: 'Username',
                           controller: brand,
                           textInputType: TextInputType.text,
                           textInputAction: TextInputAction.next,
                           validator: (a) {
-                            return Utils.isValidName(a, '"Brand Name"', 2);
+                            return Utils.isValidName(a, '"Username"', 2);
                           },
                         ),
                         CustomTextField(

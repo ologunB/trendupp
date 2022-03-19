@@ -114,7 +114,7 @@ class PostApi extends BaseAPI {
           res.data['data'].forEach((a) {
             PostModel post = PostModel.fromJson(a);
             post.userImage = AppCache.getUser()!.picture;
-            post.userName = AppCache.getUser()!.firstName;
+            post.userName = AppCache.getUser()!.brandName;
             post.hidden = false;
             list.add(post);
           });

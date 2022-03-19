@@ -54,10 +54,18 @@ class _ChooseSignupState extends State<ChooseSignup>
     return BaseView<AuthViewModel>(
         onModelReady: (m) => null,
         builder: (_, AuthViewModel model, __) => Scaffold(
-              backgroundColor: Color(0xff040039),
+        //      backgroundColor: Color(0xff040039),
               body: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(24.h),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppColors.red, Color(0xff040039)],
+                    stops: [.3, .7],
+                    begin: FractionalOffset.topCenter,
+                    end: FractionalOffset.bottomCenter,
+                  ),
+                ),
                 child: ListView(
                   shrinkWrap: true,
                   children: [

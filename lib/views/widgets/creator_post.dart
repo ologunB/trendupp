@@ -71,7 +71,7 @@ Widget creatorPost(BuildContext context, PostModel post) {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       regularText(
-                        '${post.userName ?? (post.user?.userName ?? '')}',
+                        '${post.userName ?? (post.user?.brandName ?? '')}',
                         fontSize: 12.sp,
                         color: AppColors.black,
                         fontWeight: FontWeight.w700,
@@ -87,7 +87,7 @@ Widget creatorPost(BuildContext context, PostModel post) {
                 )
               ],
             ),
-            post.hidden!
+            post.hidden == true
                 ? Container(
                     height: 172.h,
                     padding: EdgeInsets.only(top: 16.h),
@@ -132,7 +132,7 @@ Widget creatorPost(BuildContext context, PostModel post) {
                                       color: AppColors.grey1, size: 20.h),
                                   SizedBox(width: 8.h),
                                   regularText(
-                                    'Support ${post.userName ?? (post.user?.userName ?? '')}',
+                                    'Support ${post.userName ?? (post.user?.brandName ?? '')}',
                                     fontSize: 12.sp,
                                     color: AppColors.white,
                                     fontWeight: FontWeight.w500,

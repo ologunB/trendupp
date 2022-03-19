@@ -130,7 +130,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                       ),
                       SizedBox(height: 10.h),
                       regularText(
-                        '${AppCache.getUser()?.firstName} ${AppCache.getUser()?.lastName}',
+                        '${AppCache.getUser()?.brandName}',
                         fontSize: 16.sp,
                         color: AppColors.black,
                         fontWeight: FontWeight.w700,

@@ -58,7 +58,7 @@ class SupportDone extends StatelessWidget {
                   ),
                   SizedBox(height: 24.h),
                   regularText(
-                    'Thank you for supporting ${creator.firstName}',
+                    'Thank you for supporting ${creator.brandName}',
                     fontSize: 16.sp,
                     color: AppColors.black,
                     fontWeight: FontWeight.w700,
@@ -126,7 +126,7 @@ class SupportDone extends StatelessWidget {
                               color: AppColors.red,
                               borderRadius: BorderRadius.circular(6.h)),
                           child: regularText(
-                            'Go back to ${creator.firstName} page',
+                            'Go back to ${creator.brandName} page',
                             fontSize: 12.sp,
                             color: AppColors.white,
                             fontWeight: FontWeight.w500,

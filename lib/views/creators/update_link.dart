@@ -155,12 +155,24 @@ class _UpdateLinkState extends State<UpdateLink> {
                                 ),
                               ),
                               SizedBox(width: 10.h),
-                              Image.asset(
-                                'assets/images/mark.png',
-                                height: 20.h,
-                                color:
-                                    !model.isVerified ? AppColors.grey1 : null,
-                              )
+                              model.busy
+                                  ? SizedBox(
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 3,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                AppColors.red),
+                                      ),
+                                      height: 15.h,
+                                      width: 15.h,
+                                    )
+                                  : Image.asset(
+                                      'assets/images/mark.png',
+                                      height: 20.h,
+                                      color: !model.isVerified
+                                          ? AppColors.grey1
+                                          : null,
+                                    )
                             ],
                           ),
                         ),
@@ -179,28 +191,33 @@ class _UpdateLinkState extends State<UpdateLink> {
                             ),
                           ),
                         SizedBox(height: 20.h),
-                        buttonWithBorder('Update Link',
-                            buttonColor: AppColors.red,
-                            isActive: controller.text.isNotEmpty,
-                            fontSize: 16.sp,
-                            height: 52.h,
-                            busy: model.busy,
-                            textColor: AppColors.white,
-                            fontWeight: FontWeight.w700, onTap: () async {
-                          if (controller.text.length > 3) {
-                            Utils.offKeyboard();
+                        BaseView<AuthViewModel>(
+                            onModelReady: (m) => null,
+                            builder: (_, AuthViewModel updateModel, __) =>
+                                buttonWithBorder('Update Link',
+                                    buttonColor: AppColors.red,
+                                    isActive: model.isVerified,
+                                    fontSize: 16.sp,
+                                    height: 52.h,
+                                    busy: updateModel.busy,
+                                    textColor: AppColors.white,
+                                    fontWeight: FontWeight.w700,
+                                    onTap: () async {
+                                  if (controller.text.length > 3) {
+                                    Utils.offKeyboard();
 
-                            Map<String, String> data = {
-                              "userName": controller.text,
-                            };
+                                    Map<String, String> data = {
+                                      "userName": controller.text,
+                                    };
 
-                            bool res = await model.updateProfile(data, null);
-                            if (res) {
-                              showSnackBar(context, 'Success',
-                                  'Your Link has been updated successfully');
-                            }
-                          }
-                        }),
+                                    bool res = await updateModel.updateProfile(
+                                        data, null);
+                                    if (res) {
+                                      showSnackBar(context, 'Success',
+                                          'Your Link has been updated successfully');
+                                    }
+                                  }
+                                })),
                         SizedBox(height: 36.h),
                       ],
                     ),

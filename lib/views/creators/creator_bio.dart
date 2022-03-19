@@ -41,7 +41,7 @@ class _CreatorBioState extends State<CreatorBio> {
   @override
   void initState() {
     UserData user = AppCache.getUser()!;
-    brand = TextEditingController(text: user.userName);
+    brand = TextEditingController(text: user.brandName);
     firstName = TextEditingController(text: user.firstName);
     lastName = TextEditingController(text: user.lastName);
     whatYouCreate = TextEditingController(text: user.creating);
@@ -191,12 +191,12 @@ class _CreatorBioState extends State<CreatorBio> {
                       SizedBox(height: 32.h),
                       CustomTextField(
                         title: 'Basic Information',
-                        hintText: 'Brand Name',
+                        hintText: 'Username',
                         controller: brand,
                         textInputType: TextInputType.text,
                         textInputAction: TextInputAction.next,
                         validator: (a) {
-                          return Utils.isValidName(a, '"Brand Name"', 2);
+                          return Utils.isValidName(a, '"Username"', 2);
                         },
                       ),
                       CustomTextField(
@@ -310,7 +310,7 @@ class _CreatorBioState extends State<CreatorBio> {
                             if (img == null) return;
                           }
                           Map<String, String> data = {
-                            "userName": brand.text,
+                            "brandName": brand.text,
                             "firstName": firstName.text,
                             "lastName": lastName.text,
                             "creating": whatYouCreate.text,

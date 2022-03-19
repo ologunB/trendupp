@@ -53,7 +53,7 @@ class PostDetail extends StatelessWidget {
                         ),
                         SizedBox(width: 6.h),
                         regularText(
-                          '${(post.userName ?? post.user!.firstName)!.toUpperCase()}’S PAGE',
+                          '${(post.userName ?? post.user?.brandName)!.toUpperCase()}’S PAGE',
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w700,
                           color: AppColors.lightBlack,
@@ -110,7 +110,7 @@ class PostDetail extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             regularText(
-                              '${post.userName ?? ((post.user!.firstName ?? '') + ' ' + (post.user!.lastName ?? ''))}',
+                              '${post.userName ?? post.user?.brandName}',
                               fontSize: 12.sp,
                               color: AppColors.black,
                               fontWeight: FontWeight.w700,
@@ -197,7 +197,7 @@ class PostDetail extends StatelessWidget {
                                   color: AppColors.lightRed, size: 20.h),
                               SizedBox(width: 8.h),
                               regularText(
-                                'Support ${post.userName ?? post.user!.firstName}',
+                                'Support ${post.userName ?? post.user?.brandName}',
                                 fontSize: 12.sp,
                                 color: AppColors.white,
                                 fontWeight: FontWeight.w500,

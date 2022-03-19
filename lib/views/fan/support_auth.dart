@@ -111,7 +111,7 @@ class _SupportAuthState extends State<SupportAuth> {
                             ),
                             SizedBox(height: 16.h),
                             regularText(
-                              'Support ${widget.creator.firstName} ${widget.creator.lastName}',
+                              'Support ${widget.creator.brandName}',
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w700,
                               color: AppColors.black,
@@ -270,7 +270,6 @@ class _SupportAuthState extends State<SupportAuth> {
             CupertinoPageRoute<dynamic>(
               builder: (BuildContext context) => WebviewScreen(
                 url: responseBody['data']['link'],
-                title: 'Support Creator',
               ),
             ),
           );
@@ -292,6 +291,7 @@ class _SupportAuthState extends State<SupportAuth> {
             }
           }
         } catch (error) {
+          print(error);
           model.setBusy(false);
           showSnackBar(context, 'Error', error.toString());
         }

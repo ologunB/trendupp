@@ -241,7 +241,7 @@ class AuthApi extends BaseAPI {
       log(res.data);
       switch (res.statusCode) {
         case SERVER_OKAY:
-          return res.data['message'] == 'Success';
+          return res.data['data'] ;
         default:
           throw res.data['message'];
       }

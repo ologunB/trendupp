@@ -261,7 +261,7 @@ class _FanHomeState extends State<FanHome> {
                                             ),
                                             SizedBox(height: 6.h),
                                             regularText(
-                                              '${data.firstName} ${data.lastName}',
+                                              '${data.brandName}',
                                               fontSize: 12.sp,
                                               color: AppColors.black,
                                               fontWeight: FontWeight.w700,

@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/post_model.dart';
 import 'package:mms_app/core/models/user_model.dart';
@@ -12,10 +11,8 @@ import 'package:mms_app/views/widgets/creator_post.dart';
 import 'package:mms_app/views/widgets/empty_widget.dart';
 import 'package:mms_app/views/widgets/error_widget.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
-import 'package:mms_app/views/widgets/utils.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:social_share/social_share.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:io';
 
 import '../base_view.dart';
@@ -87,7 +84,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                   Icon(Icons.favorite, color: AppColors.lightRed, size: 20.h),
                   SizedBox(width: 8.h),
                   regularText(
-                    'Support ${user.userName ?? user.firstName}',
+                    'Support ${user.brandName ?? user.firstName}',
                     fontSize: 12.sp,
                     color: AppColors.white,
                     fontWeight: FontWeight.w500,
@@ -184,7 +181,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.h),
                         child: regularText(
-                          '${user.userName ?? user.firstName}',
+                          '${user.brandName ?? user.firstName}',
                           fontSize: 16.sp,
                           color: AppColors.black,
                           fontWeight: FontWeight.w700,
@@ -193,8 +190,8 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                       ),
                       SizedBox(height: 4.h),
                       BaseView<PostViewModel>(
-                          onModelReady: (m) => m
-                              .supportersByUsername(widget.userData!, context),
+                          onModelReady: (m) =>
+                              m.supportersByUsername(widget.userData!, context),
                           builder: (_, PostViewModel sModel, __) => Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 16.h),
                                 child: regularText(
@@ -209,7 +206,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 30.h),
                         child: regularText(
-                          '${user.about}',
+                          '${user.creating}',
                           fontSize: 14.sp,
                           color: AppColors.textGrey,
                           textAlign: TextAlign.center,
@@ -241,7 +238,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                                   color: AppColors.lightRed, size: 20.h),
                               SizedBox(width: 8.h),
                               regularText(
-                                'Support ${user.userName ?? user.firstName}',
+                                'Support ${user.brandName ?? user.firstName}',
                                 fontSize: 12.sp,
                                 color: AppColors.white,
                                 fontWeight: FontWeight.w500,
@@ -257,7 +254,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.h),
                         child: regularText(
-                          '${user.creating}',
+                          '${user.about}',
                           fontSize: 12.sp,
                           height: 1.6,
                           color: AppColors.textGrey,
@@ -307,7 +304,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                         )
                       : model.creatorsPost!.isEmpty
                           ? AppEmptyWidget(AppCache.getUser()!.userType == 'fan'
-                              ? '${user.userName ?? user.firstName} has no post yet'
+                              ? '${user.brandName ?? user.firstName} has no post yet'
                               : 'You have not made any post')
                           : ListView.builder(
                               itemCount: model.creatorsPost!.length,
@@ -328,56 +325,37 @@ class _CreatorDetailsState extends State<CreatorDetails> {
   File? imageFile;
 
   Widget linksWidget() {
-    String link = 'https://trendupp.com/' + user.userName!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List<String>.generate(5, (index) => 'sh' + index.toString())
-          .map((e) => Padding(
-                padding: EdgeInsets.all(4.h),
-                child: InkWell(
-                  onTap: () async {
-                    try {
-                      String path =
-                          '${(await getTemporaryDirectory()).path}/bg.png';
-                      await getImageFileFromAssets(path);
-
-                      // print(path);
-                      if (e == 'sh0') {
-                        SocialShare.shareTwitter("Support me on Trendupp ",
-                            hashtags: ["trendupp", "support"], url: link);
-                      } else if (e == 'sh1') {
-                        SocialShare.shareOptions(
-                            "Support me on Trendupp on $link");
-                      } else if (e == 'sh2') {
-                        SocialShare.shareOptions(
-                            "Support me on Trendupp on $link");
-                      } else if (e == 'sh3') {
-                        SocialShare.shareFacebookStory(
-                            path, "#ffffff", "#000000", link,
-                            appId: Utils.facebookKey);
-                      } else if (e == 'sh4') {
-                        SocialShare.shareOptions(
-                            "Support me on Trendupp on $link");
-                      }
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
-                  child: Image.asset(
-                    'assets/images/$e.png',
-                    width: 38.h,
-                  ),
-                ),
-              ))
-          .toList(),
+      children: [
+        if (widget.userData!.twitterLink?.isEmpty == false)
+          socialItem(0, 'https://twitter.com/' + widget.userData!.twitterLink!),
+        if (widget.userData!.instagramLink?.isEmpty == false)
+          socialItem(
+              1, 'http://www.instagram.com/' + widget.userData!.instagramLink!),
+        if (widget.userData!.youtubeLink?.isEmpty == false)
+          socialItem(2, 'https://www.youtube.com/' + widget.userData!.youtubeLink!),
+        if (widget.userData!.facebookLink?.isEmpty == false)
+          socialItem(
+              3, 'https://web.facebook.com/' + widget.userData!.facebookLink!),
+        if (widget.userData!.websiteUrl?.isEmpty == false)
+          socialItem(4, 'https://' + widget.userData!.websiteUrl!),
+      ],
     );
   }
 
-  Future<File> getImageFileFromAssets(String _path) async {
-    final byteData = await rootBundle.load('assets/images/bg.png');
-    final File file = File(_path);
-    await file.writeAsBytes(byteData.buffer
-        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-    return file;
+  Widget socialItem(int e, String url) {
+    return Padding(
+      padding: EdgeInsets.all(4.h),
+      child: InkWell(
+        onTap: () async {
+          await launch(url);
+        },
+        child: Image.asset(
+          'assets/images/sh$e.png',
+          width: 38.h,
+        ),
+      ),
+    );
   }
 }

@@ -340,8 +340,6 @@ class _CreatorHomeState extends State<CreatorHome> {
       children: [
         InkWell(
           onTap: () async {
-            dynamic d = await SocialShare.shareOptions('contentText');
-            print(d);
             try {
               await SocialShare.shareTwitter(
                 "Support me on Trendupp ",
@@ -357,14 +355,14 @@ class _CreatorHomeState extends State<CreatorHome> {
         SizedBox(width: 30.h),
         InkWell(
           onTap: () {
-            SocialShare.shareOptions("Support me on Trendupp on $link");
+            SocialShare.shareOptions("Support me on Trendupp via $link");
           },
           child: Image.asset('assets/images/fb.png', width: 28.h),
         ),
         SizedBox(width: 30.h),
         InkWell(
           onTap: () {
-            SocialShare.shareWhatsapp("Support me on Trendupp on $link");
+            SocialShare.shareWhatsapp("Support me on Trendupp via $link");
           },
           child: Image.asset('assets/images/ws.png', width: 28.h),
         ),

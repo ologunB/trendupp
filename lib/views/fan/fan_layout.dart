@@ -121,7 +121,7 @@ class _FanLayoutState extends State<FanLayout> {
                       ),
                       SizedBox(height: 10.h),
                       regularText(
-                        '${AppCache.getUser()!.firstName} ${AppCache.getUser()!.lastName}',
+                        '${AppCache.getUser()?.firstName} ${AppCache.getUser()?.lastName}',
                         fontSize: 16.sp,
                         color: AppColors.black,
                         fontWeight: FontWeight.w700,

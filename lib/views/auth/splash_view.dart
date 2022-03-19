@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/routes/router.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/views/auth/choose_type.dart';
@@ -31,6 +32,7 @@ class _SplashViewState extends State<SplashView> {
           pushReplacement(context, ChooseType());
         } else if (AppCache.getUser()!.userType == 'fan') {
           pushReplacement(context, FanLayout());
+          //          pushReplacement(context,WebviewScreen(url: 'https://ravemodal-dev.herokuapp.com/v3/hosted/pay/f173f05fe5805a6d0b96',));
         } else if (AppCache.getUser()!.userType == 'creator') {
           pushReplacement(context, CreatorLayout());
         } else if (!AppCache.getUser()!.verified!) {
@@ -49,11 +51,22 @@ class _SplashViewState extends State<SplashView> {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: () => Scaffold(
-        backgroundColor: Color(0xff040039),
-        body: Center(
-          child: Hero(
-            tag: 'splash',
-            child: Image.asset('assets/images/logo3.png', width: 120.h),
+ //   backgroundColor: AppColors.red,
+
+      body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColors.red, Color(0xff040039)],
+              stops: [.3, .7],
+              begin: FractionalOffset.topCenter,
+              end: FractionalOffset.bottomCenter,
+            ),
+          ),
+          child: Center(
+            child: Hero(
+              tag: 'splash',
+              child: Image.asset('assets/images/logo3.png', width: 120.h),
+            ),
           ),
         ),
       ),

@@ -35,7 +35,8 @@ class StatViewModel extends BaseModel {
       creatorStat = context.read<StatViewModel>().creatorStat;
       tempAmount = context.read<StatViewModel>().tempAmount;
       creatorStat = await _statApi.getCreatorStat();
-      creatorStat!.supporters!.sort((a, b) => b.updatedAt!.compareTo(a.updatedAt!));
+      creatorStat!.supporters!
+          .sort((a, b) => b.updatedAt!.compareTo(a.updatedAt!));
       tempAmount = creatorStat!.amount!.toDouble();
       context.read<StatViewModel>().setCreatorStat(creatorStat);
       setBusy(false);
@@ -120,7 +121,6 @@ class StatViewModel extends BaseModel {
     notifyListeners();
   }
 
-  
   Future<void> getPayoutHistory(BuildContext context) async {
     setBusy(true);
     allPayoutHistory = context.read<StatViewModel>().allPayoutHistory;
@@ -212,6 +212,28 @@ class StatViewModel extends BaseModel {
     }
   }
 
+  filterCreators(String? a) {
+    a = a!.trim();
+    if (a.length > 0) {
+      a = a.toUpperCase();
+      filteredCreators?.clear();
+      for (UserData item in allCreators!) {
+        if ((item.firstName?.toUpperCase().contains(a) ?? true) ||
+            (item.lastName?.toUpperCase().contains(a) ?? true) ||
+            (item.email?.toUpperCase().contains(a) ?? true) ||
+            (item.about?.toUpperCase().contains(a) ?? true) ||
+            (item.brandName?.toUpperCase().contains(a) ?? true) ||
+            (item.creating?.toUpperCase().contains(a) ?? true)) {
+          filteredCreators!.add(item);
+        }
+      }
+    } else {
+      filteredCreators!.clear();
+      filteredCreators!.addAll(allCreators!);
+    }
+    setBusy(false);
+  }
+
   List<UserData>? allSupportedCreators, filteredSupportedCreators;
 
   void setSupportedCreators(List<UserData>? data) {
@@ -237,6 +259,28 @@ class StatViewModel extends BaseModel {
       setBusy(false);
       showDialog(e);
     }
+  }
+
+  filterSupportedCreators(String? a) {
+    a = a!.trim();
+    if (a.length > 0) {
+      a = a.toUpperCase();
+      filteredSupportedCreators?.clear();
+      for (UserData item in allSupportedCreators!) {
+        if ((item.firstName?.toUpperCase().contains(a) ?? true) ||
+            (item.lastName?.toUpperCase().contains(a) ?? true) ||
+            (item.email?.toUpperCase().contains(a) ?? true) ||
+            (item.about?.toUpperCase().contains(a) ?? true) ||
+            (item.brandName?.toUpperCase().contains(a) ?? true) ||
+            (item.creating?.toUpperCase().contains(a) ?? true)) {
+          filteredSupportedCreators!.add(item);
+        }
+      }
+    } else {
+      filteredSupportedCreators!.clear();
+      filteredSupportedCreators!.addAll(allSupportedCreators!);
+    }
+    setBusy(false);
   }
 
   List<PostModel>? allFanPayment;
@@ -281,28 +325,6 @@ class StatViewModel extends BaseModel {
       setBusy(false);
       showDialog(e);
     }
-  }
-
-  filterCreators(String? a) {
-    a = a!.trim();
-    if (a.length > 0) {
-      a = a.toUpperCase();
-      filteredCreators!.clear();
-      for (UserData item in allCreators!) {
-        if ((item.firstName?.toUpperCase().contains(a) ?? true) ||
-            (item.lastName?.toUpperCase().contains(a) ?? true) ||
-            (item.email?.toUpperCase().contains(a) ?? true) ||
-            (item.about?.toUpperCase().contains(a) ?? true) ||
-            (item.brandName?.toUpperCase().contains(a) ?? true) ||
-            (item.creating?.toUpperCase().contains(a) ?? true)) {
-          filteredCreators!.add(item);
-        }
-      }
-    } else {
-      filteredCreators!.clear();
-      filteredCreators!.addAll(allCreators!);
-    }
-    setBusy(false);
   }
 
   BuildContext c() => navigate.navigationKey.currentContext!;

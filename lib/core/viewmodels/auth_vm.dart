@@ -301,7 +301,7 @@ class AuthViewModel extends BaseModel {
     try {
       bool verified = await _authApi.checkLink(a);
       error = null;
-      isVerified = verified;
+      isVerified = !verified;
       setBusy(false);
     } on CustomException catch (e) {
       error = e.message;

@@ -86,7 +86,7 @@ class _SupportDialogState extends State<SupportDialog> {
                   ),
                   SizedBox(height: 16.h),
                   regularText(
-                    'Support ${widget.creator.firstName} ${widget.creator.lastName}',
+                    'Support ${widget.creator.brandName}',
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w700,
                     color: AppColors.black,
@@ -236,7 +236,7 @@ class _SupportDialogState extends State<SupportDialog> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24.h),
                     child: CustomTextField(
-                      title: 'Send ${widget.creator.firstName} a message',
+                      title: 'Send ${widget.creator.brandName} a message',
                       hintText: 'Say something nice....(optional)',
                       textInputType: TextInputType.text,
                       maxLines: 3,

@@ -4,9 +4,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 
 class WebviewScreen extends StatefulWidget {
-  const WebviewScreen({required this.title, required this.url});
+  const WebviewScreen({required this.url});
 
-  final String title;
   final String url;
 
   @override
@@ -63,10 +62,8 @@ class _WebviewScreenState extends State<WebviewScreen> {
                       Navigator.pop(
                           context, [true, 'Payment was been successful']);
                       return NavigationDecision.navigate;
-                    } else {
-                      Navigator.pop(context, [false, 'An error has occurred']);
-                      return NavigationDecision.navigate;
                     }
+                    return NavigationDecision.navigate;
                   },
                 ),
               ),

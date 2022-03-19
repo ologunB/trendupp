@@ -257,8 +257,8 @@ class _PostsHistoryState extends State<PostsHistory> {
                 onSelected: (int a) async {
                   if (a == 0) {
                     PostModel post = data;
-                    post.userName = (AppCache.getUser()!.firstName ?? "");
-                    post.userImage = (AppCache.getUser()!.picture);
+                    post.userName = (AppCache.getUser()?.brandName ?? "");
+                    post.userImage = (AppCache.getUser()?.picture);
                     push(context, PostDetail(post));
                   }
                   if (a == 1) {
