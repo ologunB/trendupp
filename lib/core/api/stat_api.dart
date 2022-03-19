@@ -188,7 +188,7 @@ class StatApi extends BaseAPI {
     String url = 'user/creators';
     try {
       final Response<dynamic> res = await dio().get<dynamic>(url);
-      //log(res.data);
+      log(res.data);
       switch (res.statusCode) {
         case SERVER_OKAY:
           List<UserData> list = [];

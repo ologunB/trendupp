@@ -62,7 +62,7 @@ class _CantSupportDialogState extends State<CantSupportDialog> {
                   padding:
                       EdgeInsets.symmetric(horizontal: 45.h, vertical: 40.h),
                   child: buttonWithBorder(
-                    'Go back to ${widget.user?.brandName} page',
+                    'Go back to ${widget.user?.brandName ??widget.user?.firstName } page',
                     buttonColor: AppColors.red,
                     fontSize: 14.sp,
                     height: 40.h,

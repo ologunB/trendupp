@@ -25,11 +25,12 @@ class FanHome extends StatefulWidget {
 
 class _FanHomeState extends State<FanHome> {
   bool loadMorePosts = false;
+  int postsToLoad = 6;
 
   @override
   Widget build(BuildContext _) {
     return BaseView<StatViewModel>(
-      onModelReady: (m) => m.getFanPosts(AppCache.getUser()!.email!, context),
+      onModelReady: (m) => m.getFanPosts(AppCache.getUser()?.email?? '', context),
       builder: (_, StatViewModel postsModel, __) => BaseView<StatViewModel>(
         onModelReady: (m) => m.getExploreCreators(context),
         builder: (_, StatViewModel exploreModel, __) => RefreshIndicator(
@@ -114,8 +115,9 @@ class _FanHomeState extends State<FanHome> {
                                 ListView.builder(
                                     itemCount: loadMorePosts
                                         ? postsModel.allPosts!.length
-                                        : (postsModel.allPosts!.length > 4
-                                            ? 4
+                                        : (postsModel.allPosts!.length >
+                                                postsToLoad
+                                            ? postsToLoad
                                             : postsModel.allPosts!.length),
                                     shrinkWrap: true,
                                     padding: EdgeInsets.zero,
@@ -124,7 +126,7 @@ class _FanHomeState extends State<FanHome> {
                                       return creatorPost(
                                           context, postsModel.allPosts![i]);
                                     }),
-                                if (postsModel.allPosts!.length > 4)
+                                if (postsModel.allPosts!.length > postsToLoad)
                                   Padding(
                                     padding:
                                         EdgeInsets.symmetric(vertical: 10.h),
@@ -135,6 +137,7 @@ class _FanHomeState extends State<FanHome> {
                                         InkWell(
                                           onTap: () {
                                             loadMorePosts = !loadMorePosts;
+                                            setState(() {});
                                           },
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,

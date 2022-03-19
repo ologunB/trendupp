@@ -74,7 +74,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
               );
             },
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 40.h, vertical: 7.h),
+              padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 7.h),
               decoration: BoxDecoration(
                   color: AppColors.red,
                   borderRadius: BorderRadius.circular(6.h)),
@@ -334,7 +334,8 @@ class _CreatorDetailsState extends State<CreatorDetails> {
           socialItem(
               1, 'http://www.instagram.com/' + widget.userData!.instagramLink!),
         if (widget.userData!.youtubeLink?.isEmpty == false)
-          socialItem(2, 'https://www.youtube.com/' + widget.userData!.youtubeLink!),
+          socialItem(
+              2, 'https://www.youtube.com/' + widget.userData!.youtubeLink!),
         if (widget.userData!.facebookLink?.isEmpty == false)
           socialItem(
               3, 'https://web.facebook.com/' + widget.userData!.facebookLink!),
