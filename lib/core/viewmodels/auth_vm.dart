@@ -49,6 +49,7 @@ class AuthViewModel extends BaseModel {
         return;
       }
       AppCache.setUser(user);
+      AppCache.setToken(user.token!);
       await getAccount();
       user = AppCache.getUser()!;
       if (user.userType == null) {

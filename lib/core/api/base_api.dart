@@ -22,9 +22,8 @@ class BaseAPI {
       ),
     );
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (HttpClient client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+        (client) {
+      client.badCertificateCallback = (cert, host, port) => true;
       return client;
     };
 
@@ -33,6 +32,6 @@ class BaseAPI {
 
   log(dynamic data) {
     Logger l = Logger();
-  // l.d(data);
+     l.d(data);
   }
 }

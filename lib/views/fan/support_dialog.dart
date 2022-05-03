@@ -14,9 +14,11 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mms_app/views/widgets/utils.dart';
 
 class SupportDialog extends StatefulWidget {
-  const SupportDialog({Key? key, required this.creator}) : super(key: key);
+  const SupportDialog({Key? key, required this.creator, this.data})
+      : super(key: key);
 
   final UserData creator;
+  final Map<String, String>? data;
 
   @override
   _SupportDialogState createState() => _SupportDialogState();
@@ -25,8 +27,25 @@ class SupportDialog extends StatefulWidget {
 class _SupportDialogState extends State<SupportDialog> {
   int frequency = 0;
   String? selectedAmount = '1000';
-  TextEditingController controller = TextEditingController();
+  TextEditingController amountController = TextEditingController();
   TextEditingController message = TextEditingController();
+
+  @override
+  void initState() {
+    if (widget.data != null) {
+      Map<String, String> data = widget.data!;
+      frequency = data['payment_plan'] == 'Monthly' ? 1 : 0;
+      message.text = data['message']!;
+
+      if (list.contains(data['amount']!)) {
+        selectedAmount = data['amount'];
+      } else {
+        selectedAmount = null;
+        amountController.text = data['amount']!;
+      }
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext cContext) {
@@ -153,7 +172,7 @@ class _SupportDialogState extends State<SupportDialog> {
                           return InkWell(
                             onTap: () {
                               selectedAmount = e;
-                              controller.text = '';
+                              amountController.text = '';
                               setState(() {});
                             },
                             child: Container(
@@ -209,13 +228,14 @@ class _SupportDialogState extends State<SupportDialog> {
                               padding: EdgeInsets.zero,
                               cursorColor: AppColors.textGrey,
                               cursorWidth: 1,
+                              maxLength: 5,
                               onChanged: (a) {
                                 selectedAmount = null;
                                 setState(() {});
                               },
                               placeholder: 'Other amount',
                               keyboardType: TextInputType.number,
-                              controller: controller,
+                              controller: amountController,
                               style: GoogleFonts.dmSans(
                                   fontSize: 15.sp,
                                   fontWeight: FontWeight.w700,
@@ -249,10 +269,15 @@ class _SupportDialogState extends State<SupportDialog> {
                         EdgeInsets.symmetric(horizontal: 24.h, vertical: 24.h),
                     child: InkWell(
                       onTap: () {
-                        if (controller.text.isNotEmpty ||
+                        if (amountController.text.isNotEmpty ||
                             selectedAmount != null) {
+                          if ((double.tryParse(amountController.text) ?? 0) >
+                              50000) {
+                            return showSnackBar(context, 'Error',
+                                'Amount cannot be more than NGN50,000');
+                          }
                           Map<String, String> data = {
-                            "amount": selectedAmount ?? controller.text,
+                            "amount": selectedAmount ?? amountController.text,
                             "payment_plan":
                                 frequency == 0 ? "One-Time" : "Monthly",
                             "creatorId": widget.creator.id.toString(),
@@ -283,7 +308,7 @@ class _SupportDialogState extends State<SupportDialog> {
                                 color: AppColors.lightRed, size: 20.h),
                             SizedBox(width: 8.h),
                             regularText(
-                              'Support Twyse',
+                              'Support ${widget.creator.brandName}',
                               fontSize: 12.sp,
                               color: AppColors.white,
                               fontWeight: FontWeight.w500,

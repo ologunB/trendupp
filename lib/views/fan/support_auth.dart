@@ -11,6 +11,7 @@ import 'package:mms_app/core/models/user_model.dart';
 import 'package:mms_app/core/routes/router.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/core/viewmodels/stat_vm.dart';
+import 'package:mms_app/views/fan/support_dialog.dart';
 import 'package:mms_app/views/fan/support_done.dart';
 import 'package:mms_app/views/widgets/buttons.dart';
 import 'package:mms_app/views/widgets/custom_textfield.dart';
@@ -77,6 +78,16 @@ class _SupportAuthState extends State<SupportAuth> {
                                   InkWell(
                                     onTap: () {
                                       Navigator.pop(cContext);
+
+                                      showDialog<AlertDialog>(
+                                        context: context,
+                                        barrierDismissible: true,
+                                        builder: (BuildContext context) =>
+                                            SupportDialog(
+                                          creator: widget.creator,
+                                          data: widget.data,
+                                        ),
+                                      );
                                     },
                                     child: Image.asset(
                                       'assets/images/close.png',
@@ -244,6 +255,8 @@ class _SupportAuthState extends State<SupportAuth> {
                 "amount": data1['amount']!,
                 "currency": 'NGN',
                 "payment_options": "ussd, card, barter, payattitude",
+                "payment_plan":
+                    widget.data['payment_plan'] == 'Monthly' ? 'monthly' : null,
                 "redirect_url": Utils.DEFAULT_URL,
                 "customer": {
                   "email": email.text,
