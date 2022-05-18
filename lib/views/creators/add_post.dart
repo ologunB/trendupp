@@ -202,7 +202,7 @@ class _AddPostState extends State<AddPost> {
                                                 ),
                                                 SizedBox(width: 8.h),
                                                 regularText(
-                                                  'Supporters',
+                                                  'Tippers',
                                                   fontSize: 12.sp,
                                                   fontWeight: FontWeight.w700,
                                                   color: AppColors.lightBlack,

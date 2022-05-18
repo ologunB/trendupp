@@ -68,7 +68,7 @@ class _CreatorHomeState extends State<CreatorHome> {
                             cardItem(
                                 'love1',
                                 '${statModel.creatorStat?.supportersNumber?.toString() ?? 0}',
-                                'Supporters',
+                                'Tippers',
                                 Color(0xffFCEFE7),
                                 Color(0xffF09A4A)),
                             cardItem(
@@ -105,7 +105,7 @@ class _CreatorHomeState extends State<CreatorHome> {
                               child: Row(
                                 children: [
                                   regularText(
-                                    'RECENT SUPPORTERS',
+                                    'RECENT TIPPERS',
                                     fontSize: 14.sp,
                                     color: AppColors.lightBlack,
                                     fontWeight: FontWeight.w700,
@@ -342,7 +342,7 @@ class _CreatorHomeState extends State<CreatorHome> {
           onTap: () async {
             try {
               await SocialShare.shareTwitter(
-                "Support me on Trendupp ",
+                "Tip me on Trendupp ",
                 hashtags: ["trendupp", "support"],
                 url: link,
               );
@@ -355,14 +355,14 @@ class _CreatorHomeState extends State<CreatorHome> {
         SizedBox(width: 30.h),
         InkWell(
           onTap: () {
-            SocialShare.shareOptions("Support me on Trendupp via $link");
+            SocialShare.shareOptions("Tip me on Trendupp via $link");
           },
           child: Image.asset('assets/images/fb.png', width: 28.h),
         ),
         SizedBox(width: 30.h),
         InkWell(
           onTap: () {
-            SocialShare.shareWhatsapp("Support me on Trendupp via $link");
+            SocialShare.shareWhatsapp("Tip me on Trendupp via $link");
           },
           child: Image.asset('assets/images/ws.png', width: 28.h),
         ),

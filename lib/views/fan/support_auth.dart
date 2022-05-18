@@ -122,7 +122,7 @@ class _SupportAuthState extends State<SupportAuth> {
                             ),
                             SizedBox(height: 16.h),
                             regularText(
-                              'Support ${widget.creator.brandName}',
+                              'Tip ${widget.creator.brandName}',
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w700,
                               color: AppColors.black,
@@ -265,7 +265,7 @@ class _SupportAuthState extends State<SupportAuth> {
                 },
                 "customizations": {
                   "title": "TrendUpp",
-                  "description": "Support Creator",
+                  "description": "Tip Creator",
                   "logo":
                       "https://firebasestorage.googleapis.com/v0/b/triviablog-78fd9.appspot.com/o/logo2.png?alt=media&token=c6d8a9f0-abef-47b7-80be-aafaf5a25f4e"
                 }

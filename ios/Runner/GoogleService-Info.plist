@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>568741488955-6rjkk8t9bgtb5l8othcfcj6j3k6p2u8t.apps.googleusercontent.com</string>
+	<string>568741488955-qf0s4tmpprr2nntaamt9csg0bs8igrnr.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.568741488955-6rjkk8t9bgtb5l8othcfcj6j3k6p2u8t</string>
+	<string>com.googleusercontent.apps.568741488955-qf0s4tmpprr2nntaamt9csg0bs8igrnr</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>568741488955-44f1u5atvh2aama6dbb8g1l8muct9hvd.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.trendupp.app</string>
+	<string>com.mactavis.trendup</string>
 	<key>PROJECT_ID</key>
 	<string>trendupp-f1208</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:568741488955:ios:09881bfaa8e8d1481def1e</string>
+	<string>1:568741488955:ios:7b6d8589a88c2b5f1def1e</string>
 </dict>
 </plist>

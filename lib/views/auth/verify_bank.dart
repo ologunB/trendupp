@@ -83,7 +83,7 @@ class _VerifyBankState extends State<VerifyBank> {
                   ),
                   SizedBox(height: 10.h),
                   regularText(
-                    'All funds paid to you by your supporters will\nbe sent to this account at your request',
+                    'All funds tipped to you by your tippers will\nbe sent to this account at your request',
                     fontSize: 12.sp,
                     textAlign: TextAlign.center,
                     fontWeight: FontWeight.w500,
@@ -242,7 +242,7 @@ class _VerifyBankState extends State<VerifyBank> {
             ),
             SizedBox(height: 8.h),
             regularText(
-              'You’ve successfully created a profile.\nShare your page with your audience to\nget supporters',
+              'You’ve successfully created a profile.\nShare your page with your audience to\nget tippers',
               fontSize: 12.sp,
               fontWeight: FontWeight.w500,
               textAlign: TextAlign.center,
@@ -342,7 +342,7 @@ class _VerifyBankState extends State<VerifyBank> {
       children: [
         InkWell(
           onTap: () {
-            SocialShare.shareTwitter("Support me on Trendupp ",
+            SocialShare.shareTwitter("Tip me on Trendupp ",
                 hashtags: ["trendupp", "support"], url: link);
           },
           child: Image.asset('assets/images/tw.png', width: 28.h),
@@ -350,14 +350,14 @@ class _VerifyBankState extends State<VerifyBank> {
         SizedBox(width: 30.h),
         InkWell(
           onTap: () {
-            SocialShare.shareOptions("Support me on Trendupp on $link");
+            SocialShare.shareOptions("Tip me on Trendupp on $link");
           },
           child: Image.asset('assets/images/fb.png', width: 28.h),
         ),
         SizedBox(width: 30.h),
         InkWell(
           onTap: () {
-            SocialShare.shareWhatsapp("Support me on Trendupp on $link");
+            SocialShare.shareWhatsapp("Tip me on Trendupp on $link");
           },
           child: Image.asset('assets/images/ws.png', width: 28.h),
         ),

@@ -99,7 +99,7 @@ class _FanHomeState extends State<FanHome> {
                                   ),
                                   SizedBox(height: 14.h),
                                   regularText(
-                                    'Support a creator to see posts from\nthe creator\n\nThere are no posts from the creators\nyou support.',
+                                    'Tip a creator to see posts from\nthe creator\n\nThere are no posts from the creators\nyou tip.',
                                     fontSize: 12.sp,
                                     color: AppColors.textGrey,
                                     textAlign: TextAlign.center,

@@ -112,7 +112,7 @@ Widget creatorPost(BuildContext context, PostModel post) {
                             ),
                             SizedBox(height: 16.h),
                             regularText(
-                              'This post is for supporters',
+                              'This post is for tippers',
                               fontSize: 12.sp,
                               color: AppColors.white,
                               fontWeight: FontWeight.w500,
@@ -132,7 +132,7 @@ Widget creatorPost(BuildContext context, PostModel post) {
                                       color: AppColors.grey1, size: 20.h),
                                   SizedBox(width: 8.h),
                                   regularText(
-                                    'Support ${post.userName ?? (post.user?.brandName ?? '')}',
+                                    'Tip ${post.userName ?? (post.user?.brandName ?? '')}',
                                     fontSize: 12.sp,
                                     color: AppColors.white,
                                     fontWeight: FontWeight.w500,

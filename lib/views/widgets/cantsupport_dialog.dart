@@ -53,7 +53,7 @@ class _CantSupportDialogState extends State<CantSupportDialog> {
                 ),
                 SizedBox(height: 20.h),
                 regularText(
-                    'We’re sorry! You need a fan\naccount to support a creator',
+                    'We’re sorry! You need a fan\naccount to tip a creator',
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w700,
                     color: AppColors.black,

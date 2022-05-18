@@ -18,6 +18,7 @@ class SplashView extends StatefulWidget {
 class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
+    //  AppCache.clear();
     Future.delayed(Duration(seconds: 2), () {
       if (AppCache.getUser() == null) {
         Navigator.pushReplacement(
@@ -32,7 +33,6 @@ class _SplashViewState extends State<SplashView> {
           pushReplacement(context, ChooseType());
         } else if (AppCache.getUser()!.userType == 'fan') {
           pushReplacement(context, FanLayout());
-          //          pushReplacement(context,WebviewScreen(url: 'https://ravemodal-dev.herokuapp.com/v3/hosted/pay/f173f05fe5805a6d0b96',));
         } else if (AppCache.getUser()!.userType == 'creator') {
           pushReplacement(context, CreatorLayout());
         } else if (!AppCache.getUser()!.verified!) {
@@ -51,9 +51,9 @@ class _SplashViewState extends State<SplashView> {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: () => Scaffold(
- //   backgroundColor: AppColors.red,
+        //   backgroundColor: AppColors.red,
 
-      body: Container(
+        body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [AppColors.red, Color(0xff040039)],

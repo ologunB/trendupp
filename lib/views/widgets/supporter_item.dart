@@ -69,7 +69,7 @@ class SupporterItem extends StatelessWidget {
                       PopupMenuItem<int>(
                         value: 0,
                         child: regularText(
-                          'View Support History',
+                          'View Tip History',
                           fontSize: 12.sp,
                           color: AppColors.textGrey,
                           fontWeight: FontWeight.w500,

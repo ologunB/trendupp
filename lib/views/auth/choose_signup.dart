@@ -7,6 +7,7 @@ import 'package:mms_app/views/widgets/text_widgets.dart';
 import '../base_view.dart';
 import 'login.dart';
 import 'signup.dart';
+import 'dart:io';
 
 class ChooseSignup extends StatefulWidget {
   const ChooseSignup({Key? key}) : super(key: key);
@@ -54,7 +55,7 @@ class _ChooseSignupState extends State<ChooseSignup>
     return BaseView<AuthViewModel>(
         onModelReady: (m) => null,
         builder: (_, AuthViewModel model, __) => Scaffold(
-        //      backgroundColor: Color(0xff040039),
+              //      backgroundColor: Color(0xff040039),
               body: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(24.h),
@@ -115,6 +116,14 @@ class _ChooseSignupState extends State<ChooseSignup>
                                   onTap: () => model.signInWithFB(context),
                                   child: item('Continue with Facebook', 'fb'),
                                 ),
+                                if (Platform.isIOS)
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 18.h),
+                                    child: InkWell(
+                                      onTap: () => model.signinApple(context),
+                                      child: item('Continue with Apple', 'ap'),
+                                    ),
+                                  ),
                                 SizedBox(height: 51.h),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,

@@ -84,7 +84,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                   Icon(Icons.favorite, color: AppColors.lightRed, size: 20.h),
                   SizedBox(width: 8.h),
                   regularText(
-                    'Support ${user.brandName ?? user.firstName}',
+                    'Tip ${user.brandName ?? user.firstName}',
                     fontSize: 12.sp,
                     color: AppColors.white,
                     fontWeight: FontWeight.w500,
@@ -195,7 +195,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                           builder: (_, PostViewModel sModel, __) => Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 16.h),
                                 child: regularText(
-                                  '${sModel.supportersNumber} ${sModel.supportersNumber > 1 ? 'Supporters' : "Supporter"}',
+                                  '${sModel.supportersNumber} ${sModel.supportersNumber > 1 ? 'Tippers' : "Tipper"}',
                                   fontSize: 14.sp,
                                   color: AppColors.black,
                                   fontWeight: FontWeight.w500,
@@ -238,7 +238,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                                   color: AppColors.lightRed, size: 20.h),
                               SizedBox(width: 8.h),
                               regularText(
-                                'Support ${user.brandName ?? user.firstName}',
+                                'Tip ${user.brandName ?? user.firstName}',
                                 fontSize: 12.sp,
                                 color: AppColors.white,
                                 fontWeight: FontWeight.w500,
@@ -350,7 +350,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
       padding: EdgeInsets.all(4.h),
       child: InkWell(
         onTap: () async {
-          await launch(url);
+          await launchUrl(Uri.parse(url));
         },
         child: Image.asset(
           'assets/images/sh$e.png',

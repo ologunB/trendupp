@@ -308,13 +308,13 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 regularText(
-                                  'Supporters',
+                                  'Tippers',
                                   fontSize: 12.sp,
                                   color: AppColors.white,
                                   fontWeight: FontWeight.w700,
                                 ),
                                 regularText(
-                                  'Post to your supporters of your page',
+                                  'Post to your tippers of your page',
                                   fontSize: 10.sp,
                                   color: AppColors.white,
                                   fontWeight: FontWeight.w700,

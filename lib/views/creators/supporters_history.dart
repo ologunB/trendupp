@@ -47,7 +47,7 @@ class _SupportersHistoryState extends State<SupportersHistory> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 24.h),
                         child: regularText(
-                          'SUPPORTERS',
+                          'TIPPERS',
                           fontSize: 14.sp,
                           color: AppColors.lightBlack,
                           fontWeight: FontWeight.w700,
@@ -83,7 +83,7 @@ class _SupportersHistoryState extends State<SupportersHistory> {
                                 )
                               : model.allSupporters!.isEmpty
                                   ? AppEmptyWidget(
-                                      'No supporters yet, share link')
+                                      'No tippers yet, share link')
                                   : ListView.separated(
                                       separatorBuilder: (_, __) {
                                         return Divider(

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:global_configuration/global_configuration.dart';
@@ -32,6 +30,7 @@ class BaseAPI {
 
   log(dynamic data) {
     Logger l = Logger();
-     l.d(data);
+
+    //  l.d(data);
   }
 }

@@ -12,9 +12,12 @@ import 'package:mms_app/views/auth/choose_type.dart';
 import 'package:mms_app/views/creators/creators_layout.dart';
 import 'package:mms_app/views/fan/fan_layout.dart';
 import 'package:mms_app/views/widgets/snackbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 import '../../locator.dart';
 import 'base_vm.dart';
 import 'dart:io';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class AuthViewModel extends BaseModel {
   final AuthApi _authApi = locator<AuthApi>();
@@ -294,6 +297,70 @@ class AuthViewModel extends BaseModel {
     } catch (e) {
       setBusy(false);
       showSnackBar(buildContext, "Error", e.toString());
+    }
+  }
+
+  Future signinApple(BuildContext buildContext) async {
+    if (!await TheAppleSignIn.isAvailable()) {
+      return null;
+    }
+
+    final res = await TheAppleSignIn.performRequests([
+      AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    ]);
+
+    switch (res.status) {
+      case AuthorizationStatus.authorized:
+        //Get Token
+        final AppleIdCredential? appleIdCredential = res.credential;
+
+        dynamic decoded = JwtDecoder.tryDecode(
+            String.fromCharCodes(appleIdCredential?.identityToken ?? []));
+        log(decoded);
+
+        final prefs = await SharedPreferences.getInstance();
+        String? fName = appleIdCredential?.fullName?.givenName;
+        String? lName = appleIdCredential?.fullName?.familyName;
+        String? email = decoded['email'] ?? appleIdCredential?.email;
+        if (email != null) {
+          await prefs.setString('firstName', fName ?? 'John');
+          await prefs.setString('lastName', lName ?? 'Doe');
+          await prefs.setString('email', email);
+        }
+
+        Map<String, dynamic> data = {
+          "firstName": fName ?? prefs.getString('firstName') ?? '',
+          "lastName": lName ?? prefs.getString('lastName') ?? '',
+          "email": email ?? prefs.getString('email') ?? '',
+          "picture": '',
+          "onboardingStep": 1
+        };
+
+        if (data['email'] == '' || data['email'] == null) {
+          setBusy(false);
+          showSnackBar(
+              buildContext, "Error", 'The operation could not be completed');
+          break;
+        }
+        String? checkRes = await socialCheck(data);
+        if (checkRes == 'This user does not exists') {
+          socialSignup(data);
+        } else if (checkRes == 'This user already exists') {
+          socialLogin(data);
+        }
+        setBusy(false);
+
+        break;
+      case AuthorizationStatus.error:
+        setBusy(false);
+        showSnackBar(
+            buildContext, "Error", res.error?.localizedDescription ?? '');
+        break;
+      case AuthorizationStatus.cancelled:
+        setBusy(false);
+        showSnackBar(
+            buildContext, "Error", 'The operation could not be completed');
+        break;
     }
   }
 

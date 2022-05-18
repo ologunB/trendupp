@@ -133,7 +133,7 @@ class _FanLayoutState extends State<FanLayout> {
                 item('Home', 0),
                 item('Explore Creators', 1),
                 item('Supported Creators', 2),
-                item('Support History', 3),
+                item('Tip History', 3),
                 item('Settings', 4),
                 item('Logout', 5),
               ],
