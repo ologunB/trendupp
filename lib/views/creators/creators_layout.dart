@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
- import 'package:mms_app/app/colors.dart';
+import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/models/post_model.dart';
 import 'package:mms_app/core/routes/router.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
@@ -19,6 +19,7 @@ import 'package:mms_app/views/widgets/logout_dialog.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 
 import 'creator_home.dart';
+import 'dart:math';
 
 class CreatorLayout extends StatefulWidget {
   @override
@@ -42,7 +43,7 @@ class _CreatorLayoutState extends State<CreatorLayout> {
 
   @override
   Widget build(bContext) {
-     return ValueListenableBuilder<int>(
+    return ValueListenableBuilder<int>(
         valueListenable: cIndexNotifier,
         builder: (_, a, __) {
           return Scaffold(
@@ -55,18 +56,22 @@ class _CreatorLayoutState extends State<CreatorLayout> {
               leading: SizedBox(),
               title: Container(
                 padding: EdgeInsets.symmetric(horizontal: 24.h),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Stack(
                   children: [
-                    Image.asset('assets/images/logo.png', height: 32.h),
-                    Spacer(),
+                    Center(
+                        child: Image.asset('assets/images/logo2.png',
+                            height: 32.h)),
                     InkWell(
-                        onTap: () {
-                          setState(() {});
-                          mainLayoutScaffoldKey.currentState!.openDrawer();
-                        },
-                        child: Image.asset('assets/images/menu.png',
-                            height: 20.h)),
+                      onTap: () {
+                        setState(() {});
+                        mainLayoutScaffoldKey.currentState!.openDrawer();
+                      },
+                      child: Transform.rotate(
+                        angle: pi,
+                        child:
+                            Image.asset('assets/images/menu.png', height: 20.h),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -117,13 +122,13 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                                 fit: BoxFit.cover,
                               ),
                               errorWidget: (BuildContext context, String url,
-                                  dynamic error) =>
+                                      dynamic error) =>
                                   Image.asset(
-                                    'assets/images/person.png',
-                                    height: 60.h,
-                                    width: 60.h,
-                                    fit: BoxFit.cover,
-                                  ),
+                                'assets/images/person.png',
+                                height: 60.h,
+                                width: 60.h,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ],
@@ -253,8 +258,8 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                       onTap: () {
                         postIsOpen = !postIsOpen;
                         setState(() {});
-                        push(
-                            context, AddPost(model: PostModel(postType: 'public')));
+                        push(context,
+                            AddPost(model: PostModel(postType: 'public')));
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -292,7 +297,8 @@ class _CreatorLayoutState extends State<CreatorLayout> {
                       onTap: () {
                         postIsOpen = !postIsOpen;
                         setState(() {});
-                        push(context, AddPost(model: PostModel(postType: 'supporters')));
+                        push(context,
+                            AddPost(model: PostModel(postType: 'supporters')));
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,

@@ -110,7 +110,7 @@ class PostDetail extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             regularText(
-                              '${post.userName ?? post.user?.brandName}',
+                              '@${post.userName ?? post.user?.brandName}',
                               fontSize: 12.sp,
                               color: AppColors.black,
                               fontWeight: FontWeight.w700,
@@ -197,7 +197,7 @@ class PostDetail extends StatelessWidget {
                                   color: AppColors.lightRed, size: 20.h),
                               SizedBox(width: 8.h),
                               regularText(
-                                'Tip ${post.userName ?? post.user?.brandName}',
+                                'Tip @${post.userName ?? post.user?.brandName}',
                                 fontSize: 12.sp,
                                 color: AppColors.white,
                                 fontWeight: FontWeight.w500,

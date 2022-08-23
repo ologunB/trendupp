@@ -71,7 +71,7 @@ Widget creatorPost(BuildContext context, PostModel post) {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       regularText(
-                        '${post.userName ?? (post.user?.brandName ?? '')}',
+                        '@${post.userName ?? (post.user?.brandName ?? '')}',
                         fontSize: 12.sp,
                         color: AppColors.black,
                         fontWeight: FontWeight.w700,

@@ -21,19 +21,16 @@ class _WebviewScreenState extends State<WebviewScreen> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,
-          leadingWidth: 0,
           backgroundColor: Colors.transparent,
-          titleSpacing: 0,
-          leading: SizedBox(),
-          title: Container(
-            padding: EdgeInsets.symmetric(horizontal: 24.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset('assets/images/logo2.png', height: 32.h),
-                Spacer(),
-              ],
-            ),
+          iconTheme: IconThemeData(color: AppColors.black),
+          centerTitle: true,
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset('assets/images/logo2.png', height: 32.h),
+              Spacer(),
+            ],
           ),
         ),
         body: Column(

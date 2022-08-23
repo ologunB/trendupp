@@ -122,7 +122,7 @@ class _SupportAuthState extends State<SupportAuth> {
                             ),
                             SizedBox(height: 16.h),
                             regularText(
-                              'Tip ${widget.creator.brandName}',
+                              'Tip @${widget.creator.brandName}',
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w700,
                               color: AppColors.black,

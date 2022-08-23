@@ -21,137 +21,183 @@ class ExploreCreators extends StatefulWidget {
 
 class _ExploreCreatorsState extends State<ExploreCreators> {
   TextEditingController search = TextEditingController();
+  bool _showBackToTopButton = false;
+  ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    _scrollController
+      ..addListener(() {
+        setState(() {
+          if (_scrollController.offset >= 400) {
+            _showBackToTopButton = true;
+          } else {
+            _showBackToTopButton = false;
+          }
+        });
+      });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // dispose the controller
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(0,
+        duration: Duration(seconds: 1), curve: Curves.linear);
+  }
 
   @override
   Widget build(BuildContext _) {
     return BaseView<StatViewModel>(
         onModelReady: (m) => m.getExploreCreators(context),
-        builder: (_, StatViewModel historyModel, __) => GestureDetector(
-            onTap: Utils.offKeyboard,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 13.h),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.h),
-                  child: regularText(
-                    'EXPLORE CREATORS',
-                    fontSize: 12.sp,
-                    color: AppColors.lightBlack,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.h),
-                  child: CustomTextField(
-                    hintText: 'Search Here.',
-                    controller: search,
-                    textInputType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    onChanged: historyModel.filterCreators,
-                    suffixIcon: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/images/search.png', height: 14.h),
-                      ],
+        builder: (_, StatViewModel historyModel, __) => Scaffold(
+              floatingActionButton: !_showBackToTopButton
+                  ? null
+                  : FloatingActionButton(
+                      backgroundColor: AppColors.red,
+                      onPressed: _scrollToTop,
+                      child: Icon(Icons.keyboard_arrow_up),
+                      tooltip: 'Scroll to up',
                     ),
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                Expanded(
-                  child: ListView(
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.onDrag,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 24.h, vertical: 8.h),
-                    shrinkWrap: true,
+              body: GestureDetector(
+                  onTap: Utils.offKeyboard,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      historyModel.busy && historyModel.filteredCreators == null
-                          ? GridView.builder(
-                              shrinkWrap: true,
-                              gridDelegate: Utils.gridDelegate(),
-                              physics: ClampingScrollPhysics(),
-                              padding: EdgeInsets.zero,
-                              itemCount: 6,
-                              itemBuilder: (context, index) {
-                                return Shimmer.fromColors(
-                                    baseColor: Colors.grey.withOpacity(.1),
-                                    highlightColor: Colors.white60,
-                                    child: Container(
-                                      height: 150.h,
-                                      margin: EdgeInsets.only(top: 16.h),
-                                      width: ScreenUtil.defaultSize.width,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(.7),
-                                        borderRadius:
-                                            BorderRadius.circular(5.h),
-                                      ),
-                                    ));
-                              })
-                          : historyModel.filteredCreators == null
-                              ? ErrorOccurredWidget(
-                                  error: historyModel.error,
-                                  onPressed: () {
-                                    historyModel.getExploreCreators(context);
-                                  },
-                                )
-                              : historyModel.filteredCreators!.isEmpty
-                                  ? AppEmptyWidget('No creators are available')
-                                  : GridView.builder(
-                                      gridDelegate: Utils.gridDelegate(),
-                                      itemCount:
-                                          historyModel.filteredCreators!.length,
-                                      shrinkWrap: true,
-                                      padding: EdgeInsets.zero,
-                                      physics: ClampingScrollPhysics(),
-                                      itemBuilder: (ctx, i) {
-                                        UserData c =
-                                            historyModel.filteredCreators![i];
-                                        return creatorItem(ctx, c);
-                                      }),
-                      /*    SizedBox(height: 24.h),
-                      if (historyModel.allExploredCreators != null)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                      SizedBox(height: 13.h),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.h),
+                        child: regularText(
+                          'EXPLORE CREATORS',
+                          fontSize: 12.sp,
+                          color: AppColors.lightBlack,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.h),
+                        child: CustomTextField(
+                          hintText: 'Search Here.',
+                          controller: search,
+                          textInputType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          onChanged: historyModel.filterCreators,
+                          suffixIcon: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset('assets/images/search.png',
+                                  height: 14.h),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      Expanded(
+                        child: ListView(
+                          controller: _scrollController,
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 24.h, vertical: 8.h),
+                          shrinkWrap: true,
                           children: [
-                            isLoadingMore
-                                ? SizedBox(
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 3,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          AppColors.red),
+                            historyModel.busy &&
+                                    historyModel.filteredCreators == null
+                                ? GridView.builder(
+                                    shrinkWrap: true,
+                                    gridDelegate: Utils.gridDelegate(),
+                                    physics: ClampingScrollPhysics(),
+                                    padding: EdgeInsets.zero,
+                                    itemCount: 6,
+                                    itemBuilder: (context, index) {
+                                      return Shimmer.fromColors(
+                                          baseColor:
+                                              Colors.grey.withOpacity(.1),
+                                          highlightColor: Colors.white60,
+                                          child: Container(
+                                            height: 150.h,
+                                            margin: EdgeInsets.only(top: 16.h),
+                                            width: ScreenUtil.defaultSize.width,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  Colors.grey.withOpacity(.7),
+                                              borderRadius:
+                                                  BorderRadius.circular(5.h),
+                                            ),
+                                          ));
+                                    })
+                                : historyModel.filteredCreators == null
+                                    ? ErrorOccurredWidget(
+                                        error: historyModel.error,
+                                        onPressed: () {
+                                          historyModel
+                                              .getExploreCreators(context);
+                                        },
+                                      )
+                                    : historyModel.filteredCreators!.isEmpty
+                                        ? AppEmptyWidget(
+                                            'No creators are available')
+                                        : GridView.builder(
+                                            gridDelegate: Utils.gridDelegate(),
+                                            itemCount: historyModel
+                                                .filteredCreators!.length,
+                                            shrinkWrap: true,
+                                            padding: EdgeInsets.zero,
+                                            physics: ClampingScrollPhysics(),
+                                            itemBuilder: (ctx, i) {
+                                              UserData c = historyModel
+                                                  .filteredCreators![i];
+                                              return creatorItem(ctx, c);
+                                            }),
+                            /*    SizedBox(height: 24.h),
+                        if (historyModel.allExploredCreators != null)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              isLoadingMore
+                                  ? SizedBox(
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 3,
+                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                            AppColors.red),
+                                      ),
+                                      height: 20.h,
+                                      width: 20.h,
+                                    )
+                                  : InkWell(
+                                      onTap: () {},
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.add_circle_outline,
+                                            color: AppColors.red,
+                                            size: 14.h,
+                                          ),
+                                          SizedBox(width: 4.h),
+                                          regularText(
+                                            'View more',
+                                            fontSize: 12.sp,
+                                            color: AppColors.red,
+                                            fontWeight: FontWeight.w500,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    height: 20.h,
-                                    width: 20.h,
-                                  )
-                                : InkWell(
-                                    onTap: () {},
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.add_circle_outline,
-                                          color: AppColors.red,
-                                          size: 14.h,
-                                        ),
-                                        SizedBox(width: 4.h),
-                                        regularText(
-                                          'View more',
-                                          fontSize: 12.sp,
-                                          color: AppColors.red,
-                                          fontWeight: FontWeight.w500,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                            ],
+                          ),*/
+                            SizedBox(height: 24.h),
                           ],
-                        ),*/
-                      SizedBox(height: 24.h),
+                        ),
+                      )
                     ],
-                  ),
-                )
-              ],
-            )));
+                  )),
+            ));
   }
 }

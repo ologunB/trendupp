@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mms_app/core/routes/router.dart';
@@ -9,6 +10,7 @@ import 'package:mms_app/views/auth/splash_view.dart';
 import 'package:provider/provider.dart';
 import 'core/storage/local_storage.dart';
 import 'core/utils/navigator.dart';
+import 'dart:io';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +26,13 @@ Future<void> main() async {
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.dumpErrorToConsole(details, forceReport: true);
   };
+
+  if (Platform.isIOS) {
+    await FlutterStatusbarManager.setNetworkActivityIndicatorVisible(true);
+    await FlutterStatusbarManager.setHidden(false);
+    await FlutterStatusbarManager.setTranslucent(true);
+    await FlutterStatusbarManager.setStyle(StatusBarStyle.LIGHT_CONTENT);
+  }
 
   runApp(App());
 }

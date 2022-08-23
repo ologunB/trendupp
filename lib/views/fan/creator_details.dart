@@ -84,7 +84,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                   Icon(Icons.favorite, color: AppColors.lightRed, size: 20.h),
                   SizedBox(width: 8.h),
                   regularText(
-                    'Tip ${user.brandName ?? user.firstName}',
+                    'Tip @${user.brandName ?? user.firstName}',
                     fontSize: 12.sp,
                     color: AppColors.white,
                     fontWeight: FontWeight.w500,
@@ -181,7 +181,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.h),
                         child: regularText(
-                          '${user.brandName ?? user.firstName}',
+                          '@${user.brandName ?? user.firstName}',
                           fontSize: 16.sp,
                           color: AppColors.black,
                           fontWeight: FontWeight.w700,
@@ -238,7 +238,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                                   color: AppColors.lightRed, size: 20.h),
                               SizedBox(width: 8.h),
                               regularText(
-                                'Tip ${user.brandName ?? user.firstName}',
+                                'Tip @${user.brandName ?? user.firstName}',
                                 fontSize: 12.sp,
                                 color: AppColors.white,
                                 fontWeight: FontWeight.w500,
@@ -304,7 +304,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                         )
                       : model.creatorsPost!.isEmpty
                           ? AppEmptyWidget(AppCache.getUser()!.userType == 'fan'
-                              ? '${user.brandName ?? user.firstName} has no post yet'
+                              ? '@${user.brandName ?? user.firstName} has no post yet'
                               : 'You have not made any post')
                           : ListView.builder(
                               itemCount: model.creatorsPost!.length,

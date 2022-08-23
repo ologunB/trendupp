@@ -13,6 +13,7 @@ import 'fan_home.dart';
 import 'settings.dart';
 import 'support_history.dart';
 import 'supported_creators.dart';
+import 'dart:math';
 
 class FanLayout extends StatefulWidget {
   @override
@@ -47,18 +48,22 @@ class _FanLayoutState extends State<FanLayout> {
               leading: SizedBox(),
               title: Container(
                 padding: EdgeInsets.symmetric(horizontal: 24.h),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Stack(
                   children: [
-                    Image.asset('assets/images/logo.png', height: 32.h),
-                    Spacer(),
+                    Center(
+                        child: Image.asset('assets/images/logo.png',
+                            height: 32.h)),
                     InkWell(
-                        onTap: () {
-                          setState(() {});
-                          mainLayoutScaffoldKey.currentState!.openDrawer();
-                        },
-                        child: Image.asset('assets/images/menu.png',
-                            height: 20.h)),
+                      onTap: () {
+                        setState(() {});
+                        mainLayoutScaffoldKey.currentState!.openDrawer();
+                      },
+                      child: Transform.rotate(
+                        angle: pi,
+                        child:
+                            Image.asset('assets/images/menu.png', height: 20.h),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -108,8 +113,7 @@ class _FanLayoutState extends State<FanLayout> {
                                 width: 60.h,
                                 fit: BoxFit.cover,
                               ),
-                              errorWidget: (_, __, ___) =>
-                                  Image.asset(
+                              errorWidget: (_, __, ___) => Image.asset(
                                 'assets/images/person.png',
                                 height: 60.h,
                                 width: 60.h,

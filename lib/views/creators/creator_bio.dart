@@ -105,7 +105,7 @@ class _CreatorBioState extends State<CreatorBio> {
                       ),
                       SizedBox(height: 32.h),
                       regularText(
-                        'Update User Details',
+                        'Update your Details',
                         fontSize: 24.sp,
                         textAlign: TextAlign.center,
                         fontWeight: FontWeight.w700,

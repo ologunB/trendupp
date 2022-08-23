@@ -202,6 +202,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.1"
+  flutter_statusbar_manager:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: "27b070667c24d64c9866d0aaa99d4c472202866a"
+      url: "https://github.com/charleyzhu/flutter_statusbar_manager.git"
+    source: git
+    version: "3.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -338,6 +347,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  ntp:
+    dependency: "direct main"
+    description:
+      name: ntp
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   octo_image:
     dependency: transitive
     description:

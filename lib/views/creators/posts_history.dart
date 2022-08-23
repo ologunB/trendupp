@@ -92,8 +92,7 @@ class _PostsHistoryState extends State<PostsHistory> {
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              model.busy &&
-                                  model.creatorsPost == null
+                              model.busy && model.creatorsPost == null
                                   ? ListView.builder(
                                       shrinkWrap: true,
                                       physics: ClampingScrollPhysics(),
@@ -202,8 +201,8 @@ class _PostsHistoryState extends State<PostsHistory> {
                                                               .withOpacity(.4),
                                                           height: 2.h);
                                                     },
-                                                    itemCount:
-                                                        model.creatorsPost!.length,
+                                                    itemCount: model
+                                                        .creatorsPost!.length,
                                                     shrinkWrap: true,
                                                     padding: EdgeInsets.zero,
                                                     physics:

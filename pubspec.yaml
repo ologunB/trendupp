@@ -36,6 +36,12 @@ dependencies:
   the_apple_sign_in: ^1.1.1
   url_launcher: ^6.1.2
   jwt_decoder: ^2.0.1
+  flutter_statusbar_manager:
+     git:
+       url: https://github.com/charleyzhu/flutter_statusbar_manager.git
+       ref: master
+
+  ntp:
 
 dev_dependencies:
   flutter_test:

@@ -98,7 +98,7 @@ class _FanBioState extends State<FanBio> {
                       ),
                       SizedBox(height: 32.h),
                       regularText(
-                        'Update User Details',
+                        'Update your Details',
                         fontSize: 24.sp,
                         textAlign: TextAlign.center,
                         fontWeight: FontWeight.w700,
@@ -114,72 +114,72 @@ class _FanBioState extends State<FanBio> {
                             color: AppColors.textGrey,
                             child: imageFile != null
                                 ? Center(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10.h),
-                                child: Image.file(
-                                  imageFile!,
-                                  width: 100.h,
-                                  height: 100.h,
-                                ),
-                              ),
-                            )
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.h),
+                                      child: Image.file(
+                                        imageFile!,
+                                        width: 100.h,
+                                        height: 100.h,
+                                      ),
+                                    ),
+                                  )
                                 : imageUrl != null
-                                ? Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.center,
-                              children: [
-                                ClipRRect(
-                                  borderRadius:
-                                  BorderRadius.circular(10.h),
-                                  child: CachedNetworkImage(
-                                    imageUrl: imageUrl!,
-                                    height: 100.h,
-                                    width: 100.h,
-                                    fit: BoxFit.cover,
-                                    placeholder: (_, __) =>
-                                        Image.asset(
-                                          'assets/images/person.png',
-                                          height: 100.h,
-                                          width: 100.h,
-                                          fit: BoxFit.cover,
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10.h),
+                                            child: CachedNetworkImage(
+                                              imageUrl: imageUrl!,
+                                              height: 100.h,
+                                              width: 100.h,
+                                              fit: BoxFit.cover,
+                                              placeholder: (_, __) =>
+                                                  Image.asset(
+                                                'assets/images/person.png',
+                                                height: 100.h,
+                                                width: 100.h,
+                                                fit: BoxFit.cover,
+                                              ),
+                                              errorWidget:
+                                                  (BuildContext context,
+                                                          String url,
+                                                          dynamic error) =>
+                                                      Image.asset(
+                                                'assets/images/person.png',
+                                                height: 100.h,
+                                                width: 100.h,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    : Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 20.h, horizontal: 55.h),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/camera.png',
+                                              height: 30.h,
+                                            ),
+                                            Row(),
+                                            SizedBox(height: 17.h),
+                                            regularText(
+                                              'Upload profile picture',
+                                              fontSize: 12.sp,
+                                              textAlign: TextAlign.center,
+                                              fontWeight: FontWeight.w400,
+                                              color: AppColors.lightBlack,
+                                            ),
+                                          ],
                                         ),
-                                    errorWidget:
-                                        (BuildContext context,
-                                        String url,
-                                        dynamic error) =>
-                                        Image.asset(
-                                          'assets/images/person.png',
-                                          height: 100.h,
-                                          width: 100.h,
-                                          fit: BoxFit.cover,
-                                        ),
-                                  ),
-                                )
-                              ],
-                            )
-                                : Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 20.h, horizontal: 55.h),
-                              child: Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/camera.png',
-                                    height: 30.h,
-                                  ),
-                                  Row(),
-                                  SizedBox(height: 17.h),
-                                  regularText(
-                                    'Upload profile picture',
-                                    fontSize: 12.sp,
-                                    textAlign: TextAlign.center,
-                                    fontWeight: FontWeight.w400,
-                                    color: AppColors.lightBlack,
-                                  ),
-                                ],
-                              ),
-                            )),
+                                      )),
                       ),
                       SizedBox(height: 32.h),
                       CustomTextField(

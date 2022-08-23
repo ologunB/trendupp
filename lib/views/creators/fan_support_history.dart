@@ -22,6 +22,36 @@ class FanSupportHistory extends StatefulWidget {
 }
 
 class _FanSupportHistoryState extends State<FanSupportHistory> {
+  bool _showBackToTopButton = false;
+  ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    _scrollController
+      ..addListener(() {
+        setState(() {
+          if (_scrollController.offset >= 400) {
+            _showBackToTopButton = true;
+          } else {
+            _showBackToTopButton = false;
+          }
+        });
+      });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // dispose the controller
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(0,
+        duration: Duration(seconds: 1), curve: Curves.linear);
+  }
+
   @override
   Widget build(BuildContext _) {
     return BaseView<StatViewModel>(
@@ -37,6 +67,14 @@ class _FanSupportHistoryState extends State<FanSupportHistory> {
                 leading: SizedBox(),
                 title: Image.asset('assets/images/logo.png', height: 32.h),
               ),
+              floatingActionButton: !_showBackToTopButton
+                  ? null
+                  : FloatingActionButton(
+                      backgroundColor: AppColors.red,
+                      onPressed: _scrollToTop,
+                      child: Icon(Icons.keyboard_arrow_up),
+                      tooltip: 'Scroll to up',
+                    ),
               body: ListView(
                 padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 13.h),
                 children: [
@@ -127,6 +165,7 @@ class _FanSupportHistoryState extends State<FanSupportHistory> {
                         ]),
                     child: ListView(
                       shrinkWrap: true,
+                      controller: _scrollController,
                       padding: EdgeInsets.zero,
                       physics: ClampingScrollPhysics(),
                       children: [
