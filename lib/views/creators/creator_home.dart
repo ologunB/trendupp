@@ -353,7 +353,7 @@ class _CreatorHomeState extends State<CreatorHome> {
                           child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          regularText('TIP' + (index + 1).toString(),
+                          regularText('SUPPORT' + (index + 1).toString(),
                               fontSize: 14.sp,
                               color: AppColors.black,
                               fontWeight: FontWeight.w700),
@@ -384,7 +384,7 @@ class _CreatorHomeState extends State<CreatorHome> {
           onTap: () async {
             try {
               await SocialShare.shareTwitter(
-                "Tip me on Trendupp ",
+                "Support me on Trendupp ",
                 hashtags: ["trendupp", "support"],
                 url: link,
               );
@@ -397,14 +397,14 @@ class _CreatorHomeState extends State<CreatorHome> {
         SizedBox(width: 30.h),
         InkWell(
           onTap: () {
-            SocialShare.shareOptions("Tip me on Trendupp via $link");
+            SocialShare.shareOptions("Support me on Trendupp via $link");
           },
           child: Image.asset('assets/images/fb.png', width: 28.h),
         ),
         SizedBox(width: 30.h),
         InkWell(
           onTap: () {
-            SocialShare.shareWhatsapp("Tip me on Trendupp via $link");
+            SocialShare.shareWhatsapp("Support me on Trendupp via $link");
           },
           child: Image.asset('assets/images/ws.png', width: 28.h),
         ),

@@ -1,17 +1,18 @@
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
   static const DEFAULT_URL = "https://www.google.com";
-  static String raveEncryptionKey = 'FLWSECK_TEST079f656d190b';
-  static String ravePublicKey =
-      'FLWPUBK_TEST-4775239fc89f256ef2f24cddcebc17e1-X';
+  static String ravePublicKey = kDebugMode
+      ? 'FLWPUBK_TEST-327dc33b96bfb9366018c06ef2ab2734-X'
+      : 'FLWPUBK-e1d79cd84929f5f9998b67e7cee0626b-X';
 
-  static String getBaseUrl(final bool isTestMode) {
-    return isTestMode
+  static String getBaseUrl() {
+    return kDebugMode
         ? "https://ravesandboxapi.flutterwave.com/v3/sdkcheckout/"
         : "https://api.ravepay.co/v3/sdkcheckout/";
   }

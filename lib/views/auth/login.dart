@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/routes/router.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/core/viewmodels/auth_vm.dart';
 import 'package:mms_app/views/widgets/buttons.dart';
 import 'package:mms_app/views/widgets/custom_textfield.dart';
@@ -27,6 +28,12 @@ class _LoginState extends State<Login> {
   bool obscureText = true;
   bool autoValidate = false;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    AppCache.haveFirstView();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

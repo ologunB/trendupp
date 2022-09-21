@@ -6,7 +6,7 @@ import 'package:mms_app/core/storage/local_storage.dart';
 
 class BaseAPI {
   Dio dio() {
-    Dio dio = new Dio(
+    Dio dio = Dio(
       BaseOptions(
         baseUrl: GlobalConfiguration().get('base_url'),
         sendTimeout: 30000,
@@ -31,6 +31,6 @@ class BaseAPI {
   log(dynamic data) {
     Logger l = Logger();
 
-    l.d(data);
+    l.d('');
   }
 }

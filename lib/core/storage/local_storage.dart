@@ -5,6 +5,7 @@ const String kUserBox = 'userBox';
 const String isFirstKey = 'noBiometricKoeypipo';
 const String tokenKey = 'tokenKeyrgewr';
 const String userKey = 'userKeytrte';
+const String isFirst = 'isFirsterterrtt';
 
 class AppCache {
   static Future<void> init() async {
@@ -13,6 +14,15 @@ class AppCache {
   }
 
   static Box<dynamic> get _userBox => Hive.box<dynamic>(kUserBox);
+
+  static void haveFirstView() {
+    _userBox.put(isFirst, false);
+  }
+
+  static bool getIsFirst() {
+    final bool data = _userBox.get(isFirst, defaultValue: true);
+    return data;
+  }
 
   static void setToken(String a) {
     _userBox.put(tokenKey, a);

@@ -122,7 +122,7 @@ class _SupportAuthState extends State<SupportAuth> {
                             ),
                             SizedBox(height: 16.h),
                             regularText(
-                              'Tip @${widget.creator.brandName}',
+                              'Support @${widget.creator.brandName}',
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w700,
                               color: AppColors.black,
@@ -240,7 +240,7 @@ class _SupportAuthState extends State<SupportAuth> {
       data1.addAll(widget.data);
       String? reference = await model.initPayment(data1);
       if (reference != null) {
-        final url = Utils.getBaseUrl(true) + 'payments';
+        final url = Utils.getBaseUrl() + 'payments';
         final uri = Uri.parse(url);
         try {
           model.setBusy(true);
@@ -265,9 +265,9 @@ class _SupportAuthState extends State<SupportAuth> {
                 },
                 "customizations": {
                   "title": "TrendUpp",
-                  "description": "Tip Creator",
+                  "description": "Support Creator",
                   "logo":
-                      "https://firebasestorage.googleapis.com/v0/b/triviablog-78fd9.appspot.com/o/logo2.png?alt=media&token=c6d8a9f0-abef-47b7-80be-aafaf5a25f4e"
+                      'https://firebasestorage.googleapis.com/v0/b/triviablog-78fd9.appspot.com/o/icon.png?alt=media&token=7687066d-d003-4f88-986c-e4941a9554ab'
                 }
               }));
           final responseBody = json.decode(response.body);

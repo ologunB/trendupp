@@ -116,42 +116,11 @@ class _FanHomeState extends State<FanHome> {
                                   },
                                 )
                               : postsModel.allPosts!.isEmpty
-                                  ? Container(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 28.h),
-                                      decoration: BoxDecoration(
-                                          color: AppColors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(8.h),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: AppColors.grey,
-                                                blurRadius: 6,
-                                                spreadRadius: 2)
-                                          ]),
-                                      child: Column(
-                                        children: [
-                                          Image.asset(
-                                            'assets/images/love.png',
-                                            height: 41.h,
-                                          ),
-                                          SizedBox(height: 8.h),
-                                          regularText(
-                                            'No Post Available',
-                                            fontSize: 14.sp,
-                                            color: AppColors.black,
-                                            fontWeight: FontWeight.w700,
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          SizedBox(height: 14.h),
-                                          regularText(
-                                            'Tip a creator to see posts from\nthe creator\n\nThere are no posts from the creators\nyou tip.',
-                                            fontSize: 12.sp,
-                                            color: AppColors.textGrey,
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ],
-                                      ),
+                                  ? Image.asset(
+                                      'assets/images/no-content.png',
+                                      height:
+                                          MediaQuery.of(context).size.width -
+                                              48.h,
                                     )
                                   : ListView(
                                       shrinkWrap: true,

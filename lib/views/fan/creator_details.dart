@@ -84,7 +84,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                   Icon(Icons.favorite, color: AppColors.lightRed, size: 20.h),
                   SizedBox(width: 8.h),
                   regularText(
-                    'Tip @${user.brandName ?? user.firstName}',
+                    'Support @${user.brandName ?? user.firstName}',
                     fontSize: 12.sp,
                     color: AppColors.white,
                     fontWeight: FontWeight.w500,
@@ -238,7 +238,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                                   color: AppColors.lightRed, size: 20.h),
                               SizedBox(width: 8.h),
                               regularText(
-                                'Tip @${user.brandName ?? user.firstName}',
+                                'Support @${user.brandName ?? user.firstName}',
                                 fontSize: 12.sp,
                                 color: AppColors.white,
                                 fontWeight: FontWeight.w500,

@@ -87,7 +87,7 @@ class _SupportHistoryState extends State<SupportHistory> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 24.h),
                             child: regularText(
-                              'TIP HISTORY',
+                              'SUPPORT HISTORY',
                               fontSize: 12.sp,
                               color: AppColors.lightBlack,
                               fontWeight: FontWeight.w700,
@@ -127,7 +127,8 @@ class _SupportHistoryState extends State<SupportHistory> {
                                       },
                                     )
                                   : historyModel.allFanPayment!.isEmpty
-                                      ? AppEmptyWidget('Tip History is empty')
+                                      ? AppEmptyWidget(
+                                          'Support History is empty')
                                       : ListView.separated(
                                           separatorBuilder: (_, __) {
                                             return Divider(

@@ -88,10 +88,11 @@ class SupportDone extends StatelessWidget {
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        pushAndRemoveUntil(context, ChooseSignup());
+                                        pushAndRemoveUntil(
+                                            context, ChooseSignup());
                                       }),
                                 TextSpan(
-                                  text: ' to track your tip to creators',
+                                  text: ' to track your support to creators',
                                   style: GoogleFonts.dmSans(
                                     color: AppColors.textGrey,
                                     fontSize: 15.sp,
@@ -103,7 +104,7 @@ class SupportDone extends StatelessWidget {
                             ),
                           )
                         : regularText(
-                            'An account has been created for you to track your tip to creators.\nThe log in details has been sent to your email',
+                            'An account has been created for you to track your support to creators.\nThe log in details has been sent to your email',
                             fontSize: 14.sp,
                             height: 1.8,
                             textAlign: TextAlign.center,

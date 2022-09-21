@@ -6,6 +6,7 @@ import 'package:global_configuration/global_configuration.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mms_app/core/routes/router.dart';
 import 'package:mms_app/locator.dart';
+import 'package:mms_app/views/auth/onboarding_view.dart';
 import 'package:mms_app/views/auth/splash_view.dart';
 import 'package:provider/provider.dart';
 import 'core/storage/local_storage.dart';
@@ -50,7 +51,7 @@ class App extends StatelessWidget {
           primaryColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: SplashView(),
+        home: AppCache.getIsFirst() ? OnboardingView() : SplashView(),
         navigatorKey: locator<NavigationService>().navigationKey,
         onGenerateRoute: generateRoute,
       ),

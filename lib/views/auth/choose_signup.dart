@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/routes/router.dart';
+import 'package:mms_app/core/storage/local_storage.dart';
 import 'package:mms_app/core/viewmodels/auth_vm.dart';
 import 'package:mms_app/views/widgets/text_widgets.dart';
 
@@ -25,6 +26,7 @@ class _ChooseSignupState extends State<ChooseSignup>
   void initState() {
     super.initState();
 
+    AppCache.haveFirstView();
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1400),

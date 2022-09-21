@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Trendupp</string>
-    <string name="facebook_app_id">481033083584762</string>
-    <string name="fb_login_protocol_scheme">fb481033083584762</string>
-    <string name="facebook_client_token">e16562d3b280079df947ad73ae504120</string>
+    <string name="facebook_app_id">4701868159922041</string>
+    <string name="fb_login_protocol_scheme">fb4701868159922041</string>
+    <string name="facebook_client_token">3e9a9cde8f13ebe5ec049aadd3e4d251</string>
 </resources>

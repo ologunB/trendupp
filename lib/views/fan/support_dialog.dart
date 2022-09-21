@@ -105,7 +105,7 @@ class _SupportDialogState extends State<SupportDialog> {
                   ),
                   SizedBox(height: 16.h),
                   regularText(
-                    'Tip @${widget.creator.brandName}',
+                    'Support @${widget.creator.brandName}',
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w700,
                     color: AppColors.black,
@@ -308,7 +308,7 @@ class _SupportDialogState extends State<SupportDialog> {
                                 color: AppColors.lightRed, size: 20.h),
                             SizedBox(width: 8.h),
                             regularText(
-                              'Tip @${widget.creator.brandName}',
+                              'Support @${widget.creator.brandName}',
                               fontSize: 12.sp,
                               color: AppColors.white,
                               fontWeight: FontWeight.w500,

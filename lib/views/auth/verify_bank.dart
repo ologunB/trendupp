@@ -342,7 +342,7 @@ class _VerifyBankState extends State<VerifyBank> {
       children: [
         InkWell(
           onTap: () {
-            SocialShare.shareTwitter("Tip me on Trendupp ",
+            SocialShare.shareTwitter("Support me on Trendupp ",
                 hashtags: ["trendupp", "support"], url: link);
           },
           child: Image.asset('assets/images/tw.png', width: 28.h),
@@ -350,14 +350,14 @@ class _VerifyBankState extends State<VerifyBank> {
         SizedBox(width: 30.h),
         InkWell(
           onTap: () {
-            SocialShare.shareOptions("Tip me on Trendupp on $link");
+            SocialShare.shareOptions("Support me on Trendupp on $link");
           },
           child: Image.asset('assets/images/fb.png', width: 28.h),
         ),
         SizedBox(width: 30.h),
         InkWell(
           onTap: () {
-            SocialShare.shareWhatsapp("Tip me on Trendupp on $link");
+            SocialShare.shareWhatsapp("Support me on Trendupp on $link");
           },
           child: Image.asset('assets/images/ws.png', width: 28.h),
         ),

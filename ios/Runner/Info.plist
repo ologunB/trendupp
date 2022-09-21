@@ -28,7 +28,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.568741488955-qf0s4tmpprr2nntaamt9csg0bs8igrnr</string>
-				<string>fb481033083584762</string>
+				<string>fb4701868159922041</string>
 			</array>
 		</dict>
 		<dict>
@@ -36,14 +36,16 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb481033083584762</string>
+				<string>fb4701868159922041</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
-	<string>481033083584762</string>
+	<string>4701868159922041</string>
+	<key>FacebookClientToken</key>
+	<string>3e9a9cde8f13ebe5ec049aadd3e4d251</string>
 	<key>FacebookDisplayName</key>
 	<string>Trendupp</string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -55,6 +57,10 @@
 		<string>twitter</string>
 		<string>whatsapp</string>
 		<string>tg</string>
+        <string>fbapi</string>
+        <string>fb-messenger-share-api</string>
+        <string>fbauth2</string>
+        <string>fbshareextension</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

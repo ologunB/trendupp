@@ -197,7 +197,7 @@ class PostDetail extends StatelessWidget {
                                   color: AppColors.lightRed, size: 20.h),
                               SizedBox(width: 8.h),
                               regularText(
-                                'Tip @${post.userName ?? post.user?.brandName}',
+                                'Support @${post.userName ?? post.user?.brandName}',
                                 fontSize: 12.sp,
                                 color: AppColors.white,
                                 fontWeight: FontWeight.w500,

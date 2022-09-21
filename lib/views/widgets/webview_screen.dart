@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:mms_app/views/widgets/text_widgets.dart';
 
 class WebviewScreen extends StatefulWidget {
   const WebviewScreen({required this.url});
@@ -24,14 +23,6 @@ class _WebviewScreenState extends State<WebviewScreen> {
           backgroundColor: Colors.transparent,
           iconTheme: IconThemeData(color: AppColors.black),
           centerTitle: true,
-          title: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Image.asset('assets/images/logo2.png', height: 32.h),
-              Spacer(),
-            ],
-          ),
         ),
         body: Column(
           children: [

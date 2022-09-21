@@ -53,7 +53,7 @@ class _CantSupportDialogState extends State<CantSupportDialog> {
                 ),
                 SizedBox(height: 20.h),
                 regularText(
-                    'We’re sorry! You need a fan\naccount to tip a creator',
+                    'We’re sorry! You need a fan\naccount to support a creator',
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w700,
                     color: AppColors.black,
@@ -62,7 +62,7 @@ class _CantSupportDialogState extends State<CantSupportDialog> {
                   padding:
                       EdgeInsets.symmetric(horizontal: 45.h, vertical: 40.h),
                   child: buttonWithBorder(
-                    'Go back to ${widget.user?.brandName ??widget.user?.firstName } page',
+                    'Go back to ${widget.user?.brandName ?? widget.user?.firstName} page',
                     buttonColor: AppColors.red,
                     fontSize: 14.sp,
                     height: 40.h,
