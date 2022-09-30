@@ -29,7 +29,7 @@ class Utils {
       return "Password is required";
     } else if (value.trim().length < 6) {
       return "Password is too short";
-    } else if (!value.trim().contains(RegExp(r'[0-9]'))) {
+    } /* else if (!value.trim().contains(RegExp(r'[0-9]'))) {
       return "Password must contain a number";
     } else if (!value.trim().toUpperCase().contains(RegExp(r'[A-Z]'))) {
       return "Password must contain a letter";
@@ -37,7 +37,7 @@ class Utils {
       return "Password must contain an upper case letter";
     } else if (!value.trim().contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
       return "Password must contain a special character";
-    }
+    }*/
     return null;
   }
 

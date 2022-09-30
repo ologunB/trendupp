@@ -195,7 +195,7 @@ class _CreatorDetailsState extends State<CreatorDetails> {
                           builder: (_, PostViewModel sModel, __) => Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 16.h),
                                 child: regularText(
-                                  '${sModel.supportersNumber} ${sModel.supportersNumber > 1 ? 'Tippers' : "Tipper"}',
+                                  '${sModel.supportersNumber} ${sModel.supportersNumber > 1 ? 'Supporters' : "Supporter"}',
                                   fontSize: 14.sp,
                                   color: AppColors.black,
                                   fontWeight: FontWeight.w500,

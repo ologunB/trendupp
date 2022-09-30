@@ -83,117 +83,121 @@ class _FanHomeState extends State<FanHome> {
                   color: AppColors.red,
                   child: ListView(
                     controller: _scrollController,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 24.h, vertical: 13.h),
+                    padding: EdgeInsets.symmetric(vertical: 13.h),
                     children: [
-                      postsModel.busy && postsModel.allPosts == null
-                          ? ListView.builder(
-                              shrinkWrap: true,
-                              physics: ClampingScrollPhysics(),
-                              padding: EdgeInsets.zero,
-                              itemCount: 1,
-                              itemBuilder: (context, index) {
-                                return Shimmer.fromColors(
-                                    baseColor: Colors.grey.withOpacity(.1),
-                                    highlightColor: Colors.white60,
-                                    child: Container(
-                                      height: 150.h,
-                                      margin: EdgeInsets.only(top: 16.h),
-                                      width: ScreenUtil.defaultSize.width,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(.7),
-                                        borderRadius:
-                                            BorderRadius.circular(5.h),
-                                      ),
-                                    ));
-                              })
-                          : postsModel.allPosts == null
-                              ? ErrorOccurredWidget(
-                                  error: postsModel.error,
-                                  onPressed: () {
-                                    postsModel.getFanPosts(
-                                        AppCache.getUser()!.email!, context);
-                                  },
-                                )
-                              : postsModel.allPosts!.isEmpty
-                                  ? Image.asset(
-                                      'assets/images/no-content.png',
-                                      height:
-                                          MediaQuery.of(context).size.width -
-                                              48.h,
-                                    )
-                                  : ListView(
-                                      shrinkWrap: true,
-                                      padding: EdgeInsets.zero,
-                                      physics: ClampingScrollPhysics(),
-                                      children: [
-                                        ListView.builder(
-                                            itemCount: loadMorePosts
-                                                ? postsModel.allPosts!.length
-                                                : (postsModel.allPosts!.length >
-                                                        postsToLoad
-                                                    ? postsToLoad
-                                                    : postsModel
-                                                        .allPosts!.length),
-                                            shrinkWrap: true,
-                                            padding: EdgeInsets.zero,
-                                            physics: ClampingScrollPhysics(),
-                                            itemBuilder: (ctx, i) {
-                                              return creatorPost(context,
-                                                  postsModel.allPosts![i]);
-                                            }),
-                                        if (postsModel.allPosts!.length >
-                                            postsToLoad)
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 10.h),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    loadMorePosts =
-                                                        !loadMorePosts;
-                                                    setState(() {});
-                                                  },
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Icon(
-                                                        Icons
-                                                            .add_circle_outline,
-                                                        color: AppColors.red,
-                                                        size: 14.h,
-                                                      ),
-                                                      SizedBox(width: 4.h),
-                                                      regularText(
-                                                        loadMorePosts
-                                                            ? 'Less Posts'
-                                                            : 'More Posts',
-                                                        fontSize: 12.sp,
-                                                        color: AppColors.red,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                      ],
-                                    ),
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20.h),
-                        child: regularText(
-                          'EXPLORE CREATORS',
-                          fontSize: 12.sp,
-                          color: AppColors.black,
-                          fontWeight: FontWeight.w700,
+                        padding: EdgeInsets.symmetric(horizontal: 24.h),
+                        child: postsModel.busy && postsModel.allPosts == null
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                padding: EdgeInsets.zero,
+                                itemCount: 1,
+                                itemBuilder: (context, index) {
+                                  return Shimmer.fromColors(
+                                      baseColor: Colors.grey.withOpacity(.1),
+                                      highlightColor: Colors.white60,
+                                      child: Container(
+                                        height: 150.h,
+                                        margin: EdgeInsets.only(top: 16.h),
+                                        width: ScreenUtil.defaultSize.width,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.withOpacity(.7),
+                                          borderRadius:
+                                              BorderRadius.circular(5.h),
+                                        ),
+                                      ));
+                                })
+                            : postsModel.allPosts == null
+                                ? ErrorOccurredWidget(
+                                    error: postsModel.error,
+                                    onPressed: () {
+                                      postsModel.getFanPosts(
+                                          AppCache.getUser()!.email!, context);
+                                    },
+                                  )
+                                : postsModel.allPosts!.isEmpty
+                                    ? Image.asset(
+                                        'assets/images/no-content.png',
+                                        fit: BoxFit.fitWidth,
+                                      )
+                                    : ListView(
+                                        shrinkWrap: true,
+                                        padding: EdgeInsets.zero,
+                                        physics: ClampingScrollPhysics(),
+                                        children: [
+                                          ListView.builder(
+                                              itemCount: loadMorePosts
+                                                  ? postsModel.allPosts!.length
+                                                  : (postsModel.allPosts!
+                                                              .length >
+                                                          postsToLoad
+                                                      ? postsToLoad
+                                                      : postsModel
+                                                          .allPosts!.length),
+                                              shrinkWrap: true,
+                                              padding: EdgeInsets.zero,
+                                              physics: ClampingScrollPhysics(),
+                                              itemBuilder: (ctx, i) {
+                                                return creatorPost(context,
+                                                    postsModel.allPosts![i]);
+                                              }),
+                                          if (postsModel.allPosts!.length >
+                                              postsToLoad)
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 10.h),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      loadMorePosts =
+                                                          !loadMorePosts;
+                                                      setState(() {});
+                                                    },
+                                                    child: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Icon(
+                                                          Icons
+                                                              .add_circle_outline,
+                                                          color: AppColors.red,
+                                                          size: 14.h,
+                                                        ),
+                                                        SizedBox(width: 4.h),
+                                                        regularText(
+                                                          loadMorePosts
+                                                              ? 'Less Posts'
+                                                              : 'More Posts',
+                                                          fontSize: 12.sp,
+                                                          color: AppColors.red,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(top: 20.h),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 24.h),
+                          child: regularText(
+                            'EXPLORE CREATORS',
+                            fontSize: 12.sp,
+                            color: AppColors.black,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                       exploreModel.busy && exploreModel.allCreators == null
@@ -201,8 +205,9 @@ class _FanHomeState extends State<FanHome> {
                               shrinkWrap: true,
                               gridDelegate: Utils.gridDelegate(),
                               physics: ClampingScrollPhysics(),
-                              padding: EdgeInsets.zero,
                               itemCount: 4,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 24.h, vertical: 20.h),
                               itemBuilder: (context, index) {
                                 return Shimmer.fromColors(
                                     baseColor: Colors.grey.withOpacity(.1),
@@ -219,14 +224,23 @@ class _FanHomeState extends State<FanHome> {
                                     ));
                               })
                           : exploreModel.allCreators == null
-                              ? ErrorOccurredWidget(
-                                  error: exploreModel.error,
-                                  onPressed: () {
-                                    exploreModel.getExploreCreators(context);
-                                  },
+                              ? Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 24.h),
+                                  child: ErrorOccurredWidget(
+                                    error: exploreModel.error,
+                                    onPressed: () {
+                                      exploreModel.getExploreCreators(context);
+                                    },
+                                  ),
                                 )
                               : exploreModel.allCreators!.isEmpty
-                                  ? AppEmptyWidget('No creators are available')
+                                  ? Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 24.h),
+                                      child: AppEmptyWidget(
+                                          'No creators are available'),
+                                    )
                                   : ListView(
                                       physics: ClampingScrollPhysics(),
                                       shrinkWrap: true,
@@ -241,7 +255,9 @@ class _FanHomeState extends State<FanHome> {
                                                 : exploreModel
                                                     .allCreators!.length,
                                             shrinkWrap: true,
-                                            padding: EdgeInsets.zero,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 24.h,
+                                                vertical: 20.h),
                                             physics: ClampingScrollPhysics(),
                                             itemBuilder: (ctx, i) {
                                               UserData data =
@@ -266,14 +282,15 @@ class _FanHomeState extends State<FanHome> {
                                                   padding: EdgeInsets.symmetric(
                                                       vertical: 16.h,
                                                       horizontal: 22.h),
-                                                  margin: EdgeInsets.all(2),
+                                                  margin: EdgeInsets.all(1),
                                                   decoration: BoxDecoration(
                                                     color: AppColors.white,
                                                     boxShadow: [
                                                       BoxShadow(
-                                                          color: AppColors.grey,
+                                                          color: AppColors.grey
+                                                              .withOpacity(.3),
                                                           blurRadius: 4,
-                                                          spreadRadius: 2)
+                                                          spreadRadius: 4)
                                                     ],
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -367,36 +384,41 @@ class _FanHomeState extends State<FanHome> {
                                         SizedBox(height: 24.h),
                                         if (exploreModel.allCreators!.length >
                                             6)
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              InkWell(
-                                                onTap: () =>
-                                                    fIndexNotifier.value = 1,
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.add_circle_outline,
-                                                      color: AppColors.red,
-                                                      size: 14.h,
-                                                    ),
-                                                    SizedBox(width: 4.h),
-                                                    regularText(
-                                                      'View all creators',
-                                                      fontSize: 12.sp,
-                                                      color: AppColors.red,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                  ],
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 24.h),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                InkWell(
+                                                  onTap: () =>
+                                                      fIndexNotifier.value = 1,
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Icon(
+                                                        Icons
+                                                            .add_circle_outline,
+                                                        color: AppColors.red,
+                                                        size: 14.h,
+                                                      ),
+                                                      SizedBox(width: 4.h),
+                                                      regularText(
+                                                        'View all creators',
+                                                        fontSize: 12.sp,
+                                                        color: AppColors.red,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         SizedBox(height: 24.h),
                                       ],
