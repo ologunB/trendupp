@@ -30,7 +30,7 @@ class BaseAPI {
 
   log(dynamic data) {
     Logger l = Logger();
-
-    l.d('');
+    l.toString();
+    //   l.d('');
   }
 }

@@ -84,7 +84,7 @@ class PostDetail extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(40.h),
                         child: CachedNetworkImage(
-                          imageUrl: post.userImage ?? post.user!.picture ?? "c",
+                          imageUrl: post.userImage ?? post.user?.picture ?? "c",
                           height: 40.h,
                           width: 40.h,
                           fit: BoxFit.cover,
