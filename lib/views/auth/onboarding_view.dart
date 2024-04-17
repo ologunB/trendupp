@@ -44,7 +44,7 @@ class _OnboardingViewState extends State<OnboardingView> {
         designSize: Size(375, 812),
         minTextAdapt: true,
         splitScreenMode: true,
-        builder: () => Scaffold(
+        builder: (_, __) => Scaffold(
             backgroundColor: _index == 0
                 ? Color(0xffFFBFDD)
                 : _index == 1

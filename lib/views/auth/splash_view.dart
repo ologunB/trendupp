@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mms_app/app/colors.dart';
 import 'package:mms_app/core/routes/router.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
@@ -6,7 +7,7 @@ import 'package:mms_app/views/auth/choose_type.dart';
 import 'package:mms_app/views/creators/creators_layout.dart';
 import 'package:mms_app/views/fan/fan_layout.dart';
 import 'package:mms_app/views/widgets/utils.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'choose_signup.dart';
 import 'login.dart';
 
@@ -50,7 +51,7 @@ class _SplashViewState extends State<SplashView> {
       designSize: Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: () => Scaffold(
+      builder: (_, __) => Scaffold(
         //   backgroundColor: AppColors.red,
 
         body: Container(

@@ -1,4 +1,3 @@
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:logger/logger.dart';
@@ -9,9 +8,9 @@ class BaseAPI {
     Dio dio = Dio(
       BaseOptions(
         baseUrl: GlobalConfiguration().get('base_url'),
-        sendTimeout: 30000,
-        connectTimeout: 500000,
-        receiveTimeout: 50000,
+        sendTimeout: const Duration(seconds: 30),
+        connectTimeout: const Duration(seconds: 50),
+        receiveTimeout: const Duration(seconds: 50),
         contentType: 'application/json',
         validateStatus: (int? s) => s! < 500,
         headers: {
@@ -19,18 +18,17 @@ class BaseAPI {
         },
       ),
     );
-    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+/*    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (client) {
       client.badCertificateCallback = (cert, host, port) => true;
       return client;
-    };
+    };*/
 
     return dio;
   }
 
   log(dynamic data) {
     Logger l = Logger();
-    l.toString();
     //   l.d('');
   }
 }

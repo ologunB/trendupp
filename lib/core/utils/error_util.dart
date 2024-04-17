@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:mms_app/core/routes/router.dart';
 import 'package:mms_app/core/storage/local_storage.dart';
@@ -11,46 +10,36 @@ import 'navigator.dart';
 
 class DioErrorUtil {
   static String handleError(dynamic error) {
-    String errorDescription = '';
-    if (error is SocketException) {
-      errorDescription = 'No internet connection';
-    } else if (error is DioError) {
+    String errorDescription = 'An error happened';
+
+    if (error is DioException) {
+      errorDescription = error.message ?? 'An unknown error happened';
       switch (error.type) {
-        case DioErrorType.cancel:
-          errorDescription = 'Request to API server was cancelled';
+        case DioExceptionType.cancel:
+          errorDescription = 'Request to server was cancelled';
           break;
-        case DioErrorType.connectTimeout:
+        case DioExceptionType.connectionTimeout:
           errorDescription = 'Slow Connection';
           break;
-        case DioErrorType.other:
+        case DioExceptionType.unknown:
           errorDescription = 'No internet connection';
           break;
-        case DioErrorType.receiveTimeout:
-          errorDescription = 'Receive timeout in connection with API server';
+        case DioExceptionType.receiveTimeout:
+          errorDescription = 'Failed to receive data from server';
           break;
-        case DioErrorType.response:
-          if (error.response!.statusCode == 404)
-            errorDescription =
-                error.response!.statusMessage ?? 'Unexpected error occurred';
-          else if (error.response!.statusCode == 400) {
-            errorDescription = error.response!.statusMessage ?? 'Bad request';
-          } else if (error.response!.statusCode == 401) {
-            errorDescription = error.response!.statusMessage ??
-                'These credentials are wrong \nCheck and try again';
-          } else if (error.response!.statusCode == 500) {
-            errorDescription = error.response!.statusMessage ??
-                'Server is currently under maintenance, Try again later';
-          } else {
-            errorDescription =
-                'Received invalid status code: ${error.response!.statusCode}';
-          }
+        case DioExceptionType.sendTimeout:
+          errorDescription = 'Failed to send data to server';
           break;
-        case DioErrorType.sendTimeout:
-          errorDescription = 'Send timeout in connection with API server';
+        case DioExceptionType.badCertificate:
+          errorDescription = 'Server Bad Certificate';
+          break;
+        case DioExceptionType.badResponse:
+          errorDescription = 'Bad Response';
+          break;
+        case DioExceptionType.connectionError:
+          errorDescription = 'Failed to connect to server';
           break;
       }
-    } else if (error is TypeError) {
-      errorDescription = error.stackTrace.toString();
     } else {
       errorDescription = error.toString();
     }
@@ -66,4 +55,9 @@ class DioErrorUtil {
 
     return errorDescription;
   }
+}
+
+class LendoException implements Exception {
+  LendoException(this.message);
+  String message;
 }
